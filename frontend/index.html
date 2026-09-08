@@ -479,8 +479,9 @@
       </div>
       <div style="display: flex; align-items: center; gap: 6px;">
         <span id="status-conexao-db" style="display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; color: #15803d; background: #dcfce7; padding: 2px 6px; border-radius: 3px; border: 1px solid #86efac;">
-          🟢 Conectado ao SQLite (robo_boah.db)
+          🟢 Conectado ao SQLite (bimer.db)
         </span>
+        <button type="button" class="tool-btn" style="padding: 1px 5px; font-size: 10px;" onclick="configurarServidorNuvem()" title="Configurar Servidor / API Cloud">⚙️ Nuvem</button>
       </div>
     </div>
 
@@ -1377,8 +1378,20 @@
 </div>
 
 <script>
-  const API_BASE = 'http://localhost:8000/api/contas-a-pagar';
+  let API_BASE = localStorage.getItem('bimer_cloud_api_url') || 'http://localhost:8000/api/contas-a-pagar';
   let isBackendOnline = false;
+
+  function configurarServidorNuvem() {
+    const atual = localStorage.getItem('bimer_cloud_api_url') || 'http://localhost:8000/api/contas-a-pagar';
+    const nova = prompt('Informe o endereço da API do Backend (Railway, Render ou Localhost):\nEx: https://sua-api.up.railway.app/api/contas-a-pagar', atual);
+    if (nova !== null) {
+      const urlFinal = nova.trim() || 'http://localhost:8000/api/contas-a-pagar';
+      localStorage.setItem('bimer_cloud_api_url', urlFinal);
+      API_BASE = urlFinal;
+      alert(`Servidor configurado para:\n${urlFinal}\nRecarregando dados...`);
+      carregarDadosIniciais();
+    }
+  }
 
   const STORAGE_KEY = 'alterdata_bimer_contas_pagar_v2';
   const STORAGE_PREV_KEY = 'alterdata_bimer_previsoes_v1';
