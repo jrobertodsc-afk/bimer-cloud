@@ -499,8 +499,6 @@
 
       <button class="tool-btn primary" onclick="gravarDocumento()">💾 Gravar (F10)</button>
       <button class="tool-btn" onclick="novoDocumento()">➕ Novo Lançamento</button>
-      <button class="tool-btn" style="color: #0369a1; font-weight: 700; background: #e0f2fe; border: 1px solid #7dd3fc;" onclick="testarBoletoExemplo('itau')">⚡ Testar Itaú</button>
-      <button class="tool-btn" style="color: #92400e; font-weight: 700; background: #fef3c7; border: 1px solid #fcd34d;" onclick="testarBoletoExemplo('enel')">⚡ Testar Luz</button>
       <button class="tool-btn" onclick="carregarExemploCompleto()">⚡ Exemplo NFS-e</button>
       <button class="tool-btn" onclick="abrirFolhaRostoUltimo()">🖨️ Folha de Rosto</button>
       <button class="tool-btn" style="color: var(--danger);" onclick="limparTudo()">🗑️ Limpar Base</button>
@@ -572,17 +570,11 @@
 
       <!-- DECODIFICADOR INTELIGENTE DE BOLETO / LINHA DIGITÁVEL -->
       <fieldset style="background: #f0fdf4; border: 1px solid #86efac; margin-bottom: 7px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; flex-wrap: wrap; gap: 4px;">
-          <legend style="color: #166534; font-weight: 700; background: #dcfce7; padding: 2px 8px; border-radius: 3px; border: 1px solid #86efac;">
-            ⚡ Leitura Rápida de Boleto (Código de Barras Febraban)
-          </legend>
-          <div style="display: flex; gap: 6px;">
-            <button type="button" class="tool-btn" style="background: #ffffff; border: 1px solid #86efac; font-weight: 700; color: #15803d;" onclick="testarBoletoExemplo('itau')">⚡ Testar Itaú (47 dígitos)</button>
-            <button type="button" class="tool-btn" style="background: #ffffff; border: 1px solid #fcd34d; font-weight: 700; color: #92400e;" onclick="testarBoletoExemplo('enel')">⚡ Testar Luz (48 dígitos)</button>
-          </div>
-        </div>
-        <div class="form-field">
-          <input type="text" id="linha_digitavel" oninput="processarLinhaDigitavelLive()" placeholder="Cole aqui a linha digitável (47 ou 48 dígitos) para auto-preencher banco, vencimento e valor..." style="font-family: monospace; font-size: 12px; font-weight: 600; color: #1e3a8a; padding: 5px 8px;">
+        <legend style="color: #166534; font-weight: 700; background: #dcfce7; padding: 2px 8px; border-radius: 3px; border: 1px solid #86efac;">
+          💳 Leitura Rápida de Boleto (Código de Barras Febraban & Concessionárias)
+        </legend>
+        <div class="form-field" style="margin-top: 2px;">
+          <input type="text" id="linha_digitavel" oninput="processarLinhaDigitavelLive()" placeholder="Cole aqui a linha digitável do boleto (47 dígitos) ou conta de consumo (48 dígitos) para preencher banco, vencimento e valor..." style="font-family: monospace; font-size: 12px; font-weight: 600; color: #1e3a8a; padding: 5px 8px;">
           <div id="badge-boleto-decodificado" style="display: none; margin-top: 4px; padding: 4px 8px; border-radius: 3px; font-size: 11px; font-weight: 600;"></div>
         </div>
       </fieldset>
