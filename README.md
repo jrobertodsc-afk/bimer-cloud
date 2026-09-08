@@ -1,46 +1,84 @@
-# ?? Bimer Cloud - Central de Documentos & Contas a Pagar
+Ôªø# üè¢ Bimer Cloud - Central de Documentos & Contas a Pagar
 
-Sistema moderno de gest„o financeira, contas a pagar, desmembramento de retenÁıes tribut·rias federais e municipais, agenda de vencimentos e prestaÁ„o de contas de adiantamentos corporativos no padr„o de alta densidade visual **Alterdata Bimer**.
-
----
-
-## ??? Arquitetura do Projeto
-
-O projeto segue a arquitetura de **MonÛlito Modular Desacoplado**:
-- **rontend/**: Interface SPA de alta densidade com viewport desktop (85%-100%), decodificador inteligente de boletos Febraban (47 e 48 dÌgitos) e rÈgua de vencimentos. Pronta para deploy est·tico na **Vercel** ou **Cloudflare Pages**.
-- **ackend/**: API RESTful em **FastAPI** modularizada por domÌnio (	itulos, previsoes, diantamentos), com suporte a CORS total e conteinerizada via **Docker**. Pronta para deploy no **Railway** ou **Render**.
-- **database/**: Banco de dados SQLite persistente (imer.db), com suporte a migraÁ„o simples para PostgreSQL / Turso no cloud.
+Sistema moderno de gest√£o financeira, contas a pagar, desmembramento de reten√ß√µes tribut√°rias federais e municipais, agenda de vencimentos e presta√ß√£o de contas de adiantamentos corporativos no padr√£o de alta densidade visual **Alterdata Bimer**.
 
 ---
 
-## ?? Como Rodar Localmente
+## üèõÔ∏è Arquitetura do Projeto
+
+O projeto segue a arquitetura de **Mon√≥lito Modular Desacoplado**:
+- **rontend/**: Interface SPA de alta densidade com layout desktop nativo, decodificador inteligente de boletos Febraban (47 e 48 d√≠gitos) e r√©gua de vencimentos. Pronta para deploy est√°tico na **Vercel** ou **Cloudflare Pages**.
+- **ackend/**: API RESTful em **FastAPI** modularizada por dom√≠nio (	itulos, previsoes, diantamentos), com suporte a CORS total, conteinerizada via **Docker**. Pronta para deploy no **Railway** ou **Render**.
+- **database/**: Banco de dados SQLite persistente (imer.db com 143+ registros reais), com suporte a migra√ß√£o para PostgreSQL ou LibSQL/Turso.
+
+---
+
+## üöÄ Como Rodar Localmente
 
 ### 1. Iniciar o Backend (FastAPI):
-\\\ash
+`ash
 cd backend
 pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
-\\\
-A documentaÁ„o interativa estar· disponÌvel em: [http://localhost:8000/docs](http://localhost:8000/docs)
+`
+- Documenta√ß√£o OpenAPI (Swagger): [http://localhost:8000/docs](http://localhost:8000/docs)
+- Healthcheck: [http://localhost:8000/health](http://localhost:8000/health)
 
 ### 2. Iniciar o Frontend:
-\\\ash
+`ash
 cd frontend
 python -m http.server 3000
-\\\
-Acesse no navegador: [http://localhost:3000](http://localhost:3000)
+`
+- Acesse no navegador: [http://localhost:3000/index.html](http://localhost:3000/index.html)
 
 ---
 
-## ?? Como Fazer Deploy na Nuvem
+## ‚òÅÔ∏è Guia de Deploy Passo a Passo
 
-### 1. Backend (Railway ou Render):
-- Crie um novo projeto no **[Railway.app](https://railway.app)** ou **[Render.com](https://render.com)**.
-- Conecte o repositÛrio do GitHub e aponte a pasta raiz como ackend/ (ele detectar· o Dockerfile automaticamente).
-- Defina a vari·vel de ambiente: \PORT=8000\.
-- O Railway/Render gerar· uma URL segura (ex: \https://bimer-api.up.railway.app\).
+### Passo 1: Subir o Projeto para o GitHub
+No terminal da pasta imer-cloud:
+`ash
+# Se ainda n√£o criou o reposit√≥rio no GitHub, crie em: https://github.com/new
+git remote add origin https://github.com/SEU_USUARIO/bimer-cloud.git
+git branch -M main
+git push -u origin main
+`
 
-### 2. Frontend (Vercel):
-- Crie um novo projeto no **[Vercel.com](https://vercel.com)**.
-- Importe o repositÛrio do GitHub e selecione a pasta raiz como rontend/.
-- Clique em **Deploy**. A Vercel gerar· o link global (ex: \https://bimer-cloud.vercel.app\).
+---
+
+### Passo 2: Deploy do Backend (Render ou Railway)
+
+#### Op√ß√£o A: Render (Recomendado - Gratuito)
+1. Acesse [render.com](https://render.com) e conecte sua conta do GitHub.
+2. Clique em **New +** -> **Web Service**.
+3. Selecione o reposit√≥rio imer-cloud.
+4. O Render detectar√° automaticamente o arquivo ender.yaml j√° configurado na raiz!
+   - **Root Directory**: ackend
+   - **Build Command**: pip install -r requirements.txt
+   - **Start Command**: uvicorn app.main:app --host 0.0.0.0 --port 
+5. Clique em **Create Web Service**.
+6. Copie a URL p√∫blica gerada (exemplo: https://bimer-cloud-api.onrender.com).
+
+#### Op√ß√£o B: Railway
+1. Acesse [railway.app](https://railway.app) e conecte sua conta do GitHub.
+2. Clique em **New Project** -> **Deploy from GitHub repo** -> selecione imer-cloud.
+3. Em Settings, configure o **Root Directory** como /backend ou deixe o Dockerfile da raiz.
+4. O Railway iniciar√° o build e gerar√° a URL (exemplo: https://bimer-cloud-production.up.railway.app).
+
+---
+
+### Passo 3: Deploy do Frontend (Vercel)
+1. Acesse [vercel.com](https://vercel.com) e fa√ßa login.
+2. Clique em **Add New...** -> **Project**.
+3. Importe o reposit√≥rio imer-cloud.
+4. Em **Root Directory**, selecione a pasta rontend (ou mantenha na raiz, pois o ercel.json j√° est√° configurado).
+5. Clique em **Deploy**.
+6. A Vercel disponibilizar√° a URL p√∫blica instantaneamente (exemplo: https://bimer-cloud.vercel.app).
+
+---
+
+### Passo 4: Conectar Frontend ao Backend em Nuvem
+1. Abra seu site na Vercel no navegador.
+2. Na barra de ferramentas superior, clique no bot√£o **‚öôÔ∏è Nuvem**.
+3. Cole a URL da API gerada no Render ou Railway (exemplo: https://bimer-cloud-api.onrender.com/api/contas-a-pagar).
+4. Clique em **OK**. O sistema salvar√° a URL e se conectar√° automaticamente √† API de nuvem!
