@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "name": "bimer-cloud-frontend",
   "builds": [
     {
       "src": "index.html",
