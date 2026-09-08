@@ -19,3 +19,6 @@ CORS_ORIGINS = os.getenv("CORS_ORIGINS", "*").split(",")
 API_PREFIX = "/api/v1"
 PROJECT_NAME = "Bimer Cloud - ERP Financeiro & Fiscal"
 VERSION = "1.0.0"
+TURSO_DATABASE_URL = os.getenv("TURSO_DATABASE_URL", "").strip()
+TURSO_AUTH_TOKEN = os.getenv("TURSO_AUTH_TOKEN", "").strip()
+
