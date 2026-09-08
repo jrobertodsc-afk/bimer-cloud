@@ -1374,7 +1374,11 @@
 </div>
 
 <script>
-  let API_BASE = localStorage.getItem('bimer_cloud_api_url') || 'http://localhost:8000/api/contas-a-pagar';
+  let API_BASE = localStorage.getItem('bimer_cloud_api_url') || (
+    window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:8000/api/contas-a-pagar'
+      : 'https://bimer-cloud-api.onrender.com/api/contas-a-pagar'
+  );
   let isBackendOnline = false;
 
   function configurarServidorNuvem() {
@@ -2100,7 +2104,7 @@
             badgeStatus.style.background = '#dcfce7';
             badgeStatus.style.color = '#15803d';
             badgeStatus.style.border = '1px solid #86efac';
-            badgeStatus.innerHTML = `🟢 Conectado ao SQLite (robo_boah.db) • ${titulos.length} títulos`;
+            badgeStatus.innerHTML = `🟢 Conectado ao Backend (${API_BASE.includes('render') ? 'Render Cloud' : 'SQLite Local'}) • ${titulos.length} títulos`;
           }
         }
       }
