@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
 from ..core.database import get_connection
 
-router = APIRouter(prefix="/titulos", tags=["Títulos & Contas a Pagar"])
+router = APIRouter(tags=["Títulos & Contas a Pagar"])
 
 class ImpostoItem(BaseModel):
     tipo: str
@@ -34,6 +34,7 @@ class DocumentoEntrada(BaseModel):
     impostos: Optional[List[ImpostoItem]] = []
 
 @router.get("")
+@router.get("/titulos")
 def listar_titulos(
     status: Optional[str] = None,
     filtro_data: Optional[str] = None,
@@ -161,6 +162,7 @@ def listar_titulos(
         return {"success": False, "error": str(e), "titulos": []}
 
 @router.post("/gravar-documento")
+@router.post("/titulos/gravar-documento")
 def gravar_documento(doc: DocumentoEntrada):
     try:
         conn = get_connection()
@@ -243,6 +245,7 @@ def gravar_documento(doc: DocumentoEntrada):
         raise HTTPException(status_code=500, detail=f"Erro interno: {str(e)}")
 
 @router.post("/{identificador}/baixa")
+@router.post("/titulos/{identificador}/baixa")
 def alternar_baixa(identificador: str):
     try:
         conn = get_connection()
@@ -280,6 +283,7 @@ def alternar_baixa(identificador: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.delete("/{identificador}")
+@router.delete("/titulos/{identificador}")
 def excluir_titulo(identificador: str):
     try:
         conn = get_connection()
