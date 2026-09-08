@@ -1,0 +1,3399 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Alterdata Bimer / Pack - Lançamento Completo & Gestão de Despesas Fixas</title>
+  <style>
+    :root {
+      --alterdata-blue: #004b87;
+      --alterdata-dark: #002d54;
+      --alterdata-light: #e6f0fa;
+      --alterdata-border: #cbd5e1;
+      --bg-window: #e2e8f0;
+      --panel-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --grid-header: #f1f5f9;
+      --grid-row-alt: #f8fafc;
+      --btn-bg: #f8fafc;
+      --btn-border: #94a3b8;
+      --highlight: #0284c7;
+      --danger: #dc2626;
+      --success: #16a34a;
+      --tax-purple: #6b21a8;
+      --fixed-orange: #ea580c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      font-size: 11px;
+    }
+
+    html, body {
+      height: 100%;
+      height: 100vh;
+      height: 100dvh;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: var(--bg-window);
+      color: var(--text-main);
+    }
+
+    .window-frame {
+      background: var(--panel-bg);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      height: 100vh;
+      height: 100dvh;
+      max-height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      margin: 0;
+      position: relative;
+    }
+
+    /* BARRA SUPERIOR ALTERDATA */
+    .top-toolbar {
+      background: linear-gradient(to bottom, #ffffff, #f1f5f9);
+      border-bottom: 1px solid var(--alterdata-border);
+      padding: 4px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .system-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .system-logo {
+      background: var(--alterdata-blue);
+      color: white;
+      font-weight: 900;
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .system-title h1 {
+      font-size: 12.5px;
+      color: var(--alterdata-dark);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .system-title p {
+      font-size: 10.5px;
+      color: var(--text-muted);
+      line-height: 1.2;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .tool-btn {
+      background: var(--btn-bg);
+      border: 1px solid var(--btn-border);
+      border-radius: 3px;
+      padding: 4px 9px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--text-main);
+      transition: all 0.1s ease;
+      font-size: 11px;
+    }
+
+    .tool-btn:hover {
+      background: #e2e8f0;
+      border-color: #64748b;
+    }
+
+    .tool-btn.primary {
+      background: var(--alterdata-blue);
+      border-color: var(--alterdata-dark);
+      color: white;
+    }
+
+    .tool-btn.primary:hover {
+      background: #003866;
+    }
+
+    /* ABAS */
+    .tabs-bar {
+      display: flex;
+      background: #e2e8f0;
+      border-bottom: 1px solid #cbd5e1;
+      padding-left: 8px;
+      padding-top: 4px;
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+
+    .tab-btn {
+      padding: 5px 11px;
+      background: #cbd5e1;
+      border: 1px solid #94a3b8;
+      border-bottom: none;
+      border-radius: 3px 3px 0 0;
+      margin-right: 3px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+      font-size: 11px;
+    }
+
+    .tab-btn.active {
+      background: var(--panel-bg);
+      border-color: #94a3b8;
+      border-bottom: 1px solid var(--panel-bg);
+      color: var(--alterdata-blue);
+      margin-bottom: -1px;
+      z-index: 2;
+    }
+
+    .tab-btn.tab-fixas {
+      background: #fed7aa;
+      border-color: #f97316;
+      color: #9a3412;
+    }
+    .tab-btn.tab-fixas.active {
+      background: var(--panel-bg);
+      border-color: #f97316;
+      color: #c2410c;
+    }
+
+    .tab-btn.tab-adiantamentos {
+      background: #e0e7ff;
+      border-color: #6366f1;
+      color: #3730a3;
+    }
+    .tab-btn.tab-adiantamentos.active {
+      background: var(--panel-bg);
+      border-color: #6366f1;
+      color: #4338ca;
+    }
+
+    /* CONTEUDO */
+    .content-area {
+      flex: 1 1 0%;
+      min-height: 0;
+      overflow-y: auto;
+      padding: 8px 12px 56px 12px;
+      background: var(--panel-bg);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    fieldset {
+      border: 1px solid #cbd5e1;
+      border-radius: 3px;
+      padding: 6px 10px;
+      margin-bottom: 7px;
+      background: #ffffff;
+    }
+
+    legend {
+      padding: 0 4px;
+      font-weight: 700;
+      color: var(--alterdata-blue);
+      font-size: 10.5px;
+      text-transform: uppercase;
+    }
+
+    .form-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 7px;
+      margin-bottom: 5px;
+    }
+
+    .form-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+      margin-bottom: 5px;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .form-field label {
+      font-size: 10px;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .form-field input, .form-field select, .form-field textarea {
+      padding: 3.5px 6px;
+      border: 1px solid #94a3b8;
+      border-radius: 2px;
+      font-size: 11px;
+      background: #ffffff;
+      outline: none;
+    }
+
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
+      border-color: var(--alterdata-blue);
+      box-shadow: 0 0 0 2px rgba(0, 75, 135, 0.15);
+    }
+
+    .form-field input[readonly] {
+      background: #f1f5f9;
+      color: #334155;
+      font-weight: 600;
+    }
+
+    /* GRID TABELAS ALTERDATA */
+    .alterdata-grid {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid #cbd5e1;
+      margin-top: 6px;
+    }
+
+    .alterdata-grid th {
+      background: #e2e8f0;
+      color: #1e293b;
+      font-weight: 700;
+      padding: 6px 8px;
+      border: 1px solid #cbd5e1;
+      text-align: left;
+      font-size: 11px;
+    }
+
+    .alterdata-grid td {
+      padding: 5px 8px;
+      border: 1px solid #e2e8f0;
+      font-size: 11.5px;
+      vertical-align: middle;
+    }
+
+    .alterdata-grid tr:nth-child(even) {
+      background: var(--grid-row-alt);
+    }
+
+    .alterdata-grid tr:hover {
+      background: #e0f2fe;
+    }
+
+    .grid-input {
+      width: 100%;
+      padding: 4px 6px;
+      border: 1px solid #cbd5e1;
+      border-radius: 2px;
+      font-size: 11px;
+    }
+
+    /* PAINEL DE DUPLICIDADE DETALHADO */
+    .duplicity-modal-card {
+      background: #fef2f2;
+      border: 1px solid #f87171;
+      border-radius: 4px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      display: none;
+    }
+
+    .duplicity-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      color: #991b1b;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .duplicity-details {
+      background: white;
+      border: 1px solid #fecaca;
+      border-radius: 3px;
+      padding: 8px 12px;
+      font-size: 11px;
+      color: #450a0a;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    /* RODA-PE TOTAIS FIXO NO FINAL DA TELA */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: 44px;
+      min-height: 44px;
+      background: #f1f5f9;
+      border-top: 2px solid var(--alterdata-blue);
+      padding: 4px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      z-index: 10000;
+      box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.12);
+    }
+
+    .totals-deck {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .total-box {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.15;
+    }
+
+    .total-box .title {
+      font-size: 9.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .total-box .val {
+      font-size: 12.5px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .total-box.bruto .val { color: #0f172a; }
+    .total-box.retencoes .val { color: var(--tax-purple); }
+    .total-box.liquido .val { color: var(--alterdata-blue); }
+    .total-box.conciliado .val { color: var(--success); }
+    .total-box.orange .val { color: var(--fixed-orange); }
+    .total-box.danger .val { color: var(--danger); }
+    .total-box.indigo .val { color: #4338ca; }
+
+    .tag-tipo {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 2px;
+      font-weight: 700;
+      font-size: 9.5px;
+    }
+    .tag-fornecedor { background: #dbeafe; color: #1e40af; }
+    .tag-imposto { background: #f3e8ff; color: #6b21a8; }
+    .tag-sem-nf { background: #ffedd5; color: #9a3412; }
+    .tag-previsao { background: #fef3c7; color: #b45309; }
+    .tag-efetivada { background: #dcfce7; color: #15803d; }
+
+    .status-badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .status-pendente { background: #fef3c7; color: #92400e; }
+    .status-pago { background: #dcfce7; color: #166534; }
+
+    /* MODAIS */
+    #modal-folha-rosto, #modal-efetivar-previsao, #modal-fechamento-prestacao {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .sheet-paper {
+      background: white;
+      width: 800px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 30px;
+      border-radius: 4px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      font-family: Arial, sans-serif;
+    }
+
+    .modal-box {
+      background: white;
+      width: 480px;
+      padding: 20px;
+      border-radius: 4px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    @media print {
+      body * { visibility: hidden; }
+      #modal-folha-rosto, #modal-folha-rosto * { visibility: visible; }
+      #modal-folha-rosto { position: absolute; top: 0; left: 0; width: 100%; }
+      .no-print { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="window-frame">
+
+  <!-- BARRA DE FERRAMENTAS SUPERIOR -->
+  <div class="top-toolbar">
+    <div class="system-badge">
+      <div class="system-logo">ALTERDATA</div>
+      <div class="system-title">
+        <h1>Central de Documentos & Contas a Pagar</h1>
+        <p>Lançamentos de NFS-e, Retenções Tributárias, Rastreabilidade e Despesas Fixas</p>
+      </div>
+      <div style="display: flex; align-items: center; gap: 6px;">
+        <span id="status-conexao-db" style="display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; color: #15803d; background: #dcfce7; padding: 2px 6px; border-radius: 3px; border: 1px solid #86efac;">
+          🟢 Conectado ao SQLite (robo_boah.db)
+        </span>
+      </div>
+    </div>
+
+    <div class="toolbar-actions">
+      <!-- Seletor de Escala / Densidade de Tela -->
+      <div style="display: inline-flex; align-items: center; gap: 3px; background: #e2e8f0; padding: 2px 5px; border-radius: 3px; border: 1px solid #cbd5e1; margin-right: 4px;">
+        <span style="font-size: 10px; font-weight: 700; color: #475569;">🔍 Escala:</span>
+        <button type="button" class="tool-btn" style="padding: 2px 5px; font-size: 10px;" id="btn-zoom-85" onclick="alterarZoom('85%')">85%</button>
+        <button type="button" class="tool-btn" style="padding: 2px 5px; font-size: 10px;" id="btn-zoom-90" onclick="alterarZoom('90%')">90%</button>
+        <button type="button" class="tool-btn" style="padding: 2px 5px; font-size: 10px;" id="btn-zoom-100" onclick="alterarZoom('100%')">100%</button>
+      </div>
+
+      <button class="tool-btn primary" onclick="gravarDocumento()">💾 Gravar (F10)</button>
+      <button class="tool-btn" onclick="novoDocumento()">➕ Novo Lançamento</button>
+      <button class="tool-btn" style="color: #0369a1; font-weight: 700; background: #e0f2fe; border: 1px solid #7dd3fc;" onclick="testarBoletoExemplo('itau')">⚡ Testar Itaú</button>
+      <button class="tool-btn" style="color: #92400e; font-weight: 700; background: #fef3c7; border: 1px solid #fcd34d;" onclick="testarBoletoExemplo('enel')">⚡ Testar Luz</button>
+      <button class="tool-btn" onclick="carregarExemploCompleto()">⚡ Exemplo NFS-e</button>
+      <button class="tool-btn" onclick="abrirFolhaRostoUltimo()">🖨️ Folha de Rosto</button>
+      <button class="tool-btn" style="color: var(--danger);" onclick="limparTudo()">🗑️ Limpar Base</button>
+    </div>
+  </div>
+
+  <!-- NAVEGAÇÃO POR ABAS -->
+  <div class="tabs-bar">
+    <button class="tab-btn active" onclick="trocarAba('aba-geral', this)">📄 1. Documento</button>
+    <button class="tab-btn" onclick="trocarAba('aba-detalhes', this)">🔍 2. Detalhes & Origem</button>
+    <button class="tab-btn" onclick="trocarAba('aba-retencoes', this)">🏛️ 3. Retenções Fiscais</button>
+    <button class="tab-btn" onclick="trocarAba('aba-financeiro', this)">💼 4. Títulos a Pagar</button>
+    <button class="tab-btn" onclick="trocarAba('aba-contabil', this)">📖 5. Contabilidade</button>
+    <button class="tab-btn tab-fixas" onclick="trocarAba('aba-previsoes', this)">📅 6. Despesas Fixas</button>
+    <button class="tab-btn tab-adiantamentos" onclick="trocarAba('aba-adiantamentos', this)">🤝 7. Adiantamentos</button>
+  </div>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <div class="content-area">
+
+    <!-- ALERTA DE DUPLICIDADE DETALHADO -->
+    <div id="duplicity-modal" class="duplicity-modal-card">
+      <div class="duplicity-header">
+        <span>⛔ <strong>ALERTA DE DUPLICIDADE (TRAVA DE SEGURANÇA):</strong></span>
+        <span>Este documento já foi lançado no sistema e está registrado no Contas a Pagar!</span>
+      </div>
+      <div class="duplicity-details">
+        <div><strong>Doc / NF:</strong> <span id="dup-info-nf">-</span></div>
+        <div><strong>Favorecido:</strong> <span id="dup-info-forn">-</span></div>
+        <div><strong>Data Lançamento:</strong> <span id="dup-info-data">-</span></div>
+        <div><strong>Valor Líquido:</strong> <span id="dup-info-valor" style="color: var(--danger); font-weight: 700;">-</span></div>
+        <div style="grid-column: span 4; margin-top: 4px; border-top: 1px dashed #fca5a5; padding-top: 4px;">
+          <strong>Situação Atual:</strong> <span id="dup-info-status" class="status-badge status-pendente">-</span>
+          <span style="margin-left: 12px; color: #7f1d1d;">Verifique se não se trata de uma tentativa de pagamento em duplicidade.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== ABA 1: IDENTIFICAÇÃO DO DOCUMENTO ==================== -->
+    <div id="aba-geral" class="tab-content active">
+      <fieldset>
+        <legend>Tipo de Operação & Documento de Origem</legend>
+        <div class="form-grid-4">
+          <div class="form-field">
+            <label>Tipo de Documento *</label>
+            <select id="tipo_documento" onchange="ajustarTipoDocumento()">
+              <option value="NFSE">NFS-e - Nota Fiscal de Serviços Eletrônica</option>
+              <option value="NFE">NF-e - Nota Fiscal de Produtos/Mercadorias</option>
+              <option value="RECIBO">Recibo / RPA (Sem Documento Fiscal)</option>
+              <option value="CONTRATO">Contrato / Locação / Aluguel Mensal</option>
+              <option value="FATURA">Fatura de Concessionária (Luz, Água, Internet)</option>
+              <option value="DESPESA_INTERNA">Adiantamento / Reembolso / Despesa Interna</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label id="lbl-numero-doc">Número da NFS-e / Documento *</label>
+            <input type="text" id="numero_doc" placeholder="Ex: 2026105" oninput="checarDuplicidadeLive(); atualizarHistoricoDinamico();">
+          </div>
+          <div class="form-field">
+            <label>Série / Subsérie</label>
+            <input type="text" id="serie_doc" value="E - 1">
+          </div>
+          <div class="form-field">
+            <label>Código da Operação (CFOP)</label>
+            <input type="text" id="cod_operacao" value="1.933 - Aquisição de Serviços">
+          </div>
+        </div>
+      <!-- DECODIFICADOR INTELIGENTE DE BOLETO / LINHA DIGITÁVEL -->
+      <fieldset style="background: #f0fdf4; border: 1px solid #86efac; margin-bottom: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; flex-wrap: wrap; gap: 4px;">
+          <legend style="color: #166534; font-weight: 700; background: #dcfce7; padding: 2px 8px; border-radius: 3px; border: 1px solid #86efac;">
+            ⚡ Leitura Rápida de Boleto (Código de Barras Febraban)
+          </legend>
+          <div style="display: flex; gap: 6px;">
+            <button type="button" class="tool-btn" style="background: #ffffff; border: 1px solid #86efac; font-weight: 700; color: #15803d;" onclick="testarBoletoExemplo('itau')">⚡ Testar Itaú (47 dígitos)</button>
+            <button type="button" class="tool-btn" style="background: #ffffff; border: 1px solid #fcd34d; font-weight: 700; color: #92400e;" onclick="testarBoletoExemplo('enel')">⚡ Testar Luz (48 dígitos)</button>
+          </div>
+        </div>
+        <div class="form-field">
+          <input type="text" id="linha_digitavel" oninput="processarLinhaDigitavelLive()" placeholder="Cole aqui a linha digitável (47 ou 48 dígitos) para auto-preencher banco, vencimento e valor..." style="font-family: monospace; font-size: 12px; font-weight: 600; color: #1e3a8a; padding: 5px 8px;">
+          <div id="badge-boleto-decodificado" style="display: none; margin-top: 4px; padding: 4px 8px; border-radius: 3px; font-size: 11px; font-weight: 600;"></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Favorecido / Prestador / Beneficiário</legend>
+        <div class="form-grid-3">
+          <div class="form-field">
+            <label>CNPJ / CPF do Favorecido *</label>
+            <input type="text" id="cnpj_favorecido" placeholder="00.000.000/0001-00" oninput="checarDuplicidadeLive()">
+          </div>
+          <div class="form-field" style="grid-column: span 2;">
+            <label>Razão Social / Nome do Favorecido *</label>
+            <input type="text" id="razao_favorecido" placeholder="Ex: Alfa Prestadora de Serviços e Tecnologia Ltda" oninput="atualizarHistoricoDinamico()">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Datas do Movimento & Vencimento do Principal</legend>
+        <div class="form-grid-4">
+          <div class="form-field">
+            <label>Data de Emissão *</label>
+            <input type="date" id="data_emissao" onchange="sugerirVencimentosFiscais()">
+          </div>
+          <div class="form-field">
+            <label>Data de Entrada / Competência *</label>
+            <input type="date" id="data_entrada">
+          </div>
+          <div class="form-field">
+            <label>Vencimento do Boleto / Prestador *</label>
+            <input type="date" id="vencimento_principal">
+          </div>
+          <div class="form-field">
+            <label>Valor Bruto do Documento (R$) *</label>
+            <input type="number" step="0.01" id="valor_bruto" placeholder="0.00" oninput="recalcularValores()" style="font-size: 13px; font-weight: 700; color: var(--alterdata-blue);">
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <!-- ==================== ABA 2: RIQUEZA DE DETALHES ==================== -->
+    <div id="aba-detalhes" class="tab-content">
+      <fieldset>
+        <legend>Origem, Motivo & Rastreabilidade da Despesa (Mesmo sem Documento Fiscal)</legend>
+        <div class="form-grid-3">
+          <div class="form-field">
+            <label>Centro de Custo / Departamento *</label>
+            <select id="centro_custo" onchange="atualizarHistoricoDinamico()">
+              <option value="TI e Infraestrutura">01.02 - TI e Infraestrutura</option>
+              <option value="Administrativo / Diretoria">01.01 - Administrativo / Diretoria</option>
+              <option value="Financeiro / Contabilidade">01.03 - Financeiro / Contabilidade</option>
+              <option value="Operacional / Produção">02.01 - Operacional / Produção</option>
+              <option value="Comercial / Vendas">03.01 - Comercial / Vendas</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Solicitante / Quem Autorizou *</label>
+            <input type="text" id="solicitante_despesa" placeholder="Ex: Roberto (Gerência de TI)" oninput="atualizarHistoricoDinamico()">
+          </div>
+          <div class="form-field">
+            <label>Nº Contrato / Pedido de Compra / O.S.</label>
+            <input type="text" id="num_contrato_pedido" placeholder="Ex: CT-2026/04 ou OS-8841" oninput="atualizarHistoricoDinamico()">
+          </div>
+        </div>
+
+        <div class="form-field" style="margin-top: 6px;">
+          <label>Descrição Completa / Objeto Detalhado do Serviço ou Despesa *</label>
+          <textarea id="descricao_detalhada" rows="3" placeholder="Detalhe com riqueza de informações: qual o serviço, finalidade, período de atendimento, equipamentos atendidos ou justificativa do pagamento..." oninput="atualizarHistoricoDinamico()"></textarea>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Dados para Pagamento Bancário / Conciliação</legend>
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label>Forma de Pagamento Pretendida</label>
+            <select id="forma_pagamento">
+              <option value="BOLETO">Boleto Bancário (Com Código de Barras)</option>
+              <option value="PIX">Transferência Instantânea - PIX</option>
+              <option value="TED_DOC">Transferência Bancária - TED / DOC</option>
+              <option value="DEBITO">Débito Automático em Conta</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Chave PIX ou Dados Bancários (Favorecido)</label>
+            <input type="text" id="dados_bancarios" placeholder="Ex: Chave CNPJ ou Banco 341 Ag 1234 Cc 5678-9">
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <!-- ==================== ABA 3: TRIBUTOS RETIDOS ==================== -->
+    <div id="aba-retencoes" class="tab-content">
+      <fieldset>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <legend>Grade Individual de Tributos Retidos (Destacar do Papel)</legend>
+          <button type="button" class="tool-btn" style="padding: 2px 8px; font-size: 11px;" onclick="sugerirVencimentosFiscais()">
+            📅 Sugerir Vencimentos Fiscais Automaticamente
+          </button>
+        </div>
+        <p style="color: var(--text-muted); font-size: 11px; margin-bottom: 8px;">
+          Preencha os valores conforme destacados na NFS-e. Cada tributo gerará seu próprio título no Contas a Pagar com a guia correspondente.
+        </p>
+
+        <table class="alterdata-grid">
+          <thead>
+            <tr>
+              <th style="width: 140px;">Tributo Retido</th>
+              <th style="width: 100px;">Alíquota Ref.</th>
+              <th style="width: 110px;">Cód. Receita</th>
+              <th style="width: 130px;">Valor Retido (R$)</th>
+              <th style="width: 130px;">Vencimento da Guia</th>
+              <th>Favorecido / Guia Oficial</th>
+              <th style="width: 90px; text-align: center;">Gerar Título?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>ISSQN Retido</strong></td>
+              <td>2% a 5%</td>
+              <td>DAM Municipal</td>
+              <td><input type="number" step="0.01" id="ret_iss" class="grid-input" placeholder="0.00" oninput="recalcularValores()"></td>
+              <td><input type="date" id="venc_iss" class="grid-input"></td>
+              <td>Prefeitura Municipal (Guia DAM)</td>
+              <td style="text-align: center;"><input type="checkbox" id="chk_iss" checked></td>
+            </tr>
+            <tr>
+              <td><strong>IRRF PJ</strong></td>
+              <td>1,0% ou 1,5%</td>
+              <td>1708 - DARF</td>
+              <td><input type="number" step="0.01" id="ret_irrf" class="grid-input" placeholder="0.00" oninput="recalcularValores()"></td>
+              <td><input type="date" id="venc_irrf" class="grid-input"></td>
+              <td>Receita Federal do Brasil (DARF 1708)</td>
+              <td style="text-align: center;"><input type="checkbox" id="chk_irrf" checked></td>
+            </tr>
+            <tr>
+              <td><strong>PIS Retido</strong></td>
+              <td>0,65%</td>
+              <td>5952 - DARF</td>
+              <td><input type="number" step="0.01" id="ret_pis" class="grid-input" placeholder="0.00" oninput="recalcularValores()"></td>
+              <td><input type="date" id="venc_pis" class="grid-input"></td>
+              <td>Receita Federal do Brasil (DARF PIS)</td>
+              <td style="text-align: center;"><input type="checkbox" id="chk_pis" checked></td>
+            </tr>
+            <tr>
+              <td><strong>COFINS Retido</strong></td>
+              <td>3,00%</td>
+              <td>5952 - DARF</td>
+              <td><input type="number" step="0.01" id="ret_cofins" class="grid-input" placeholder="0.00" oninput="recalcularValores()"></td>
+              <td><input type="date" id="venc_cofins" class="grid-input"></td>
+              <td>Receita Federal do Brasil (DARF COFINS)</td>
+              <td style="text-align: center;"><input type="checkbox" id="chk_cofins" checked></td>
+            </tr>
+            <tr>
+              <td><strong>CSLL Retido</strong></td>
+              <td>1,00%</td>
+              <td>5952 - DARF</td>
+              <td><input type="number" step="0.01" id="ret_csll" class="grid-input" placeholder="0.00" oninput="recalcularValores()"></td>
+              <td><input type="date" id="venc_csll" class="grid-input"></td>
+              <td>Receita Federal do Brasil (DARF CSLL)</td>
+              <td style="text-align: center;"><input type="checkbox" id="chk_csll" checked></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div style="margin-top: 10px; background: #f8fafc; padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px; display: flex; justify-content: space-between;">
+          <span><strong>Total Retenções Federais (IRRF + PIS + COFINS + CSLL):</strong> <span id="tot-federais" style="color: var(--tax-purple); font-weight: 700;">R$ 0,00</span></span>
+          <span><strong>Total Retenção Municipal (ISS):</strong> <span id="tot-municipal" style="color: var(--alterdata-blue); font-weight: 700;">R$ 0,00</span></span>
+        </div>
+      </fieldset>
+    </div>
+
+    <!-- ==================== ABA 4: CONTAS A PAGAR ==================== -->
+    <div id="aba-financeiro" class="tab-content">
+      <fieldset>
+        <legend>Grade de Títulos no Contas a Pagar (Desmembramento Automático)</legend>
+        <!-- REGUA DA AGENDA FINANCEIRA DE VENCIMENTOS -->
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 8px;">
+          <div onclick="filtrarAgendaVencimento('vencidos')" style="background: #fef2f2; border: 1px solid #fca5a5; padding: 6px 10px; border-radius: 3px; cursor: pointer; transition: all 0.1s;" title="Clique para filtrar vencidos">
+            <div style="font-size: 10px; font-weight: 700; color: #991b1b; text-transform: uppercase;">🚨 Vencidos (Atraso)</div>
+            <div style="font-size: 13px; font-weight: 800; color: #dc2626;" id="agenda-tot-vencidos">R$ 0,00</div>
+            <div style="font-size: 9.5px; color: #7f1d1d;" id="agenda-qtd-vencidos">0 contas</div>
+          </div>
+          <div onclick="filtrarAgendaVencimento('hoje')" style="background: #fffbeb; border: 1px solid #fcd34d; padding: 6px 10px; border-radius: 3px; cursor: pointer; transition: all 0.1s;" title="Clique para filtrar o que vence hoje">
+            <div style="font-size: 10px; font-weight: 700; color: #92400e; text-transform: uppercase;">📅 Vence Hoje</div>
+            <div style="font-size: 13px; font-weight: 800; color: #b45309;" id="agenda-tot-hoje">R$ 0,00</div>
+            <div style="font-size: 9.5px; color: #78350f;" id="agenda-qtd-hoje">0 contas</div>
+          </div>
+          <div onclick="filtrarAgendaVencimento('semana')" style="background: #eff6ff; border: 1px solid #93c5fd; padding: 6px 10px; border-radius: 3px; cursor: pointer; transition: all 0.1s;" title="Clique para filtrar próximos 7 dias">
+            <div style="font-size: 10px; font-weight: 700; color: #1e40af; text-transform: uppercase;">📆 Próximos 7 Dias</div>
+            <div style="font-size: 13px; font-weight: 800; color: var(--alterdata-blue);" id="agenda-tot-semana">R$ 0,00</div>
+            <div style="font-size: 9.5px; color: #1e3a8a;" id="agenda-qtd-semana">0 contas</div>
+          </div>
+          <div onclick="filtrarAgendaVencimento('mes')" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 6px 10px; border-radius: 3px; cursor: pointer; transition: all 0.1s;" title="Clique para filtrar restante do mês">
+            <div style="font-size: 10px; font-weight: 700; color: #475569; text-transform: uppercase;">🗓️ Restante do Mês</div>
+            <div style="font-size: 13px; font-weight: 800; color: #1e293b;" id="agenda-tot-mes">R$ 0,00</div>
+            <div style="font-size: 9.5px; color: #64748b;" id="agenda-qtd-mes">0 contas</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+          <div style="display: flex; gap: 5px; flex-wrap: wrap;" id="botoes-filtro-titulos">
+            <button class="tool-btn" onclick="filtrarTitulos('todos', this)" style="background: var(--alterdata-blue); color: white;">Todos</button>
+            <button class="tool-btn" onclick="filtrarTitulos('fornecedor', this)">Favorecidos / Prestadores</button>
+            <button class="tool-btn" onclick="filtrarTitulos('imposto', this)">Guias de Tributos Retidos</button>
+            <button class="tool-btn" onclick="filtrarTitulos('pendente', this)">Em Aberto</button>
+            <button class="tool-btn" onclick="filtrarTitulos('conciliado', this)">Baixados & Conciliados</button>
+            <button class="tool-btn" onclick="filtrarAgendaVencimento('vencidos', this)" style="color: #b91c1c;">🚨 Vencidos</button>
+            <button class="tool-btn" onclick="filtrarAgendaVencimento('hoje', this)" style="color: #b45309;">📅 Vence Hoje</button>
+            <button class="tool-btn" onclick="filtrarAgendaVencimento('semana', this)" style="color: #1e40af;">📆 Esta Semana</button>
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <button class="tool-btn" onclick="carregarDadosIniciais()">🔄 Sincronizar SQLite</button>
+            <button class="tool-btn" onclick="abrirFolhaRostoUltimo()">🖨️ Espelho Selecionado</button>
+          </div>
+        </div>
+
+        <table class="alterdata-grid">
+          <thead>
+            <tr>
+              <th style="width: 105px;">Tipo Título</th>
+              <th style="width: 100px;">Documento</th>
+              <th>Favorecido / Histórico Completo</th>
+              <th style="width: 90px;">Vencimento</th>
+              <th style="width: 110px;">Valor (R$)</th>
+              <th style="width: 95px;">Situação</th>
+              <th style="width: 140px; text-align: center;">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="grid-titulos-body"></tbody>
+        </table>
+        <div id="empty-titulos-msg" style="text-align: center; padding: 30px; color: var(--text-muted);">
+          Nenhum título lançado. Preencha as abas e clique em "💾 Gravar (F10)".
+        </div>
+      </fieldset>
+    </div>
+
+    <!-- ==================== ABA 5: HISTÓRICO CONTÁBIL ==================== -->
+    <div id="aba-contabil" class="tab-content">
+      <fieldset>
+        <legend>Histórico Contábil Oficial (Rico em Detalhes para Diário e Razão)</legend>
+        <div class="form-field">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px;">
+            <label>Histórico da Despesa Principal (Alimentado Automaticamente pelos Detalhes):</label>
+            <button type="button" class="tool-btn" style="padding: 2px 8px; font-size: 11px;" onclick="forcarRegenerarHistorico()">✨ Reconstruir Texto dos Detalhes</button>
+          </div>
+          <textarea id="historico_contabil_completo" rows="3" placeholder="O histórico será gerado combinando fornecedor, documento, objeto do serviço, solicitante e contrato..."></textarea>
+        </div>
+
+        <div style="margin-top: 14px;">
+          <label style="font-weight: 700; color: var(--alterdata-blue); display: block; margin-bottom: 6px;">
+            Históricos Vinculados às Guias de Tributos Retidos (100% Rastreáveis):
+          </label>
+          <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 10px; border-radius: 4px; font-size: 11.5px; line-height: 1.8;">
+            <div>🏛️ <strong>ISS Retido:</strong> <span id="prev-hist-iss">Aguardando preenchimento...</span></div>
+            <div>🏛️ <strong>IRRF PJ:</strong> <span id="prev-hist-irrf">Aguardando preenchimento...</span></div>
+            <div>🏛️ <strong>PIS Retido:</strong> <span id="prev-hist-pis">Aguardando preenchimento...</span></div>
+            <div>🏛️ <strong>COFINS Retido:</strong> <span id="prev-hist-cofins">Aguardando preenchimento...</span></div>
+            <div>🏛️ <strong>CSLL Retido:</strong> <span id="prev-hist-csll">Aguardando preenchimento...</span></div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <!-- ==================== ABA 6: DESPESAS FIXAS & PREVISÕES (ITEM 2) ==================== -->
+    <div id="aba-previsoes" class="tab-content">
+      <div style="display: grid; grid-template-columns: 390px 1fr; gap: 16px; align-items: start;">
+        
+        <!-- FORMULÁRIO DE CADASTRO DE DESPESA FIXA -->
+        <fieldset>
+          <legend>Cadastrar Nova Despesa Fixa / Recorrência</legend>
+          <p style="color: var(--text-muted); font-size: 11px; margin-bottom: 10px;">
+            Cadastre contratos de aluguel, energia, internet e softwares uma única vez para gerar as previsões futuras automaticamente.
+          </p>
+
+          <div class="form-field" style="margin-bottom: 8px;">
+            <label>Identificação / Nome da Despesa *</label>
+            <input type="text" id="fixa_nome" placeholder="Ex: Aluguel Galpão Logístico">
+          </div>
+
+          <div class="form-field" style="margin-bottom: 8px;">
+            <label>Favorecido / Fornecedor / Concessionária *</label>
+            <input type="text" id="fixa_favorecido" placeholder="Ex: Imobiliária Central Ltda">
+          </div>
+
+          <div class="form-grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+            <div class="form-field">
+              <label>CNPJ / CPF</label>
+              <input type="text" id="fixa_cnpj" placeholder="00.000.000/0001-00">
+            </div>
+            <div class="form-field">
+              <label>Dia Fixo Vencimento *</label>
+              <input type="number" id="fixa_dia" min="1" max="31" value="10" placeholder="Dia (Ex: 10)">
+            </div>
+          </div>
+
+          <div class="form-grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+            <div class="form-field">
+              <label>Valor Mensal (R$) *</label>
+              <input type="number" step="0.01" id="fixa_valor" placeholder="0.00" style="font-weight: 700; color: var(--alterdata-blue);">
+            </div>
+            <div class="form-field">
+              <label>Tipo de Previsão</label>
+              <select id="fixa_tipo_valor">
+                <option value="FIXO">Valor Fixo Contratual</option>
+                <option value="ESTIMADO">Valor Estimado / Média (Luz/Água)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+            <div class="form-field">
+              <label>Centro de Custo</label>
+              <select id="fixa_ccusto">
+                <option value="Administrativo / Diretoria">Administrativo / Diretoria</option>
+                <option value="TI e Infraestrutura">TI e Infraestrutura</option>
+                <option value="Operacional / Produção">Operacional / Produção</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label>Meses a Projetar</label>
+              <select id="fixa_meses">
+                <option value="6">Próximos 6 meses</option>
+                <option value="12" selected>Próximos 12 meses</option>
+                <option value="24">Próximos 24 meses</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-field" style="margin-bottom: 12px;">
+            <label>Observações / Nº Contrato</label>
+            <input type="text" id="fixa_obs" placeholder="Ex: Contrato Locação nº 4410 - reajuste anual pelo IPCA">
+          </div>
+
+          <button type="button" class="tool-btn primary" style="width: 100%; justify-content: center;" onclick="cadastrarDespesaFixa()">
+            ➕ Gerar Previsões no Fluxo de Caixa
+          </button>
+
+          <button type="button" class="tool-btn" style="width: 100%; justify-content: center; margin-top: 8px;" onclick="carregarExemplosDespesasFixas()">
+            ⚡ Carregar Despesas Fixas Típicas (Aluguel, Luz, Internet, ERP, Contabilidade)
+          </button>
+        </fieldset>
+
+        <!-- GRADE DE PREVISÕES GERADAS (FLUXO FUTURO) -->
+        <fieldset>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <legend style="margin-bottom: 0;">Projeção do Fluxo de Caixa - Despesas Fixas</legend>
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <label style="margin-bottom: 0; font-size: 11px;">Filtrar Mês:</label>
+              <select id="filtro_mes_previsao" onchange="renderizarGridPrevisoes()" style="padding: 3px 6px; border: 1px solid #94a3b8; border-radius: 2px;">
+                <option value="TODOS">Todos os Meses</option>
+              </select>
+              <button class="tool-btn" style="padding: 2px 8px; font-size: 11px; color: var(--danger);" onclick="limparPrevisoes()">
+                🗑️ Limpar Previsões
+              </button>
+            </div>
+          </div>
+
+          <!-- Totalizadores de Previsões -->
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px;">
+            <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 8px; border-radius: 3px;">
+              <div style="font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Total Previsto em Aberto</div>
+              <div style="font-size: 14px; font-weight: 800; color: var(--alterdata-blue);" id="prev-tot-aberto">R$ 0,00</div>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 8px; border-radius: 3px;">
+              <div style="font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Previsões Efetivadas</div>
+              <div style="font-size: 14px; font-weight: 800; color: var(--success);" id="prev-tot-efetivadas">0 contas</div>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 8px; border-radius: 3px;">
+              <div style="font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Média Mensal Comprometida</div>
+              <div style="font-size: 14px; font-weight: 800; color: #475569;" id="prev-media-mensal">R$ 0,00</div>
+            </div>
+          </div>
+
+          <table class="alterdata-grid">
+            <thead>
+              <tr>
+                <th style="width: 85px;">Mês Ref.</th>
+                <th style="width: 85px;">Vencimento</th>
+                <th>Despesa / Favorecido / Contrato</th>
+                <th style="width: 105px;">Centro Custo</th>
+                <th style="width: 100px;">Valor Previsto</th>
+                <th style="width: 95px;">Situação</th>
+                <th style="width: 130px; text-align: center;">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="grid-previsoes-body"></tbody>
+          </table>
+          <div id="empty-previsoes-msg" style="text-align: center; padding: 30px; color: var(--text-muted);">
+            Nenhuma previsão cadastrada. Use o formulário ao lado ou clique em "⚡ Carregar Despesas Fixas Típicas".
+          </div>
+        </fieldset>
+
+      </div>
+    </div>
+
+    <!-- ==================== ABA 7: ADIANTAMENTOS & PRESTAÇÃO DE CONTAS ==================== -->
+    <div id="aba-adiantamentos" class="tab-content">
+      <div style="display: grid; grid-template-columns: 390px 1fr; gap: 16px; align-items: start;">
+        <div>
+        <!-- Formulário: Novo Adiantamento -->
+        <fieldset>
+          <legend>Conceder Novo Adiantamento / Fundo Fixo</legend>
+          <p style="color: var(--text-muted); font-size: 11px; margin-bottom: 10px;">
+            Liberar adiantamento para colaborador ou setor para cobertura de despesas de eventos, viagens ou compras.
+          </p>
+
+          <div class="form-field" style="margin-bottom: 8px;">
+            <label>Colaborador / Solicitante *</label>
+            <input type="text" id="ad_solicitante" placeholder="Ex: Luiza - Marketing">
+          </div>
+
+          <div class="form-grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+            <div class="form-field">
+              <label>Departamento / Centro Custo</label>
+              <select id="ad_ccusto">
+                <option value="Marketing / Eventos">Marketing / Eventos</option>
+                <option value="Administrativo / Diretoria">Administrativo / Diretoria</option>
+                <option value="Operacional / Produção">Operacional / Produção</option>
+                <option value="TI e Infraestrutura">TI e Infraestrutura</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label>Data da Liberação *</label>
+              <input type="date" id="ad_data">
+            </div>
+          </div>
+
+          <div class="form-grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+            <div class="form-field">
+              <label>Valor Adiantado (R$) *</label>
+              <input type="number" step="0.01" id="ad_valor" placeholder="1000.00" style="font-size: 13px; font-weight: 700; color: var(--alterdata-blue);">
+            </div>
+            <div class="form-field">
+              <label>Forma de Liberação</label>
+              <select id="ad_forma">
+                <option value="PIX">Transferência PIX</option>
+                <option value="TED">Transferência TED</option>
+                <option value="ESPECIE">Dinheiro em Espécie</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-field" style="margin-bottom: 12px;">
+            <label>Motivo / Evento / Finalidade *</label>
+            <textarea id="ad_motivo" rows="2" placeholder="Ex: Adiantamento para despesas e custos operacionais do evento de lançamento"></textarea>
+          </div>
+
+          <button type="button" class="tool-btn primary" style="width: 100%; justify-content: center;" onclick="concederAdiantamento()">
+            ➕ Conceder Adiantamento
+          </button>
+
+          <button type="button" class="tool-btn" style="width: 100%; justify-content: center; margin-top: 8px;" onclick="carregarExemploMultiplosAdiantamentos()">
+            ⚡ Carregar Vários Adiantamentos (Luiza, Marcos e Juliana)
+          </button>
+        </fieldset>
+
+        <!-- Lista Visual de Todos os Adiantamentos -->
+        <fieldset style="margin-top: 8px;">
+          <legend>📋 Adiantamentos Cadastrados (<span id="total-ad-count">0</span>)</legend>
+          <p style="color: var(--text-muted); font-size: 10.5px; margin-bottom: 6px;">
+            Clique em qualquer colaborador abaixo para abrir a prestação de contas dele ao lado:
+          </p>
+          <div style="max-height: 240px; overflow-y: auto; border: 1px solid #cbd5e1; border-radius: 2px;">
+            <table class="alterdata-grid" style="margin-top: 0;">
+              <thead>
+                <tr>
+                  <th>Colaborador</th>
+                  <th style="width: 75px; text-align: right;">Adiantado</th>
+                  <th style="width: 75px; text-align: right;">Saldo</th>
+                  <th style="width: 65px; text-align: center;">Status</th>
+                </tr>
+              </thead>
+              <tbody id="lista-ad-lateral-body">
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+
+      <!-- Coluna Direita: Gestão e Prestação de Contas do Adiantamento Selecionado -->
+      <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+            <legend style="margin-bottom: 0;">Gestão & Prestação de Contas</legend>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <label style="margin-bottom: 0; font-size: 11px;">Colaborador Ativo:</label>
+              <select id="sel_adiantamento_ativo" onchange="trocarAdiantamentoAtivo()" style="padding: 4px 8px; border: 1px solid #94a3b8; border-radius: 2px; font-weight: 600;">
+              </select>
+              <button class="tool-btn" style="padding: 2px 8px; font-size: 11px;" onclick="abrirRelatorioPrestacaoContas()">
+                🖨️ Imprimir Fechamento
+              </button>
+            </div>
+          </div>
+
+          <!-- Card de Resumo Financeiro do Adiantamento Selecionado -->
+          <div id="card-saldo-adiantamento" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 12px; margin-bottom: 12px;">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center;">
+              <div>
+                <div style="font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">1. Valor Concedido</div>
+                <div style="font-size: 16px; font-weight: 800; color: #0f172a;" id="ad-resumo-concedido">R$ 0,00</div>
+              </div>
+              <div>
+                <div style="font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">2. Total Comprovado</div>
+                <div style="font-size: 16px; font-weight: 800; color: var(--alterdata-blue);" id="ad-resumo-comprovado">R$ 0,00</div>
+              </div>
+              <div>
+                <div style="font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;" id="ad-lbl-saldo">3. Saldo Restante a Prestar</div>
+                <div style="font-size: 16px; font-weight: 800;" id="ad-resumo-saldo">R$ 0,00</div>
+              </div>
+            </div>
+            <div id="ad-resumo-status-msg" style="margin-top: 8px; font-size: 11px; text-align: center; font-weight: 600; padding: 4px; border-radius: 3px;"></div>
+          </div>
+
+          <!-- Formulário Rápido de Lançamento de Comprovante / Gasto -->
+          <div id="form-inserir-gasto-container" style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 4px; padding: 10px; margin-bottom: 12px;">
+            <div style="font-weight: 700; color: var(--alterdata-blue); font-size: 11px; margin-bottom: 6px;">
+              ➕ Inserir Comprovante / Nota / Recibo de Gasto
+            </div>
+            <div style="display: grid; grid-template-columns: 100px 140px 1fr 110px 100px; gap: 6px; align-items: end;">
+              <div class="form-field">
+                <label>Data Gasto</label>
+                <input type="date" id="gasto_data">
+              </div>
+              <div class="form-field">
+                <label>Tipo Documento</label>
+                <select id="gasto_tipo">
+                  <option value="Recibo">Recibo Simples</option>
+                  <option value="NFS-e">NFS-e / Nota Fiscal</option>
+                  <option value="Cupom">Cupom Fiscal</option>
+                  <option value="Comprovante">Comprovante PIX</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label>Descrição do Gasto / Fornecedor</label>
+                <input type="text" id="gasto_desc" placeholder="Ex: Garçom evento / Flores decoração / Táxi">
+              </div>
+              <div class="form-field">
+                <label>Valor (R$) *</label>
+                <input type="number" step="0.01" id="gasto_valor" placeholder="0.00" style="font-weight: 700;">
+              </div>
+              <div>
+                <button type="button" class="tool-btn primary" style="width: 100%; justify-content: center; padding: 6px 4px;" onclick="adicionarComprovanteGasto()">
+                  Adicionar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabela de Comprovantes Lançados -->
+          <table class="alterdata-grid">
+            <thead>
+              <tr>
+                <th style="width: 85px;">Data Gasto</th>
+                <th style="width: 95px;">Tipo Doc</th>
+                <th>Descrição do Gasto / Favorecido</th>
+                <th style="width: 100px; text-align: right;">Valor (R$)</th>
+                <th style="width: 60px; text-align: center;">Excluir</th>
+              </tr>
+            </thead>
+            <tbody id="grid-gastos-body"></tbody>
+          </table>
+          <div id="empty-gastos-msg" style="text-align: center; padding: 20px; color: var(--text-muted);">
+            Nenhum comprovante lançado para este adiantamento. Use o formulário acima para adicionar os gastos.
+          </div>
+
+          <!-- Ações de Encerramento do Adiantamento -->
+          <div id="painel-encerramento" style="margin-top: 14px; border-top: 1px dashed #cbd5e1; padding-top: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div id="texto-acao-fechamento" style="font-size: 11.5px; font-weight: 600; color: #334155;"></div>
+            <div id="botoes-acao-fechamento" style="display: flex; gap: 8px;"></div>
+          </div>
+
+        </fieldset>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RODAPÉ FIXO COM TOTAIS DINÂMICOS CONFORME A ABA ATIVA -->
+  <div class="bottom-bar">
+    <div class="totals-deck" id="rodape-totais-deck"></div>
+    <div style="display: flex; gap: 10px; align-items: center;" id="rodape-acoes-area"></div>
+  </div>
+
+</div>
+
+<!-- ==================== MODAL DE FOLHA DE ROSTO (ITEM 3) ==================== -->
+<div id="modal-folha-rosto">
+  <div class="sheet-paper">
+    <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #004b87; padding-bottom: 12px; margin-bottom: 16px;">
+      <div>
+        <h2 style="color: #004b87; font-size: 18px; font-weight: 800; margin-bottom: 2px;">ESPELHO DE LANÇAMENTO & CONFERÊNCIA DE DESPESA</h2>
+        <p style="font-size: 11px; color: #64748b;">Módulo Contas a Pagar - Rastreabilidade Fiscal e Tributária</p>
+      </div>
+      <div style="text-align: right;">
+        <span style="background: #e2e8f0; padding: 4px 10px; border-radius: 3px; font-weight: 700; font-size: 12px;" id="fr-doc-num">DOC-2026</span>
+        <div style="font-size: 10px; color: #64748b; margin-top: 4px;" id="fr-emissao-data">Data: 08/09/2026</div>
+      </div>
+    </div>
+
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 12px;">
+      <tr>
+        <td style="padding: 6px; border: 1px solid #cbd5e1; background: #f8fafc; width: 25%;"><strong>Favorecido:</strong></td>
+        <td style="padding: 6px; border: 1px solid #cbd5e1;" colspan="3" id="fr-favorecido">-</td>
+      </tr>
+      <tr>
+        <td style="padding: 6px; border: 1px solid #cbd5e1; background: #f8fafc;"><strong>CNPJ/CPF:</strong></td>
+        <td style="padding: 6px; border: 1px solid #cbd5e1;" id="fr-cnpj">-</td>
+        <td style="padding: 6px; border: 1px solid #cbd5e1; background: #f8fafc; width: 20%;"><strong>Vencimento:</strong></td>
+        <td style="padding: 6px; border: 1px solid #cbd5e1;" id="fr-vencimento">-</td>
+      </tr>
+      <tr>
+        <td style="padding: 6px; border: 1px solid #cbd5e1; background: #f8fafc;"><strong>Centro de Custo:</strong></td>
+        <td style="padding: 6px; border: 1px solid #cbd5e1;" id="fr-ccusto">-</td>
+        <td style="padding: 6px; border: 1px solid #cbd5e1; background: #f8fafc;"><strong>Solicitante:</strong></td>
+        <td style="padding: 6px; border: 1px solid #cbd5e1;" id="fr-solicitante">-</td>
+      </tr>
+      <tr>
+        <td style="padding: 6px; border: 1px solid #cbd5e1; background: #f8fafc;"><strong>Objeto / Descrição:</strong></td>
+        <td style="padding: 6px; border: 1px solid #cbd5e1;" colspan="3" id="fr-descricao">-</td>
+      </tr>
+      <tr>
+        <td style="padding: 6px; border: 1px solid #cbd5e1; background: #f8fafc;"><strong>Histórico Contábil:</strong></td>
+        <td style="padding: 6px; border: 1px solid #cbd5e1;" colspan="3" id="fr-historico" style="font-style: italic; color: #1e3a8a;">-</td>
+      </tr>
+      <tr>
+        <td style="padding: 6px; border: 1px solid #cbd5e1; background: #f8fafc;"><strong>Pagamento / PIX:</strong></td>
+        <td style="padding: 6px; border: 1px solid #cbd5e1;" colspan="3" id="fr-pagamento">-</td>
+      </tr>
+    </table>
+
+    <h3 style="font-size: 13px; color: #004b87; margin-bottom: 6px; text-transform: uppercase;">Demonstrativo Financeiro & Retenções Tributárias</h3>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12px;">
+      <tr style="background: #f1f5f9; font-weight: 700;">
+        <th style="padding: 6px; border: 1px solid #cbd5e1; text-align: left;">Descrição da Obrigação</th>
+        <th style="padding: 6px; border: 1px solid #cbd5e1; text-align: center;">Competência / Vencimento</th>
+        <th style="padding: 6px; border: 1px solid #cbd5e1; text-align: right;">Valor (R$)</th>
+      </tr>
+      <tr>
+        <td style="padding: 6px; border: 1px solid #cbd5e1;">Valor Bruto do Documento</td>
+        <td style="padding: 6px; border: 1px solid #cbd5e1; text-align: center;" id="fr-data-bruto">-</td>
+        <td style="padding: 6px; border: 1px solid #cbd5e1; text-align: right; font-weight: 700;" id="fr-val-bruto">R$ 0,00</td>
+      </tr>
+      <tbody id="fr-linhas-tributos"></tbody>
+      <tr style="background: #eff6ff; font-weight: 800; font-size: 13px; color: #004b87;">
+        <td style="padding: 8px; border: 1px solid #cbd5e1;">(=) LÍQUIDO A PAGAR AO FAVORECIDO</td>
+        <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: center;" id="fr-venc-liquido">-</td>
+        <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: right;" id="fr-val-liquido">R$ 0,00</td>
+      </tr>
+    </table>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 36px; text-align: center; font-size: 11px;">
+      <div style="border-top: 1px solid #475569; padding-top: 6px;">
+        <strong>Conferência Fiscal</strong><br>Data: ___/___/______
+      </div>
+      <div style="border-top: 1px solid #475569; padding-top: 6px;">
+        <strong>Aprovação Gestor</strong><br>Data: ___/___/______
+      </div>
+      <div style="border-top: 1px solid #475569; padding-top: 6px;">
+        <strong>Contas a Pagar / Baixa</strong><br>Data: ___/___/______
+      </div>
+    </div>
+
+    <div class="no-print" style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 10px;">
+      <button class="tool-btn" onclick="fecharFolhaRosto()">Fechar</button>
+      <button class="tool-btn primary" onclick="window.print()">🖨️ Imprimir Folha de Rosto</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== MODAL DE EFETIVAR PREVISÃO EM CONTA REAL ==================== -->
+<div id="modal-efetivar-previsao">
+  <div class="modal-box">
+    <div style="border-bottom: 2px solid var(--alterdata-blue); padding-bottom: 8px; margin-bottom: 12px;">
+      <h3 style="color: var(--alterdata-blue); font-size: 14px; font-weight: 700;">⚡ Efetivar Previsão em Conta Real</h3>
+      <p style="font-size: 11px; color: var(--text-muted);">A conta chegou! Confirme o valor exato para gerar o título no Contas a Pagar.</p>
+    </div>
+
+    <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 10px; border-radius: 3px; margin-bottom: 12px; font-size: 11.5px; line-height: 1.6;">
+      <div><strong>Despesa:</strong> <span id="mod-efet-nome">-</span></div>
+      <div><strong>Favorecido:</strong> <span id="mod-efet-favorecido">-</span></div>
+      <div><strong>Mês Referência:</strong> <span id="mod-efet-mes">-</span></div>
+      <div><strong>Vencimento Previsto:</strong> <span id="mod-efet-venc">-</span></div>
+    </div>
+
+    <input type="hidden" id="mod-efet-id">
+
+    <div class="form-field" style="margin-bottom: 10px;">
+      <label>Valor Real da Fatura / Boleto (R$) *</label>
+      <input type="number" step="0.01" id="mod-efet-valor" style="font-size: 14px; font-weight: 700; color: var(--alterdata-blue);">
+      <small style="color: var(--text-muted); font-size: 10px;">Se a conta veio com reajuste ou consumo diferente da média, ajuste o valor acima.</small>
+    </div>
+
+    <div class="form-field" style="margin-bottom: 10px;">
+      <label>Nº do Documento / Fatura / Mês Ref. *</label>
+      <input type="text" id="mod-efet-doc" placeholder="Ex: FAT-ENEL-2026/10 ou NF 5541">
+    </div>
+
+    <div class="form-field" style="margin-bottom: 14px;">
+      <label>Código de Barras / Linha Digitável (Opcional)</label>
+      <input type="text" id="mod-efet-barras" placeholder="Cole a linha digitável do boleto para pagamento rápido">
+    </div>
+
+    <div style="display: flex; justify-content: flex-end; gap: 8px;">
+      <button class="tool-btn" onclick="fecharModalEfetivar()">Cancelar</button>
+      <button class="tool-btn primary" onclick="confirmarEfetivacaoConta()">🚀 Enviar para Contas a Pagar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== MODAL DE FECHAMENTO DE PRESTAÇÃO DE CONTAS (ADIANTAMENTO) ==================== -->
+<div id="modal-fechamento-prestacao">
+  <div class="sheet-paper">
+    <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #004b87; padding-bottom: 12px; margin-bottom: 16px;">
+      <div>
+        <h2 style="color: #004b87; font-size: 18px; font-weight: 800; margin-bottom: 2px;">FECHAMENTO DE ADIANTAMENTO & PRESTAÇÃO DE CONTAS</h2>
+        <p style="font-size: 11px; color: #64748b;">Comprovação de Gastos Operacionais & Apuração de Saldo</p>
+      </div>
+      <div style="text-align: right;">
+        <span style="background: #e0e7ff; color: #3730a3; padding: 4px 10px; border-radius: 3px; font-weight: 700; font-size: 12px;" id="pc-status-badge">EM ABERTO</span>
+        <div style="font-size: 10px; color: #64748b; margin-top: 4px;" id="pc-data-emissao">Data: 08/09/2026</div>
+      </div>
+    </div>
+
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 12px;">
+      <tr>
+        <td style="padding: 6px; border: 1px solid #cbd5e1; background: #f8fafc; width: 25%;"><strong>Colaborador / Solicitante:</strong></td>
+        <td style="padding: 6px; border: 1px solid #cbd5e1;" colspan="3" id="pc-colaborador">-</td>
+      </tr>
+      <tr>
+        <td style="padding: 6px; border: 1px solid #cbd5e1; background: #f8fafc;"><strong>Departamento / C. Custo:</strong></td>
+        <td style="padding: 6px; border: 1px solid #cbd5e1;" id="pc-ccusto">-</td>
+        <td style="padding: 6px; border: 1px solid #cbd5e1; background: #f8fafc; width: 20%;"><strong>Data Concessão:</strong></td>
+        <td style="padding: 6px; border: 1px solid #cbd5e1;" id="pc-data-concessao">-</td>
+      </tr>
+      <tr>
+        <td style="padding: 6px; border: 1px solid #cbd5e1; background: #f8fafc;"><strong>Finalidade / Evento:</strong></td>
+        <td style="padding: 6px; border: 1px solid #cbd5e1;" colspan="3" id="pc-motivo">-</td>
+      </tr>
+      <tr>
+        <td style="padding: 6px; border: 1px solid #cbd5e1; background: #f8fafc;"><strong>Forma de Liberação:</strong></td>
+        <td style="padding: 6px; border: 1px solid #cbd5e1;" colspan="3" id="pc-forma">-</td>
+      </tr>
+    </table>
+
+    <h3 style="font-size: 13px; color: #004b87; margin-bottom: 6px; text-transform: uppercase;">Relação de Comprovantes & Gastos Apresentados</h3>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 12px;">
+      <thead>
+        <tr style="background: #f1f5f9; font-weight: 700;">
+          <th style="padding: 6px; border: 1px solid #cbd5e1; text-align: center; width: 90px;">Data</th>
+          <th style="padding: 6px; border: 1px solid #cbd5e1; text-align: left; width: 110px;">Documento</th>
+          <th style="padding: 6px; border: 1px solid #cbd5e1; text-align: left;">Descrição do Gasto / Favorecido</th>
+          <th style="padding: 6px; border: 1px solid #cbd5e1; text-align: right; width: 120px;">Valor Gasto (R$)</th>
+        </tr>
+      </thead>
+      <tbody id="pc-tabela-gastos-body"></tbody>
+    </table>
+
+    <!-- QUADRO DE APURAÇÃO DO ENCONTRO DE CONTAS -->
+    <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 14px; margin-bottom: 20px;">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 12px;">
+        <span>(+) Valor Total Concedido Inicialmente:</span>
+        <strong id="pc-val-concedido" style="font-size: 13px;">R$ 0,00</strong>
+      </div>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 12px; color: var(--alterdata-blue);">
+        <span>(-) Total de Gastos Comprovados:</span>
+        <strong id="pc-val-comprovado" style="font-size: 13px;">R$ 0,00</strong>
+      </div>
+      <div style="display: flex; justify-content: space-between; border-top: 2px dashed #94a3b8; padding-top: 8px; margin-top: 8px; font-size: 14px; font-weight: 800;">
+        <span id="pc-resultado-label">(=) SALDO FINAL APURADO:</span>
+        <span id="pc-val-saldo-final" style="font-size: 16px;">R$ 0,00</span>
+      </div>
+      <div id="pc-parecer-resultado" style="font-size: 11px; margin-top: 6px; color: #475569; font-style: italic;"></div>
+    </div>
+
+    <!-- ASSINATURAS -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 40px; text-align: center; font-size: 11px;">
+      <div style="border-top: 1px solid #475569; padding-top: 6px;">
+        <strong id="pc-sign-colaborador">Luiza (Marketing)</strong><br>
+        Prestador de Contas
+      </div>
+      <div style="border-top: 1px solid #475569; padding-top: 69px;">
+        <strong>Gestor Responsável</strong><br>
+        Aprovação da Despesa
+      </div>
+      <div style="border-top: 1px solid #475569; padding-top: 6px;">
+        <strong>Controladoria / Financeiro</strong><br>
+        Quitação e Conciliação
+      </div>
+    </div>
+
+    <div class="no-print" style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 10px;">
+      <button class="tool-btn" onclick="fecharRelatorioPrestacaoContas()">Fechar</button>
+      <button class="tool-btn primary" onclick="window.print()">🖨️ Imprimir Fechamento</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const API_BASE = 'http://localhost:8000/api/contas-a-pagar';
+  let isBackendOnline = false;
+
+  const STORAGE_KEY = 'alterdata_bimer_contas_pagar_v2';
+  const STORAGE_PREV_KEY = 'alterdata_bimer_previsoes_v1';
+  const STORAGE_AD_KEY = 'alterdata_bimer_adiantamentos_v1';
+
+  let titulos = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  let previsoes = JSON.parse(localStorage.getItem(STORAGE_PREV_KEY) || '[]');
+  let adiantamentos = JSON.parse(localStorage.getItem(STORAGE_AD_KEY) || '[]');
+  let adiantamentoAtivoId = null;
+
+  let filtroAtual = 'todos';
+  let ultimoLoteGravado = null;
+
+  const hoje = new Date().toISOString().split('T')[0];
+  document.getElementById('data_emissao').value = hoje;
+  document.getElementById('data_entrada').value = hoje;
+  document.getElementById('vencimento_principal').value = hoje;
+  document.getElementById('ad_data').value = hoje;
+  document.getElementById('gasto_data').value = hoje;
+
+  sugerirVencimentosFiscais();
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'F10') {
+      e.preventDefault();
+      gravarDocumento();
+    }
+  });
+
+  // ── DECODIFICADOR INTELIGENTE DE LINHA DIGITÁVEL / BOLETO (FEBRABAN) ─────
+  const NOMES_BANCOS = {
+    '001': 'Banco do Brasil',
+    '033': 'Santander',
+    '104': 'Caixa Econômica Federal',
+    '237': 'Bradesco',
+    '260': 'Nubank',
+    '341': 'Itaú Unibanco',
+    '422': 'Banco Safra',
+    '077': 'Banco Inter',
+    '748': 'Sicredi',
+    '756': 'Sicoob',
+    '212': 'Banco Original',
+    '655': 'Banco Votorantim',
+    '041': 'Banrisul'
+  };
+
+  const NOMES_SEGMENTOS = {
+    '1': 'Prefeituras / IPTU / Tributos Municipais',
+    '2': 'Saneamento / Água e Esgoto',
+    '3': 'Energia Elétrica / Luz / Gás',
+    '4': 'Telecomunicações / Telefonia / Internet',
+    '5': 'Órgãos Governamentais / DARF / Tributos Federais',
+    '6': 'Carnês / Outros Prestadores',
+    '7': 'Multas de Trânsito / Detran'
+  };
+
+  function decodificarLinhaDigitavel(linhaRaw) {
+    if (!linhaRaw) return null;
+    const digits = linhaRaw.replace(/\D/g, '');
+
+    // Boleto Bancário Padrão Febraban (47 dígitos numéricos)
+    if (digits.length === 47) {
+      const codBanco = digits.substring(0, 3);
+      const nomeBanco = NOMES_BANCOS[codBanco] || `Banco Código ${codBanco}`;
+      const fator = parseInt(digits.substring(33, 37), 10);
+      const valorCentavos = parseInt(digits.substring(37, 47), 10);
+      const valor = valorCentavos / 100;
+
+      let vencimentoStr = '';
+      if (fator > 0) {
+        // Cálculo inteligente de Fator de Vencimento Febraban considerando virada de ciclo pós-2025
+        const dBase1 = new Date('1997-10-07T00:00:00Z');
+        const dBase2 = new Date('2025-02-22T00:00:00Z');
+
+        if (fator >= 1000 && fator < 5000) {
+          const d2 = new Date(dBase2.getTime() + (fator - 1000) * 24 * 60 * 60 * 1000);
+          vencimentoStr = d2.toISOString().split('T')[0];
+        } else {
+          const d1 = new Date(dBase1.getTime() + fator * 24 * 60 * 60 * 1000);
+          vencimentoStr = d1.toISOString().split('T')[0];
+        }
+      }
+
+      return {
+        tipo: 'BOLETO_BANCARIO',
+        bancoCodigo: codBanco,
+        bancoNome: nomeBanco,
+        fatorVencimento: fator,
+        vencimento: vencimentoStr,
+        valor: valor
+      };
+    }
+
+    // Boleto de Concessionária / Arrecadação / Tributos (48 dígitos numéricos)
+    if (digits.length === 48) {
+      const segId = digits[1];
+      const segNome = NOMES_SEGMENTOS[segId] || 'Concessionária / Serviços Públicos';
+      // Reconstrói 44 posições do código de barras removendo os DVs de cada bloco
+      const dados44 = digits.substring(0, 11) + digits.substring(12, 23) + digits.substring(24, 35) + digits.substring(36, 47);
+      const valorCentavos = parseInt(dados44.substring(4, 15), 10);
+      const valor = valorCentavos / 100;
+
+      return {
+        tipo: 'CONCESSIONARIA',
+        segmentoCodigo: segId,
+        segmentoNome: segNome,
+        valor: valor,
+        vencimento: null
+      };
+    }
+
+    return null;
+  }
+
+  function processarLinhaDigitavelLive() {
+    const input = document.getElementById('linha_digitavel');
+    const badge = document.getElementById('badge-boleto-decodificado');
+    if (!input || !badge) return;
+
+    const res = decodificarLinhaDigitavel(input.value);
+
+    if (res) {
+      badge.style.display = 'block';
+      if (res.tipo === 'BOLETO_BANCARIO') {
+        badge.style.background = '#dbeafe';
+        badge.style.color = '#1e40af';
+        badge.style.border = '1px solid #93c5fd';
+        badge.innerHTML = `🏦 <strong>${res.bancoNome}</strong> | Vencimento: <strong>${formatarData(res.vencimento)}</strong> | Valor: <strong>${formatarMoeda(res.valor)}</strong>`;
+
+        if (res.valor > 0) {
+          const inputBruto = document.getElementById('valor_bruto');
+          if (inputBruto && (!inputBruto.value || parseFloat(inputBruto.value) === 0)) {
+            inputBruto.value = res.valor.toFixed(2);
+            recalcularValores();
+          }
+        }
+        if (res.vencimento) {
+          const inputVenc = document.getElementById('vencimento_principal');
+          if (inputVenc) inputVenc.value = res.vencimento;
+        }
+      } else if (res.tipo === 'CONCESSIONARIA') {
+        badge.style.background = '#fef3c7';
+        badge.style.color = '#92400e';
+        badge.style.border = '1px solid #fcd34d';
+        badge.innerHTML = `⚡ <strong>${res.segmentoNome}</strong> | Valor: <strong>${formatarMoeda(res.valor)}</strong>`;
+
+        if (res.valor > 0) {
+          const inputBruto = document.getElementById('valor_bruto');
+          if (inputBruto && (!inputBruto.value || parseFloat(inputBruto.value) === 0)) {
+            inputBruto.value = res.valor.toFixed(2);
+            recalcularValores();
+          }
+        }
+      }
+      atualizarHistoricoDinamico();
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+
+  function testarBoletoExemplo(tipo) {
+    trocarAba('aba-geral');
+
+    const input = document.getElementById('linha_digitavel');
+    if (!input) return;
+
+    if (tipo === 'itau') {
+      // Boleto Itaú Vencimento 15/10/2026, R$ 3.850,00 (Fator 1600)
+      input.value = '34191.79001 01043.510047 91020.150008 8 16000000385000';
+      const fornInput = document.getElementById('razao_favorecido');
+      if (fornInput) fornInput.value = 'Itaú Soluções Financeiras S.A.';
+      const cnpjInput = document.getElementById('cnpj_favorecido');
+      if (cnpjInput) cnpjInput.value = '60.701.190/0001-04';
+      const docInput = document.getElementById('numero_doc');
+      if (docInput) docInput.value = 'BOL-' + Math.floor(10000 + Math.random() * 90000);
+      const selTipo = document.getElementById('tipo_documento');
+      if (selTipo) selTipo.value = 'NFSE';
+    } else if (tipo === 'enel') {
+      // Concessionária de Energia / Luz - R$ 1.485,90
+      input.value = '83670000001 4 48590048100 8 00000000000 0 00000000000 0';
+      const fornInput = document.getElementById('razao_favorecido');
+      if (fornInput) fornInput.value = 'Enel Distribuição Rio / Energia Elétrica';
+      const cnpjInput = document.getElementById('cnpj_favorecido');
+      if (cnpjInput) cnpjInput.value = '33.050.071/0001-58';
+      const docInput = document.getElementById('numero_doc');
+      if (docInput) docInput.value = 'FAT-' + Math.floor(10000 + Math.random() * 90000);
+      const selTipo = document.getElementById('tipo_documento');
+      if (selTipo) selTipo.value = 'FATURA';
+    }
+
+    processarLinhaDigitavelLive();
+    input.focus();
+    input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // ── AGENDA FINANCEIRA DE VENCIMENTOS (RÉGUA DA ABA 4) ────────────────────
+  function atualizarAgendaFinanceira() {
+    let totVencidos = 0, qtdVencidos = 0;
+    let totHoje = 0, qtdHoje = 0;
+    let totSemana = 0, qtdSemana = 0;
+    let totMes = 0, qtdMes = 0;
+
+    const hojeData = new Date();
+    hojeData.setHours(0, 0, 0, 0);
+
+    const semanaLimite = new Date(hojeData);
+    semanaLimite.setDate(semanaLimite.getDate() + 7);
+
+    const anoAtual = hojeData.getFullYear();
+    const mesAtual = hojeData.getMonth();
+
+    titulos.forEach(item => {
+      // Apenas títulos em aberto / não conciliados entram na previsão de desembolso
+      if (item.status === 'CONCILIADO') return;
+      if (!item.vencimento) return;
+
+      const [ano, mes, dia] = item.vencimento.split('-').map(Number);
+      const dVenc = new Date(ano, mes - 1, dia, 0, 0, 0);
+
+      const val = Number(item.valor) || 0;
+
+      if (dVenc < hojeData) {
+        totVencidos += val;
+        qtdVencidos++;
+      } else if (dVenc.getTime() === hojeData.getTime()) {
+        totHoje += val;
+        qtdHoje++;
+      } else if (dVenc > hojeData && dVenc <= semanaLimite) {
+        totSemana += val;
+        qtdSemana++;
+      }
+
+      if (ano === anoAtual && (mes - 1) === mesAtual) {
+        totMes += val;
+        qtdMes++;
+      }
+    });
+
+    const elTotVenc = document.getElementById('agenda-tot-vencidos');
+    const elQtdVenc = document.getElementById('agenda-qtd-vencidos');
+    if (elTotVenc) elTotVenc.innerText = formatarMoeda(totVencidos);
+    if (elQtdVenc) elQtdVenc.innerText = `${qtdVencidos} contas`;
+
+    const elTotHoje = document.getElementById('agenda-tot-hoje');
+    const elQtdHoje = document.getElementById('agenda-qtd-hoje');
+    if (elTotHoje) elTotHoje.innerText = formatarMoeda(totHoje);
+    if (elQtdHoje) elQtdHoje.innerText = `${qtdHoje} contas`;
+
+    const elTotSem = document.getElementById('agenda-tot-semana');
+    const elQtdSem = document.getElementById('agenda-qtd-semana');
+    if (elTotSem) elTotSem.innerText = formatarMoeda(totSemana);
+    if (elQtdSem) elQtdSem.innerText = `${qtdSemana} contas`;
+
+    const elTotMes = document.getElementById('agenda-tot-mes');
+    const elQtdMes = document.getElementById('agenda-qtd-mes');
+    if (elTotMes) elTotMes.innerText = formatarMoeda(totMes);
+    if (elQtdMes) elQtdMes.innerText = `${qtdMes} contas`;
+  }
+
+  function filtrarAgendaVencimento(tipo, btn) {
+    filtroAtual = 'agenda_' + tipo;
+
+    const bar = document.getElementById('botoes-filtro-titulos');
+    if (bar) {
+      bar.querySelectorAll('button').forEach(b => {
+        b.style.background = 'var(--btn-bg)';
+        b.style.color = 'var(--text-main)';
+      });
+    }
+
+    if (btn) {
+      btn.style.background = 'var(--alterdata-blue)';
+      btn.style.color = 'white';
+    }
+
+    renderizarGridTitulos();
+  }
+
+  function alterarZoom(nivel) {
+    document.body.style.zoom = nivel;
+    localStorage.setItem('alterdata_zoom_pref', nivel);
+
+    ['85%', '90%', '100%'].forEach(z => {
+      const b = document.getElementById('btn-zoom-' + parseInt(z));
+      if (b) {
+        if (z === nivel) {
+          b.style.background = 'var(--alterdata-blue)';
+          b.style.color = '#ffffff';
+          b.style.fontWeight = '700';
+        } else {
+          b.style.background = 'var(--btn-bg)';
+          b.style.color = 'var(--text-main)';
+          b.style.fontWeight = '600';
+        }
+      }
+    });
+  }
+
+  const zoomPref = localStorage.getItem('alterdata_zoom_pref') || '90%';
+  alterarZoom(zoomPref);
+
+  let abaAtivaAtual = 'aba-geral';
+
+  function trocarAba(tabId, btn) {
+    abaAtivaAtual = tabId;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+    if (btn) {
+      btn.classList.add('active');
+    } else {
+      const allBtns = Array.from(document.querySelectorAll('.tab-btn'));
+      const match = allBtns.find(b => b.getAttribute('onclick')?.includes(tabId));
+      if (match) match.classList.add('active');
+    }
+    const targetEl = document.getElementById(tabId);
+    if (targetEl) targetEl.classList.add('active');
+
+    atualizarBarraRodape();
+  }
+
+  function formatarMoeda(val) {
+    return Number(val || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+
+  function formatarData(dataStr) {
+    if (!dataStr) return '-';
+    const [ano, mes, dia] = dataStr.split('-');
+    return `${dia}/${mes}/${ano}`;
+  }
+
+  function checarDuplicidadeLiveSilencioso() {
+    const cnpj = document.getElementById('cnpj_favorecido')?.value.trim();
+    const doc = document.getElementById('numero_doc')?.value.trim();
+    if (!cnpj || !doc) return false;
+    return titulos.some(t => t.cnpj === cnpj && t.numero_doc === doc);
+  }
+
+  function atualizarBarraRodape() {
+    const deck = document.getElementById('rodape-totais-deck');
+    const acoes = document.getElementById('rodape-acoes-area');
+    if (!deck || !acoes) return;
+
+    if (abaAtivaAtual === 'aba-geral' || abaAtivaAtual === 'aba-detalhes' || abaAtivaAtual === 'aba-retencoes' || abaAtivaAtual === 'aba-contabil') {
+      // TOTAIS DA NOTA / DOCUMENTO FISCAL ATUAL
+      const bruto = parseFloat(document.getElementById('valor_bruto')?.value) || 0;
+      const iss = parseFloat(document.getElementById('ret_iss')?.value) || 0;
+      const irrf = parseFloat(document.getElementById('ret_irrf')?.value) || 0;
+      const pis = parseFloat(document.getElementById('ret_pis')?.value) || 0;
+      const cofins = parseFloat(document.getElementById('ret_cofins')?.value) || 0;
+      const csll = parseFloat(document.getElementById('ret_csll')?.value) || 0;
+      const totRet = iss + irrf + pis + cofins + csll;
+      const liquido = Math.max(0, bruto - totRet);
+
+      const temDuplicidade = checarDuplicidadeLiveSilencioso();
+
+      deck.innerHTML = `
+        <div class="total-box bruto">
+          <span class="title">Vlr. Bruto / Documento</span>
+          <span class="val">${formatarMoeda(bruto)}</span>
+        </div>
+        <div class="total-box retencoes">
+          <span class="title">(-) Total Retenções Fiscais</span>
+          <span class="val">${formatarMoeda(totRet)}</span>
+        </div>
+        <div class="total-box liquido">
+          <span class="title">(=) Líquido ao Prestador</span>
+          <span class="val">${formatarMoeda(liquido)}</span>
+        </div>
+        <div class="total-box ${temDuplicidade ? 'danger' : 'conciliado'}">
+          <span class="title">Anti-Duplicidade</span>
+          <span class="val" style="font-size: 11.5px;">${temDuplicidade ? '⛔ DUPLICIDADE DETECTADA' : '✅ LIBERADO P/ GRAVAÇÃO'}</span>
+        </div>
+      `;
+
+      acoes.innerHTML = `
+        <span style="color: var(--text-muted); font-weight: 600;">${titulos.length} títulos no Contas a Pagar</span>
+        <button class="tool-btn primary" onclick="gravarDocumento()">💾 Gravar (F10)</button>
+      `;
+    }
+    else if (abaAtivaAtual === 'aba-financeiro') {
+      // TOTAIS DO CONTAS A PAGAR (TÍTULOS E IMPOSTOS)
+      let totAberto = 0;
+      let totImpostos = 0;
+      let totConciliado = 0;
+      let totGeral = 0;
+
+      titulos.forEach(t => {
+        totGeral += t.valor;
+        if (t.status === 'CONCILIADO') {
+          totConciliado += t.valor;
+        } else {
+          totAberto += t.valor;
+          if (t.tipo.startsWith('IMPOSTO_')) {
+            totImpostos += t.valor;
+          }
+        }
+      });
+
+      const qtdPend = titulos.filter(t => t.status === 'PENDENTE').length;
+      const qtdBaix = titulos.filter(t => t.status === 'CONCILIADO').length;
+
+      deck.innerHTML = `
+        <div class="total-box liquido">
+          <span class="title">A Pagar (Em Aberto)</span>
+          <span class="val">${formatarMoeda(totAberto)}</span>
+        </div>
+        <div class="total-box retencoes">
+          <span class="title">🏛️ Impostos Retidos a Recolher</span>
+          <span class="val">${formatarMoeda(totImpostos)}</span>
+        </div>
+        <div class="total-box conciliado">
+          <span class="title">Baixado & Conciliado</span>
+          <span class="val">${formatarMoeda(totConciliado)}</span>
+        </div>
+        <div class="total-box bruto">
+          <span class="title">Comprometimento Total</span>
+          <span class="val">${formatarMoeda(totGeral)}</span>
+        </div>
+      `;
+
+      acoes.innerHTML = `
+        <span style="color: var(--text-muted); font-weight: 600;">${qtdPend} pendentes | ${qtdBaix} quitados</span>
+        <button class="tool-btn primary" onclick="abrirFolhaRostoUltimo()">🖨️ Folha de Rosto</button>
+      `;
+    }
+    else if (abaAtivaAtual === 'aba-previsoes') {
+      // TOTAIS DAS DESPESAS FIXAS & PROJEÇÕES
+      const selMes = document.getElementById('filtro_mes_previsao');
+      const filtroMes = selMes ? selMes.value : 'TODOS';
+      let lista = previsoes;
+      if (filtroMes !== 'TODOS') {
+        lista = lista.filter(p => p.mesRef === filtroMes);
+      }
+
+      let totPrevAberto = 0;
+      let totEfetivado = 0;
+      let qtdPrev = 0;
+      let qtdEfet = 0;
+
+      lista.forEach(p => {
+        if (p.status === 'PREVISAO') {
+          totPrevAberto += p.valor;
+          qtdPrev++;
+        } else {
+          totEfetivado += p.valor;
+          qtdEfet++;
+        }
+      });
+
+      const mesesDistintos = new Set(previsoes.map(p => p.mesRef)).size || 1;
+      const totGeralPrev = previsoes.reduce((acc, p) => acc + p.valor, 0);
+      const mediaMensal = totGeralPrev / mesesDistintos;
+
+      deck.innerHTML = `
+        <div class="total-box orange">
+          <span class="title">Previsões Abertas (${filtroMes === 'TODOS' ? 'Geral' : filtroMes})</span>
+          <span class="val">${formatarMoeda(totPrevAberto)}</span>
+        </div>
+        <div class="total-box conciliado">
+          <span class="title">Efetivadas em Conta Real</span>
+          <span class="val">${formatarMoeda(totEfetivado)}</span>
+        </div>
+        <div class="total-box liquido">
+          <span class="title">Média Mensal Recorrente</span>
+          <span class="val">${formatarMoeda(mediaMensal)}</span>
+        </div>
+        <div class="total-box bruto">
+          <span class="title">Situação no Filtro</span>
+          <span class="val" style="font-size: 11.5px;">${qtdPrev} previstas / ${qtdEfet} efetivadas</span>
+        </div>
+      `;
+
+      acoes.innerHTML = `
+        <span style="color: var(--text-muted); font-weight: 600;">${previsoes.length} parcelas registradas</span>
+        <button class="tool-btn primary" onclick="document.getElementById('prev_nome')?.focus()">➕ Nova Despesa Fixa</button>
+      `;
+    }
+    else if (abaAtivaAtual === 'aba-adiantamentos') {
+      // TOTAIS DO ADIANTAMENTO / PRESTAÇÃO DE CONTAS
+      const ativo = adiantamentos.find(a => a.id === adiantamentoAtivoId);
+
+      if (ativo) {
+        const totalComprovado = ativo.gastos.reduce((acc, g) => acc + g.valor, 0);
+        const saldo = ativo.valor - totalComprovado;
+
+        let saldoLabel = '(=) Saldo a Devolver';
+        let saldoClasse = 'liquido';
+        let saldoTexto = formatarMoeda(saldo);
+
+        if (saldo < 0) {
+          saldoLabel = '(=) Saldo a Reembolsar';
+          saldoClasse = 'danger';
+          saldoTexto = formatarMoeda(Math.abs(saldo));
+        } else if (saldo === 0) {
+          saldoLabel = '(=) Contas Liquidadas';
+          saldoClasse = 'conciliado';
+          saldoTexto = 'R$ 0,00';
+        }
+
+        const isAberto = ativo.status === 'ABERTO';
+
+        deck.innerHTML = `
+          <div class="total-box indigo">
+            <span class="title">Adiantado (${ativo.solicitante.split(' ')[0]})</span>
+            <span class="val">${formatarMoeda(ativo.valor)}</span>
+          </div>
+          <div class="total-box retencoes">
+            <span class="title">(-) Total Comprovado</span>
+            <span class="val">${formatarMoeda(totalComprovado)}</span>
+          </div>
+          <div class="total-box ${saldoClasse}">
+            <span class="title">${saldoLabel}</span>
+            <span class="val">${saldoTexto}</span>
+          </div>
+          <div class="total-box ${isAberto ? 'orange' : 'conciliado'}">
+            <span class="title">Situação do Acerto</span>
+            <span class="val" style="font-size: 11.5px;">${isAberto ? '⏳ EM ANDAMENTO' : '✅ QUITADO & ARQUIVADO'}</span>
+          </div>
+        `;
+
+        acoes.innerHTML = `
+          <span style="color: var(--text-muted); font-weight: 600;">${ativo.solicitante} (${ativo.gastos.length} comprovantes)</span>
+          <button class="tool-btn primary" onclick="abrirRelatorioPrestacaoContas()">🖨️ Imprimir Fechamento</button>
+        `;
+      } else {
+        const totAdiantado = adiantamentos.reduce((acc, a) => acc + a.valor, 0);
+        const totGastos = adiantamentos.reduce((acc, a) => acc + a.gastos.reduce((gAcc, g) => gAcc + g.valor, 0), 0);
+        const saldoGeral = totAdiantado - totGastos;
+
+        deck.innerHTML = `
+          <div class="total-box indigo">
+            <span class="title">Total Adiantado (Empresa)</span>
+            <span class="val">${formatarMoeda(totAdiantado)}</span>
+          </div>
+          <div class="total-box retencoes">
+            <span class="title">(-) Total Comprovado</span>
+            <span class="val">${formatarMoeda(totGastos)}</span>
+          </div>
+          <div class="total-box liquido">
+            <span class="title">(=) Saldo Pendente Geral</span>
+            <span class="val">${formatarMoeda(saldoGeral)}</span>
+          </div>
+          <div class="total-box bruto">
+            <span class="title">Colaboradores</span>
+            <span class="val" style="font-size: 11.5px;">${adiantamentos.length} cadastrados</span>
+          </div>
+        `;
+
+        acoes.innerHTML = `
+          <span style="color: var(--text-muted); font-weight: 600;">Selecione um colaborador ao lado</span>
+          <button class="tool-btn primary" onclick="document.getElementById('ad_solicitante')?.focus()">➕ Novo Adiantamento</button>
+        `;
+      }
+    }
+  }
+
+  function ajustarTipoDocumento() {
+    const tipo = document.getElementById('tipo_documento').value;
+    const lblNum = document.getElementById('lbl-numero-doc');
+    const inputNum = document.getElementById('numero_doc');
+
+    if (tipo === 'RECIBO') {
+      lblNum.innerText = 'Nº do Recibo / Identificador Interno *';
+      if (!inputNum.value) inputNum.value = 'REC-' + new Date().getFullYear() + '-' + Math.floor(100 + Math.random() * 900);
+    } else if (tipo === 'CONTRATO') {
+      lblNum.innerText = 'Nº do Contrato / Mês Ref. *';
+      if (!inputNum.value) inputNum.value = 'LOC-' + new Date().toISOString().slice(0,7);
+    } else if (tipo === 'DESPESA_INTERNA') {
+      lblNum.innerText = 'Nº do Adiantamento / Solicitação *';
+      if (!inputNum.value) inputNum.value = 'SOL-' + Date.now().toString().slice(-5);
+    } else {
+      lblNum.innerText = 'Número da NFS-e / Documento *';
+    }
+    atualizarHistoricoDinamico();
+    checarDuplicidadeLive();
+  }
+
+  function sugerirVencimentosFiscais() {
+    const dataEmissaoStr = document.getElementById('data_emissao').value || hoje;
+    const [ano, mes, dia] = dataEmissaoStr.split('-').map(Number);
+
+    let proxMes = mes + 1;
+    let proxAno = ano;
+    if (proxMes > 12) {
+      proxMes = 1;
+      proxAno++;
+    }
+
+    const proxMesPad = String(proxMes).padStart(2, '0');
+    document.getElementById('venc_iss').value = `${proxAno}-${proxMesPad}-10`;
+
+    const dia20 = `${proxAno}-${proxMesPad}-20`;
+    document.getElementById('venc_irrf').value = dia20;
+    document.getElementById('venc_pis').value = dia20;
+    document.getElementById('venc_cofins').value = dia20;
+    document.getElementById('venc_csll').value = dia20;
+  }
+
+  function recalcularValores() {
+    const bruto = parseFloat(document.getElementById('valor_bruto').value) || 0;
+
+    const iss = parseFloat(document.getElementById('ret_iss').value) || 0;
+    const irrf = parseFloat(document.getElementById('ret_irrf').value) || 0;
+    const pis = parseFloat(document.getElementById('ret_pis').value) || 0;
+    const cofins = parseFloat(document.getElementById('ret_cofins').value) || 0;
+    const csll = parseFloat(document.getElementById('ret_csll').value) || 0;
+
+    const totFederais = irrf + pis + cofins + csll;
+    const totalRet = iss + totFederais;
+    const liquido = Math.max(0, bruto - totalRet);
+
+    const elFed = document.getElementById('tot-federais');
+    if (elFed) elFed.innerText = formatarMoeda(totFederais);
+    const elMun = document.getElementById('tot-municipal');
+    if (elMun) elMun.innerText = formatarMoeda(iss);
+
+    checarDuplicidadeLive();
+    atualizarBarraRodape();
+  }
+
+  function atualizarHistoricoDinamico() {
+    const fornecedor = document.getElementById('razao_favorecido').value.trim();
+    const doc = document.getElementById('numero_doc').value.trim();
+    const tipo = document.getElementById('tipo_documento').value;
+    const servico = document.getElementById('descricao_detalhada').value.trim();
+    const ccusto = document.getElementById('centro_custo').value;
+    const solicitante = document.getElementById('solicitante_despesa').value.trim();
+    const contrato = document.getElementById('num_contrato_pedido').value.trim();
+
+    let prefixoDoc = 'conf. doc';
+    if (tipo === 'NFSE') prefixoDoc = 'conf. NFS-e nº';
+    else if (tipo === 'RECIBO') prefixoDoc = 'conf. Recibo nº';
+    else if (tipo === 'CONTRATO') prefixoDoc = 'conf. Contrato/Locação';
+
+    let texto = `Vlr. ref. ${servico || 'despesa/serviço prestado'} ${prefixoDoc} ${doc || '---'} de ${fornecedor || '---'}`;
+    if (contrato) texto += ` [Ref. ${contrato}]`;
+    if (solicitante) texto += ` [Aut: ${solicitante}]`;
+    if (ccusto) texto += ` [C.Custo: ${ccusto}]`;
+
+    document.getElementById('historico_contabil_completo').value = texto;
+
+    const rotuloOrigem = `${doc ? 'NFS-e nº ' + doc : 'doc'} de ${fornecedor || 'prestador'}`;
+    document.getElementById('prev-hist-iss').innerText = `Vlr. ref. retenção de ISSQN s/ ${rotuloOrigem}`;
+    document.getElementById('prev-hist-irrf').innerText = `Vlr. ref. retenção de IRRF PJ (1708) s/ ${rotuloOrigem}`;
+    document.getElementById('prev-hist-pis').innerText = `Vlr. ref. retenção de PIS (0,65%) s/ ${rotuloOrigem}`;
+    document.getElementById('prev-hist-cofins').innerText = `Vlr. ref. retenção de COFINS (3,00%) s/ ${rotuloOrigem}`;
+    document.getElementById('prev-hist-csll').innerText = `Vlr. ref. retenção de CSLL (1,00%) s/ ${rotuloOrigem}`;
+  }
+
+  function forcarRegenerarHistorico() {
+    atualizarHistoricoDinamico();
+    alert('Texto do Histórico Contábil reconstruído a partir de todos os detalhes preenchidos!');
+  }
+
+  function checarDuplicidadeLive() {
+    const cnpj = document.getElementById('cnpj_favorecido').value.trim();
+    const doc = document.getElementById('numero_doc').value.trim();
+    const cardModal = document.getElementById('duplicity-modal');
+
+    if (!cnpj || !doc) {
+      cardModal.style.display = 'none';
+      return false;
+    }
+
+    const anterior = titulos.find(t => t.cnpj === cnpj && t.numero_doc === doc);
+
+    if (anterior) {
+      document.getElementById('dup-info-nf').innerText = anterior.numero_doc;
+      document.getElementById('dup-info-forn').innerText = anterior.favorecido;
+      document.getElementById('dup-info-data').innerText = formatarData(anterior.dataCriacao);
+      document.getElementById('dup-info-valor').innerText = formatarMoeda(anterior.valor);
+      
+      const stEl = document.getElementById('dup-info-status');
+      if (anterior.status === 'CONCILIADO') {
+        stEl.className = 'status-badge status-pago';
+        stEl.innerText = '✅ JÁ FOI PAGO / CONCILIADO';
+      } else {
+        stEl.className = 'status-badge status-pendente';
+        stEl.innerText = '⏳ CONTA EM ABERTO NO CONTAS A PAGAR';
+      }
+
+      cardModal.style.display = 'block';
+      return true;
+    } else {
+      cardModal.style.display = 'none';
+      return false;
+    }
+  }
+
+  // ── SINCRONIZAÇÃO BACKEND SQLITE (robo_boah.db) ─────────────────────────
+  async function carregarDadosIniciais() {
+    const badgeStatus = document.getElementById('status-conexao-db');
+    try {
+      const resp = await fetch(`${API_BASE}/titulos`, { cache: 'no-store' });
+      if (resp.ok) {
+        const data = await resp.json();
+        if (data.success && Array.isArray(data.titulos)) {
+          titulos = data.titulos;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(titulos));
+          isBackendOnline = true;
+          if (badgeStatus) {
+            badgeStatus.style.background = '#dcfce7';
+            badgeStatus.style.color = '#15803d';
+            badgeStatus.style.border = '1px solid #86efac';
+            badgeStatus.innerHTML = `🟢 Conectado ao SQLite (robo_boah.db) • ${titulos.length} títulos`;
+          }
+        }
+      }
+
+      // Sincroniza previsões do backend
+      try {
+        const respPrev = await fetch(`${API_BASE}/previsoes`, { cache: 'no-store' });
+        if (respPrev.ok) {
+          const dataPrev = await respPrev.json();
+          if (dataPrev.success && Array.isArray(dataPrev.previsoes)) {
+            previsoes = dataPrev.previsoes;
+            localStorage.setItem(STORAGE_PREV_KEY, JSON.stringify(previsoes));
+          }
+        }
+      } catch (ePrev) {}
+
+      // Sincroniza adiantamentos do backend
+      try {
+        const respAd = await fetch(`${API_BASE}/adiantamentos`, { cache: 'no-store' });
+        if (respAd.ok) {
+          const dataAd = await respAd.json();
+          if (dataAd.success && Array.isArray(dataAd.adiantamentos)) {
+            adiantamentos = dataAd.adiantamentos;
+            localStorage.setItem(STORAGE_AD_KEY, JSON.stringify(adiantamentos));
+          }
+        }
+      } catch (eAd) {}
+
+    } catch (err) {
+      console.warn('Backend SQLite indisponível. Operando via cache local:', err);
+      isBackendOnline = false;
+      if (badgeStatus) {
+        badgeStatus.style.background = '#fef3c7';
+        badgeStatus.style.color = '#92400e';
+        badgeStatus.style.border = '1px solid #fcd34d';
+        badgeStatus.innerHTML = `🟡 Modo Offline (localStorage) • ${titulos.length} títulos`;
+      }
+    }
+
+    renderizarGridTitulos();
+    atualizarTotaisGerais();
+    atualizarAgendaFinanceira();
+    renderizarGridPrevisoes();
+    atualizarSelectAdiantamentos();
+    renderizarListaAdiantamentosLateral();
+    renderizarPainelAdiantamentoAtivo();
+    atualizarBarraRodape();
+  }
+
+  async function gravarDocumento() {
+    if (checarDuplicidadeLive()) {
+      alert('BLOQUEIO DE SEGURANÇA:\nNão é permitido cadastrar o mesmo número de documento para o mesmo Favorecido/CNPJ.');
+      return;
+    }
+
+    const favorecido = document.getElementById('razao_favorecido').value.trim();
+    const cnpj = document.getElementById('cnpj_favorecido').value.trim();
+    const numero_doc = document.getElementById('numero_doc').value.trim();
+    const tipo_doc = document.getElementById('tipo_documento').value;
+    const data_emissao = document.getElementById('data_emissao').value;
+    const vencimento_principal = document.getElementById('vencimento_principal').value;
+    const valor_bruto = parseFloat(document.getElementById('valor_bruto').value) || 0;
+    const historico = document.getElementById('historico_contabil_completo').value.trim();
+    const descricao = document.getElementById('descricao_detalhada').value.trim();
+    const ccusto = document.getElementById('centro_custo').value;
+    const solicitante = document.getElementById('solicitante_despesa').value.trim();
+    const contrato = document.getElementById('num_contrato_pedido').value.trim();
+    const forma_pgto = document.getElementById('forma_pagamento').value;
+    const dados_banco = document.getElementById('dados_bancarios').value.trim();
+    const linha_dig = document.getElementById('linha_digitavel').value.trim();
+
+    if (!favorecido || !cnpj || !numero_doc || valor_bruto <= 0) {
+      alert('PREENCHIMENTO OBRIGATÓRIO:\nInforme o Favorecido, CNPJ/CPF, Número do Documento e Valor Bruto.');
+      trocarAba('aba-geral', document.querySelectorAll('.tab-btn')[0]);
+      return;
+    }
+
+    const iss = parseFloat(document.getElementById('ret_iss').value) || 0;
+    const irrf = parseFloat(document.getElementById('ret_irrf').value) || 0;
+    const pis = parseFloat(document.getElementById('ret_pis').value) || 0;
+    const cofins = parseFloat(document.getElementById('ret_cofins').value) || 0;
+    const csll = parseFloat(document.getElementById('ret_csll').value) || 0;
+
+    const impostos = [];
+    if (iss > 0 && document.getElementById('chk_iss').checked) {
+      impostos.push({ tipo: 'ISS', aliquota: 5.0, valor: iss, dt_venc_imp: document.getElementById('venc_iss').value || vencimento_principal });
+    }
+    if (irrf > 0 && document.getElementById('chk_irrf').checked) {
+      impostos.push({ tipo: 'IRRF', aliquota: 1.5, valor: irrf, dt_venc_imp: document.getElementById('venc_irrf').value || vencimento_principal });
+    }
+    if (pis > 0 && document.getElementById('chk_pis').checked) {
+      impostos.push({ tipo: 'PIS', aliquota: 0.65, valor: pis, dt_venc_imp: document.getElementById('venc_pis').value || vencimento_principal });
+    }
+    if (cofins > 0 && document.getElementById('chk_cofins').checked) {
+      impostos.push({ tipo: 'COFINS', aliquota: 3.0, valor: cofins, dt_venc_imp: document.getElementById('venc_cofins').value || vencimento_principal });
+    }
+    if (csll > 0 && document.getElementById('chk_csll').checked) {
+      impostos.push({ tipo: 'CSLL', aliquota: 1.0, valor: csll, dt_venc_imp: document.getElementById('venc_csll').value || vencimento_principal });
+    }
+
+    const payload = {
+      tipo_doc,
+      numero_doc,
+      favorecido,
+      cnpj,
+      data_emissao,
+      data_entrada: document.getElementById('data_entrada').value || data_emissao,
+      vencimento: vencimento_principal,
+      valor_bruto,
+      historico,
+      descricao,
+      ccusto,
+      solicitante,
+      contrato,
+      forma_pgto,
+      dados_banco,
+      linha_dig,
+      impostos
+    };
+
+    if (isBackendOnline) {
+      try {
+        const resp = await fetch(`${API_BASE}/gravar-documento`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!resp.ok) {
+          const errData = await resp.json().catch(() => ({}));
+          throw new Error(errData.detail || 'Erro ao gravar documento no backend');
+        }
+
+        const resData = await resp.json();
+        ultimoLoteGravado = resData.lote_tx;
+        alert(`✅ GRAVAÇÃO REALIZADA COM SUCESSO NO SQLITE!\nDocumento ${numero_doc} e ${resData.impostos_gravados} guias fiscais gravados em robo_boah.db.`);
+        await carregarDadosIniciais();
+        trocarAba('aba-financeiro', document.querySelectorAll('.tab-btn')[3]);
+        return;
+      } catch (e) {
+        console.error('Falha ao enviar ao backend, aplicando fallback local:', e);
+        alert(`Atenção: Houve um erro no SQLite (${e.message}). Salvando cópia em cache local.`);
+      }
+    }
+
+    // Fallback LocalStorage caso offline
+    const totalRet = iss + irrf + pis + cofins + csll;
+    const valor_liquido = Math.max(0, valor_bruto - totalRet);
+    const loteId = 'LOTE_' + Date.now();
+    ultimoLoteGravado = loteId;
+
+    titulos.push({
+      id: 'TIT_' + Date.now() + '_FORN',
+      loteId,
+      tipo: tipo_doc === 'NFSE' ? 'FORNECEDOR' : 'DESPESA_GERAL',
+      tipo_doc,
+      favorecido,
+      cnpj,
+      numero_doc,
+      vencimento: vencimento_principal,
+      valor: valor_liquido,
+      valor_bruto,
+      historico,
+      descricao,
+      ccusto,
+      solicitante,
+      contrato,
+      forma_pgto,
+      dados_banco,
+      linha_dig,
+      dataCriacao: hoje,
+      status: 'PENDENTE'
+    });
+
+    impostos.forEach(imp => {
+      titulos.push({
+        id: 'TIT_' + Date.now() + '_' + imp.tipo,
+        loteId,
+        tipo: 'IMPOSTO_' + imp.tipo,
+        tipo_doc,
+        favorecido: `Guia de Retenção - ${imp.tipo} (${favorecido})`,
+        cnpj,
+        numero_doc,
+        vencimento: imp.dt_venc_imp,
+        valor: imp.valor,
+        valor_bruto,
+        historico: `Vlr. ref. retenção de ${imp.tipo} s/ doc ${numero_doc}`,
+        descricao,
+        ccusto,
+        solicitante,
+        dataCriacao: hoje,
+        status: 'PENDENTE'
+      });
+    });
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(titulos));
+    renderizarGridTitulos();
+    atualizarTotaisGerais();
+    atualizarAgendaFinanceira();
+
+    alert('✅ GRAVAÇÃO REALIZADA COM SUCESSO!\nTítulos desmembrados e disponíveis no Contas a Pagar.');
+    trocarAba('aba-financeiro', document.querySelectorAll('.tab-btn')[3]);
+  }
+
+  async function alternarBaixa(id) {
+    if (isBackendOnline) {
+      try {
+        const resp = await fetch(`${API_BASE}/titulos/${id}/baixa`, { method: 'POST' });
+        if (resp.ok) {
+          await carregarDadosIniciais();
+          return;
+        }
+      } catch (e) {
+        console.warn('Erro ao alternar baixa no backend, aplicando local:', e);
+      }
+    }
+
+    const item = titulos.find(t => t.id === id);
+    if (item) {
+      item.status = item.status === 'CONCILIADO' ? 'PENDENTE' : 'CONCILIADO';
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(titulos));
+      renderizarGridTitulos();
+      atualizarTotaisGerais();
+      atualizarAgendaFinanceira();
+    }
+  }
+
+  async function excluirTitulo(id) {
+    if (!confirm('Deseja excluir este lançamento do Contas a Pagar?')) return;
+
+    if (isBackendOnline) {
+      try {
+        const resp = await fetch(`${API_BASE}/titulos/${id}`, { method: 'DELETE' });
+        if (resp.ok) {
+          await carregarDadosIniciais();
+          return;
+        }
+      } catch (e) {
+        console.warn('Erro ao excluir no backend, aplicando local:', e);
+      }
+    }
+
+    titulos = titulos.filter(t => t.id !== id);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(titulos));
+    renderizarGridTitulos();
+    atualizarTotaisGerais();
+    atualizarAgendaFinanceira();
+  }
+
+  function filtrarTitulos(tipo, btn) {
+    filtroAtual = tipo;
+    const parent = btn.parentElement;
+    parent.querySelectorAll('button').forEach(b => {
+      b.style.background = 'var(--btn-bg)';
+      b.style.color = 'var(--text-main)';
+    });
+    btn.style.background = 'var(--alterdata-blue)';
+    btn.style.color = 'white';
+    renderizarGridTitulos();
+  }
+
+  function renderizarGridTitulos() {
+    const tbody = document.getElementById('grid-titulos-body');
+    const emptyMsg = document.getElementById('empty-titulos-msg');
+    tbody.innerHTML = '';
+
+    const hojeData = new Date();
+    hojeData.setHours(0, 0, 0, 0);
+    const hojeStr = hojeData.toISOString().split('T')[0];
+
+    const semanaLimite = new Date(hojeData);
+    semanaLimite.setDate(semanaLimite.getDate() + 7);
+
+    const anoAtual = hojeData.getFullYear();
+    const mesAtual = hojeData.getMonth();
+
+    let lista = titulos.filter(item => {
+      if (filtroAtual === 'fornecedor') return item.tipo === 'FORNECEDOR' || item.tipo === 'DESPESA_GERAL';
+      if (filtroAtual === 'imposto') return item.tipo && item.tipo.startsWith('IMPOSTO_');
+      if (filtroAtual === 'pendente') return item.status === 'PENDENTE';
+      if (filtroAtual === 'conciliado') return item.status === 'CONCILIADO';
+
+      // Filtros da Agenda Financeira
+      if (filtroAtual === 'agenda_vencidos') {
+        if (item.status === 'CONCILIADO' || !item.vencimento) return false;
+        const [a, m, d] = item.vencimento.split('-').map(Number);
+        const dVenc = new Date(a, m - 1, d, 0, 0, 0);
+        return dVenc < hojeData;
+      }
+      if (filtroAtual === 'agenda_hoje') {
+        if (!item.vencimento) return false;
+        return item.vencimento === hojeStr;
+      }
+      if (filtroAtual === 'agenda_semana') {
+        if (!item.vencimento) return false;
+        const [a, m, d] = item.vencimento.split('-').map(Number);
+        const dVenc = new Date(a, m - 1, d, 0, 0, 0);
+        return dVenc >= hojeData && dVenc <= semanaLimite;
+      }
+      if (filtroAtual === 'agenda_mes') {
+        if (!item.vencimento) return false;
+        const [a, m, d] = item.vencimento.split('-').map(Number);
+        return a === anoAtual && (m - 1) === mesAtual;
+      }
+
+      return true;
+    });
+
+    const lblStatus = document.getElementById('label-status-contas');
+    if (lblStatus) lblStatus.innerText = `${titulos.length} títulos cadastrados (${lista.length} exibidos)`;
+    atualizarBarraRodape();
+
+    if (lista.length === 0) {
+      emptyMsg.style.display = 'block';
+      return;
+    }
+    emptyMsg.style.display = 'none';
+
+    lista.forEach(item => {
+      const tr = document.createElement('tr');
+      const isForn = item.tipo === 'FORNECEDOR' || item.tipo === 'DESPESA_GERAL';
+      const isPago = item.status === 'CONCILIADO';
+
+      // Status de vencimento
+      let vencDestaque = '';
+      if (!isPago && item.vencimento) {
+        const [a, m, d] = item.vencimento.split('-').map(Number);
+        const dVenc = new Date(a, m - 1, d, 0, 0, 0);
+        if (dVenc < hojeData) {
+          vencDestaque = `<span style="display: block; font-size: 9.5px; font-weight: 700; color: #dc2626;">🚨 ATRASADO</span>`;
+        } else if (dVenc.getTime() === hojeData.getTime()) {
+          vencDestaque = `<span style="display: block; font-size: 9.5px; font-weight: 700; color: #b45309;">📅 VENCE HOJE</span>`;
+        }
+      }
+
+      tr.innerHTML = `
+        <td>
+          <span class="tag-tipo ${isForn ? (item.tipo_doc === 'NFSE' ? 'tag-fornecedor' : 'tag-sem-nf') : 'tag-imposto'}">
+            ${isForn ? (item.tipo_doc === 'NFSE' ? '🏢 PRESTADOR' : '📋 ' + (item.tipo_doc || 'DESPESA')) : '🏛️ ' + (item.tipo || '').replace('IMPOSTO_', '')}
+          </span>
+        </td>
+        <td>
+          <strong>${item.numero_doc || '-'}</strong><br>
+          <small style="color: var(--text-muted); font-size: 10px;">${item.cnpj || '-'}</small>
+        </td>
+        <td>
+          <div style="font-weight: 700; color: #0f172a;">${item.favorecido || '-'}</div>
+          <div style="color: #475569; font-size: 11px; margin-top: 1px;">
+            📖 <em>${item.historico || '-'}</em>
+          </div>
+          ${item.solicitante ? `<span style="font-size: 10px; background: #e0f2fe; color: #0369a1; padding: 1px 4px; border-radius: 2px;">Sol: ${item.solicitante}</span>` : ''}
+          ${item.ccusto ? `<span style="font-size: 10px; background: #f1f5f9; color: #475569; padding: 1px 4px; border-radius: 2px; margin-left: 4px;">C.Custo: ${item.ccusto}</span>` : ''}
+          ${item.linha_dig ? `<span style="font-size: 9.5px; background: #fef3c7; color: #92400e; padding: 1px 4px; border-radius: 2px; margin-left: 4px;" title="${item.linha_dig}">💳 Boleto Cadastrado</span>` : ''}
+        </td>
+        <td style="white-space: nowrap;">
+          ${formatarData(item.vencimento)}
+          ${vencDestaque}
+        </td>
+        <td><strong style="color: ${isForn ? 'var(--alterdata-blue)' : 'var(--tax-purple)'}; font-size: 12.5px;">${formatarMoeda(item.valor)}</strong></td>
+        <td>
+          <span class="status-badge ${isPago ? 'status-pago' : 'status-pendente'}">
+            ${isPago ? '✅ BAIXADO' : '⏳ ABERTO'}
+          </span>
+        </td>
+        <td style="text-align: center; white-space: nowrap;">
+          <button class="tool-btn" style="display: inline-flex; padding: 3px 6px; font-size: 10.5px;" onclick="alternarBaixa('${item.id}')" title="${isPago ? 'Reabrir título' : 'Baixar / Liquidar'}">
+            ${isPago ? '↩️' : '✔️'}
+          </button>
+          <button class="tool-btn" style="display: inline-flex; padding: 3px 6px; font-size: 10.5px;" onclick="abrirFolhaRostoEspecifico('${item.loteId}')" title="Folha de Rosto">
+            🖨️
+          </button>
+          <button class="tool-btn" style="display: inline-flex; padding: 3px 6px; font-size: 10.5px; color: var(--danger);" onclick="excluirTitulo('${item.id}')" title="Excluir">
+            ✖
+          </button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function atualizarTotaisGerais() {
+    let totConc = 0;
+    titulos.forEach(item => {
+      if (item.status === 'CONCILIADO') totConc += Number(item.valor) || 0;
+    });
+    const elConc = document.getElementById('total-conciliado');
+    if (elConc) elConc.innerText = formatarMoeda(totConc);
+    atualizarBarraRodape();
+    atualizarAgendaFinanceira();
+  }
+
+  function abrirFolhaRostoUltimo() {
+    if (!ultimoLoteGravado && titulos.length > 0) {
+      ultimoLoteGravado = titulos[titulos.length - 1].loteId;
+    }
+    if (!ultimoLoteGravado) {
+      alert('Nenhum documento disponível para imprimir a folha de rosto. Lance uma nota primeiro!');
+      return;
+    }
+    abrirFolhaRostoEspecifico(ultimoLoteGravado);
+  }
+
+  function abrirFolhaRostoEspecifico(loteId) {
+    const itensLote = titulos.filter(t => t.loteId === loteId);
+    if (itensLote.length === 0) return;
+
+    const principal = itensLote.find(t => t.tipo === 'FORNECEDOR' || t.tipo === 'DESPESA_GERAL') || itensLote[0];
+    const tributos = itensLote.filter(t => t.tipo.startsWith('IMPOSTO_'));
+
+    document.getElementById('fr-doc-num').innerText = `${principal.tipo_doc || 'DOC'} Nº ${principal.numero_doc}`;
+    document.getElementById('fr-emissao-data').innerText = `Lançado em: ${formatarData(principal.dataCriacao)}`;
+    document.getElementById('fr-favorecido').innerText = principal.favorecido;
+    document.getElementById('fr-cnpj').innerText = principal.cnpj;
+    document.getElementById('fr-vencimento').innerText = formatarData(principal.vencimento);
+    document.getElementById('fr-ccusto').innerText = principal.ccusto || '-';
+    document.getElementById('fr-solicitante').innerText = principal.solicitante || '-';
+    document.getElementById('fr-descricao').innerText = principal.descricao || '-';
+    document.getElementById('fr-historico').innerText = principal.historico || '-';
+
+    let pgtoTxt = principal.forma_pgto || 'Boleto';
+    if (principal.dados_banco) pgtoTxt += ` | Dados: ${principal.dados_banco}`;
+    if (principal.linha_dig) pgtoTxt += ` | Linha Dig: ${principal.linha_dig}`;
+    document.getElementById('fr-pagamento').innerText = pgtoTxt;
+
+    document.getElementById('fr-data-bruto').innerText = formatarData(principal.vencimento);
+    document.getElementById('fr-val-bruto').innerText = formatarMoeda(principal.valor_bruto || (principal.valor + tributos.reduce((a,b)=>a+b.valor,0)));
+
+    const tbodyTrib = document.getElementById('fr-linhas-tributos');
+    tbodyTrib.innerHTML = '';
+
+    tributos.forEach(tr => {
+      const row = document.createElement('tr');
+      row.style.color = '#6b21a8';
+      row.innerHTML = `
+        <td style="padding: 6px; border: 1px solid #cbd5e1;">(-) ${tr.favorecido}</td>
+        <td style="padding: 6px; border: 1px solid #cbd5e1; text-align: center;">${formatarData(tr.vencimento)}</td>
+        <td style="padding: 6px; border: 1px solid #cbd5e1; text-align: right; font-weight: 600;">- ${formatarMoeda(tr.valor)}</td>
+      `;
+      tbodyTrib.appendChild(row);
+    });
+
+    document.getElementById('fr-venc-liquido').innerText = formatarData(principal.vencimento);
+    document.getElementById('fr-val-liquido').innerText = formatarMoeda(principal.valor);
+
+    document.getElementById('modal-folha-rosto').style.display = 'flex';
+  }
+
+  function fecharFolhaRosto() {
+    document.getElementById('modal-folha-rosto').style.display = 'none';
+  }
+
+  /* ==========================================================================
+     MÓDULO DE DESPESAS FIXAS & PREVISÕES RECORRENTES (ITEM 2)
+     ========================================================================== */
+
+  function cadastrarDespesaFixa() {
+    const nome = document.getElementById('fixa_nome').value.trim();
+    const favorecido = document.getElementById('fixa_favorecido').value.trim();
+    const cnpj = document.getElementById('fixa_cnpj').value.trim() || '---';
+    const dia = parseInt(document.getElementById('fixa_dia').value) || 10;
+    const valor = parseFloat(document.getElementById('fixa_valor').value) || 0;
+    const tipoValor = document.getElementById('fixa_tipo_valor').value;
+    const ccusto = document.getElementById('fixa_ccusto').value;
+    const meses = parseInt(document.getElementById('fixa_meses').value) || 12;
+    const obs = document.getElementById('fixa_obs').value.trim();
+
+    if (!nome || !favorecido || valor <= 0) {
+      alert('Por favor, informe o Nome da Despesa, o Favorecido e o Valor Mensal.');
+      return;
+    }
+
+    const agora = new Date();
+    let anoAtual = agora.getFullYear();
+    let mesAtual = agora.getMonth(); // 0 a 11
+
+    const loteRecorrencia = 'REC_' + Date.now();
+
+    for (let i = 0; i < meses; i++) {
+      let targetMes = mesAtual + i;
+      let targetAno = anoAtual;
+      while (targetMes > 11) {
+        targetMes -= 12;
+        targetAno++;
+      }
+
+      const mesPad = String(targetMes + 1).padStart(2, '0');
+      const diaPad = String(Math.min(dia, 28)).padStart(2, '0');
+      const dataVenc = `${targetAno}-${mesPad}-${diaPad}`;
+      const rotuloMes = `${mesPad}/${targetAno}`;
+
+      previsoes.push({
+        id: 'PREV_' + Date.now() + '_' + i,
+        loteRecorrencia,
+        nome,
+        favorecido,
+        cnpj,
+        mesRef: rotuloMes,
+        vencimento: dataVenc,
+        valor,
+        tipoValor,
+        ccusto,
+        obs,
+        status: 'PREVISAO' // 'PREVISAO' ou 'EFETIVADA'
+      });
+    }
+
+    localStorage.setItem(STORAGE_PREV_KEY, JSON.stringify(previsoes));
+    atualizarFiltrosMeses();
+    renderizarGridPrevisoes();
+
+    document.getElementById('fixa_nome').value = '';
+    document.getElementById('fixa_favorecido').value = '';
+    document.getElementById('fixa_cnpj').value = '';
+    document.getElementById('fixa_valor').value = '';
+    document.getElementById('fixa_obs').value = '';
+
+    alert(`✅ Sucesso!\nForam geradas ${meses} previsões futuras no fluxo de caixa.`);
+  }
+
+  function carregarExemplosDespesasFixas() {
+    const agora = new Date();
+    const mesAtual = agora.getMonth();
+    const anoAtual = agora.getFullYear();
+
+    const exemplos = [
+      { nome: 'Aluguel Galpão Logístico', fav: 'Imobiliária Barão Ltda', cnpj: '11.222.333/0001-44', dia: 10, val: 4200.00, tipo: 'FIXO', ccusto: 'Administrativo / Diretoria', obs: 'Contrato nº 104/2025 reajuste anual' },
+      { nome: 'Energia Elétrica (Média)', fav: 'Enel Distribuição', cnpj: '07.123.456/0001-99', dia: 15, val: 1350.00, tipo: 'ESTIMADO', ccusto: 'Operacional / Produção', obs: 'Conta de consumo mensal' },
+      { nome: 'Link Fibra Óptica Dedicado', fav: 'Telecom Connect S/A', cnpj: '02.999.000/0001-11', dia: 5, val: 480.00, tipo: 'FIXO', ccusto: 'TI e Infraestrutura', obs: 'IP Dedicado 500Mbps' },
+      { nome: 'Software ERP Alterdata', fav: 'Alterdata Tecnologia Ltda', cnpj: '36.888.777/0001-55', dia: 20, val: 890.00, tipo: 'FIXO', ccusto: 'TI e Infraestrutura', obs: 'Licenciamento mensal Bimer/Pack' },
+      { nome: 'Honorários Contábeis', fav: 'Audicont Assessoria Contábil', cnpj: '05.444.333/0001-22', dia: 25, val: 1800.00, tipo: 'FIXO', ccusto: 'Financeiro / Contabilidade', obs: 'Fechamento fiscal e contábil' }
+    ];
+
+    previsoes = []; // renova exemplos
+
+    exemplos.forEach((ex, idx) => {
+      const loteRec = 'REC_EX_' + idx;
+      for (let i = 0; i < 6; i++) {
+        let tMes = mesAtual + i;
+        let tAno = anoAtual;
+        while (tMes > 11) {
+          tMes -= 12;
+          tAno++;
+        }
+        const mesPad = String(tMes + 1).padStart(2, '0');
+        const diaPad = String(Math.min(ex.dia, 28)).padStart(2, '0');
+        previsoes.push({
+          id: 'PREV_' + Date.now() + '_' + idx + '_' + i,
+          loteRecorrencia: loteRec,
+          nome: ex.nome,
+          favorecido: ex.fav,
+          cnpj: ex.cnpj,
+          mesRef: `${mesPad}/${tAno}`,
+          vencimento: `${tAno}-${mesPad}-${diaPad}`,
+          valor: ex.val,
+          tipoValor: ex.tipo,
+          ccusto: ex.ccusto,
+          obs: ex.obs,
+          status: 'PREVISAO'
+        });
+      }
+    });
+
+    localStorage.setItem(STORAGE_PREV_KEY, JSON.stringify(previsoes));
+    atualizarFiltrosMeses();
+    renderizarGridPrevisoes();
+    alert('⚡ Despesas fixas carregadas com sucesso! (Aluguel, Luz, Internet, ERP e Contabilidade para os próximos 6 meses).');
+  }
+
+  function atualizarFiltrosMeses() {
+    const select = document.getElementById('filtro_mes_previsao');
+    const valorAtual = select.value;
+    select.innerHTML = '<option value="TODOS">Todos os Meses</option>';
+
+    const mesesUnicos = [...new Set(previsoes.map(p => p.mesRef))];
+    mesesUnicos.forEach(m => {
+      const opt = document.createElement('option');
+      opt.value = m;
+      opt.innerText = `Mês ${m}`;
+      if (m === valorAtual) opt.selected = true;
+      select.appendChild(opt);
+    });
+  }
+
+  function renderizarGridPrevisoes() {
+    const tbody = document.getElementById('grid-previsoes-body');
+    const emptyMsg = document.getElementById('empty-previsoes-msg');
+    const filtroMes = document.getElementById('filtro_mes_previsao').value;
+    tbody.innerHTML = '';
+
+    let lista = previsoes;
+    if (filtroMes !== 'TODOS') {
+      lista = lista.filter(p => p.mesRef === filtroMes);
+    }
+
+    if (lista.length === 0) {
+      emptyMsg.style.display = 'block';
+    } else {
+      emptyMsg.style.display = 'none';
+    }
+
+    let totAberto = 0;
+    let totEfetivadas = 0;
+
+    previsoes.forEach(p => {
+      if (p.status === 'PREVISAO') totAberto += p.valor;
+      else totEfetivadas++;
+    });
+
+    const mesesDistintos = new Set(previsoes.map(p => p.mesRef)).size || 1;
+    const mediaMensal = totAberto / mesesDistintos;
+
+    const elTotAberto = document.getElementById('prev-tot-aberto');
+    if (elTotAberto) elTotAberto.innerText = formatarMoeda(totAberto);
+    const elTotEfet = document.getElementById('prev-tot-efetivadas');
+    if (elTotEfet) elTotEfet.innerText = `${totEfetivadas} contas`;
+    const elMedia = document.getElementById('prev-media-mensal');
+    if (elMedia) elMedia.innerText = formatarMoeda(mediaMensal);
+
+    atualizarBarraRodape();
+
+    lista.forEach(p => {
+      const tr = document.createElement('tr');
+      const isEfetivada = p.status === 'EFETIVADA';
+
+      tr.innerHTML = `
+        <td><strong style="color: var(--alterdata-blue);">${p.mesRef}</strong></td>
+        <td>${formatarData(p.vencimento)}</td>
+        <td>
+          <div style="font-weight: 700; color: #0f172a;">${p.nome}</div>
+          <div style="color: var(--text-muted); font-size: 10.5px;">${p.favorecido} • CNPJ: ${p.cnpj}</div>
+          ${p.obs ? `<div style="color: #64748b; font-size: 10px; font-style: italic;">📝 ${p.obs}</div>` : ''}
+        </td>
+        <td><span style="font-size: 10px; background: #f1f5f9; padding: 2px 5px; border-radius: 2px;">${p.ccusto}</span></td>
+        <td>
+          <strong style="font-size: 12px; color: ${p.tipoValor === 'FIXO' ? '#0f172a' : 'var(--fixed-orange)'};">
+            ${formatarMoeda(p.valor)}
+          </strong>
+          <div style="font-size: 9.5px; color: var(--text-muted);">${p.tipoValor === 'FIXO' ? 'Contratual' : 'Estimado'}</div>
+        </td>
+        <td>
+          <span class="tag-tipo ${isEfetivada ? 'tag-efetivada' : 'tag-previsao'}">
+            ${isEfetivada ? '🚀 EFETIVADA' : '📅 PREVISÃO'}
+          </span>
+        </td>
+        <td style="text-align: center;">
+          ${!isEfetivada ? `
+            <button class="tool-btn primary" style="display: inline-flex; padding: 2px 6px; font-size: 10.5px;" onclick="abrirModalEfetivar('${p.id}')">
+              ⚡ Efetivar
+            </button>
+          ` : `
+            <span style="color: var(--success); font-weight: 700; font-size: 10.5px;">No Contas a Pagar</span>
+          `}
+          <button class="tool-btn" style="display: inline-flex; padding: 2px 6px; font-size: 10.5px; color: var(--danger); margin-left: 4px;" onclick="excluirPrevisao('${p.id}')">
+            ✖
+          </button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function abrirModalEfetivar(previsaoId) {
+    const prev = previsoes.find(p => p.id === previsaoId);
+    if (!prev) return;
+
+    document.getElementById('mod-efet-id').value = prev.id;
+    document.getElementById('mod-efet-nome').innerText = prev.nome;
+    document.getElementById('mod-efet-favorecido').innerText = prev.favorecido;
+    document.getElementById('mod-efet-mes').innerText = prev.mesRef;
+    document.getElementById('mod-efet-venc').innerText = formatarData(prev.vencimento);
+    document.getElementById('mod-efet-valor').value = prev.valor;
+    document.getElementById('mod-efet-doc').value = `FAT-${prev.mesRef.replace('/', '')}`;
+    document.getElementById('mod-efet-barras').value = '';
+
+    document.getElementById('modal-efetivar-previsao').style.display = 'flex';
+  }
+
+  function fecharModalEfetivar() {
+    document.getElementById('modal-efetivar-previsao').style.display = 'none';
+  }
+
+  function confirmarEfetivacaoConta() {
+    const id = document.getElementById('mod-efet-id').value;
+    const prev = previsoes.find(p => p.id === id);
+    if (!prev) return;
+
+    const valorReal = parseFloat(document.getElementById('mod-efet-valor').value) || prev.valor;
+    const numDoc = document.getElementById('mod-efet-doc').value.trim() || `FAT-${prev.mesRef.replace('/', '')}`;
+    const codBarras = document.getElementById('mod-efet-barras').value.trim();
+
+    // 1. Cria o título real no Contas a Pagar (Aba 4)
+    const loteId = 'LOTE_FIXA_' + Date.now();
+    titulos.push({
+      id: 'TIT_FIXA_' + Date.now(),
+      loteId,
+      tipo: 'DESPESA_GERAL',
+      tipo_doc: 'FATURA',
+      favorecido: prev.favorecido,
+      cnpj: prev.cnpj,
+      numero_doc: numDoc,
+      vencimento: prev.vencimento,
+      valor: valorReal,
+      valor_bruto: valorReal,
+      historico: `Vlr. ref. ${prev.nome} ref. ${prev.mesRef} conf. fatura ${numDoc} [${prev.ccusto}]`,
+      descricao: `${prev.nome} - Mês ${prev.mesRef} (${prev.obs || 'Despesa Fixa Recorrente'})`,
+      ccusto: prev.ccusto,
+      solicitante: 'Rotina Automática de Despesas Fixas',
+      contrato: prev.obs || '',
+      forma_pgto: codBarras ? 'BOLETO' : 'PIX',
+      dados_banco: '',
+      linha_dig: codBarras,
+      dataCriacao: hoje,
+      status: 'PENDENTE'
+    });
+
+    // 2. Marca previsão como EFETIVADA
+    prev.status = 'EFETIVADA';
+    prev.valor = valorReal;
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(titulos));
+    localStorage.setItem(STORAGE_PREV_KEY, JSON.stringify(previsoes));
+
+    fecharModalEfetivar();
+    renderizarGridPrevisoes();
+    renderizarGridTitulos();
+    atualizarTotaisGerais();
+
+    alert(`🎉 CONTA EFETIVADA COM SUCESSO!\nA despesa "${prev.nome}" de ${formatarMoeda(valorReal)} foi enviada para o Contas a Pagar (Aba 4) pronta para pagamento.`);
+  }
+
+  function excluirPrevisao(id) {
+    if (confirm('Deseja excluir esta previsão?')) {
+      previsoes = previsoes.filter(p => p.id !== id);
+      localStorage.setItem(STORAGE_PREV_KEY, JSON.stringify(previsoes));
+      atualizarFiltrosMeses();
+      renderizarGridPrevisoes();
+    }
+  }
+
+  function limparPrevisoes() {
+    if (confirm('Tem certeza que deseja limpar todas as previsões cadastradas?')) {
+      previsoes = [];
+      localStorage.setItem(STORAGE_PREV_KEY, JSON.stringify(previsoes));
+      atualizarFiltrosMeses();
+      renderizarGridPrevisoes();
+    }
+  }
+
+  function carregarExemploCompleto() {
+    document.getElementById('tipo_documento').value = 'NFSE';
+    ajustarTipoDocumento();
+
+    document.getElementById('numero_doc').value = '2026' + Math.floor(100 + Math.random() * 900);
+    document.getElementById('razao_favorecido').value = 'DATACENTER & CLOUD SERVIÇOS DE REDE LTDA';
+    document.getElementById('cnpj_favorecido').value = '08.999.888/0001-22';
+    document.getElementById('solicitante_despesa').value = 'Roberto - Gestão de TI';
+    document.getElementById('num_contrato_pedido').value = 'CONTRATO-TI-2026/08';
+    document.getElementById('descricao_detalhada').value = 'Hospedagem em nuvem dedicada, link redundante de fibra óptica e manutenção preventiva mensal do servidor ERP';
+    document.getElementById('forma_pagamento').value = 'BOLETO';
+    document.getElementById('dados_bancarios').value = 'Chave PIX: financeiro@datacenter.com.br';
+    document.getElementById('linha_digitavel').value = '23793.38128 60083.012015 45000.063304 9 95000000450000';
+
+    document.getElementById('valor_bruto').value = '8000.00';
+    document.getElementById('ret_iss').value = '400.00';
+    document.getElementById('ret_irrf').value = '120.00';
+    document.getElementById('ret_pis').value = '52.00';
+    document.getElementById('ret_cofins').value = '240.00';
+    document.getElementById('ret_csll').value = '80.00';
+
+    sugerirVencimentosFiscais();
+    recalcularValores();
+    atualizarHistoricoDinamico();
+  }
+
+  function novoDocumento() {
+    document.getElementById('numero_doc').value = '';
+    document.getElementById('razao_favorecido').value = '';
+    document.getElementById('cnpj_favorecido').value = '';
+    document.getElementById('solicitante_despesa').value = '';
+    document.getElementById('num_contrato_pedido').value = '';
+    document.getElementById('descricao_detalhada').value = '';
+    document.getElementById('dados_bancarios').value = '';
+    document.getElementById('linha_digitavel').value = '';
+    document.getElementById('valor_bruto').value = '';
+    document.getElementById('ret_iss').value = '';
+    document.getElementById('ret_irrf').value = '';
+    document.getElementById('ret_pis').value = '';
+    document.getElementById('ret_cofins').value = '';
+    document.getElementById('ret_csll').value = '';
+    recalcularValores();
+    atualizarHistoricoDinamico();
+    trocarAba('aba-geral', document.querySelectorAll('.tab-btn')[0]);
+  }
+
+  function limparTudo() {
+    if (confirm('Deseja limpar todos os lançamentos de teste do Contas a Pagar?')) {
+      titulos = [];
+      previsoes = [];
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(titulos));
+      localStorage.setItem(STORAGE_PREV_KEY, JSON.stringify(previsoes));
+      renderizarGridTitulos();
+      renderizarGridPrevisoes();
+      atualizarTotaisGerais();
+    }
+  }
+
+  /* ==========================================================================
+     MÓDULO DE ADIANTAMENTOS & PRESTAÇÃO DE CONTAS
+     ========================================================================== */
+
+  function salvarAdiantamentos() {
+    localStorage.setItem(STORAGE_AD_KEY, JSON.stringify(adiantamentos));
+    atualizarSelectAdiantamentos();
+    renderizarListaAdiantamentosLateral();
+    renderizarPainelAdiantamentoAtivo();
+  }
+
+  function renderizarListaAdiantamentosLateral() {
+    const tbody = document.getElementById('lista-ad-lateral-body');
+    const countEl = document.getElementById('total-ad-count');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    if (countEl) countEl.innerText = adiantamentos.length;
+
+    if (adiantamentos.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 10px; color: var(--text-muted);">Nenhum adiantamento</td></tr>';
+      return;
+    }
+
+    adiantamentos.forEach(a => {
+      const tr = document.createElement('tr');
+      const isAtivo = a.id === adiantamentoAtivoId;
+      const totalComprovado = a.gastos.reduce((acc, g) => acc + g.valor, 0);
+      const saldo = a.valor - totalComprovado;
+      const isAberto = a.status === 'ABERTO';
+
+      if (isAtivo) {
+        tr.style.backgroundColor = '#dbeafe';
+      }
+      tr.style.cursor = 'pointer';
+      tr.onclick = () => {
+        adiantamentoAtivoId = a.id;
+        document.getElementById('sel_adiantamento_ativo').value = a.id;
+        renderizarListaAdiantamentosLateral();
+        renderizarPainelAdiantamentoAtivo();
+      };
+
+      tr.innerHTML = `
+        <td>
+          <strong style="color: ${isAtivo ? 'var(--alterdata-blue)' : '#1e293b'};">${isAtivo ? '👉 ' : ''}${a.solicitante}</strong>
+          <div style="font-size: 9.5px; color: var(--text-muted);">${a.ccusto}</div>
+        </td>
+        <td style="text-align: right; font-weight: 600;">${formatarMoeda(a.valor)}</td>
+        <td style="text-align: right; font-weight: 700; color: ${saldo < 0 ? 'var(--danger)' : (saldo === 0 ? 'var(--success)' : 'var(--alterdata-blue)')};">
+          ${formatarMoeda(Math.abs(saldo))}
+        </td>
+        <td style="text-align: center;">
+          <span class="status-badge ${isAberto ? 'status-pendente' : 'status-pago'}" style="font-size: 9px;">
+            ${isAberto ? 'ABERTO' : 'QUITADO'}
+          </span>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function concederAdiantamento() {
+    const solicitante = document.getElementById('ad_solicitante').value.trim();
+    const ccusto = document.getElementById('ad_ccusto').value;
+    const dataLib = document.getElementById('ad_data').value || hoje;
+    const valor = parseFloat(document.getElementById('ad_valor').value) || 0;
+    const forma = document.getElementById('ad_forma').value;
+    const motivo = document.getElementById('ad_motivo').value.trim();
+
+    if (!solicitante || valor <= 0) {
+      alert('Por favor, informe o Colaborador/Solicitante e o Valor Adiantado.');
+      return;
+    }
+
+    const novo = {
+      id: 'AD_' + Date.now(),
+      solicitante,
+      ccusto,
+      dataLib,
+      valor,
+      forma,
+      motivo: motivo || 'Adiantamento para despesas operacionais',
+      status: 'ABERTO',
+      gastos: [],
+      dataFechamento: null
+    };
+
+    adiantamentos.unshift(novo);
+    adiantamentoAtivoId = novo.id;
+    salvarAdiantamentos();
+
+    document.getElementById('ad_solicitante').value = '';
+    document.getElementById('ad_valor').value = '';
+    document.getElementById('ad_motivo').value = '';
+
+    alert(`✅ Adiantamento de ${formatarMoeda(valor)} concedido com sucesso para ${solicitante}!\nEle já aparece na lista à esquerda.`);
+  }
+
+  function carregarExemploMultiplosAdiantamentos() {
+    adiantamentos = [
+      {
+        id: 'AD_LUIZA',
+        solicitante: 'Luiza - Marketing',
+        ccusto: 'Marketing / Eventos',
+        dataLib: hoje,
+        valor: 1000.00,
+        forma: 'PIX',
+        motivo: 'Custos operacionais do evento de lançamento',
+        status: 'ABERTO',
+        gastos: [
+          { id: 'G1', data: hoje, tipo: 'Recibo', desc: 'Garçom do evento (Diária)', valor: 150.00 },
+          { id: 'G2', data: hoje, tipo: 'NFS-e', desc: 'Flores & Decoração do Hall', valor: 200.00 },
+          { id: 'G3', data: hoje, tipo: 'Comprovante', desc: 'Táxi / Deslocamento de materiais', valor: 85.00 }
+        ],
+        dataFechamento: null
+      },
+      {
+        id: 'AD_MARCOS',
+        solicitante: 'Marcos - TI',
+        ccusto: 'TI e Infraestrutura',
+        dataLib: hoje,
+        valor: 500.00,
+        forma: 'PIX',
+        motivo: 'Compra emergencial de cabos e conectores de rede',
+        status: 'ABERTO',
+        gastos: [
+          { id: 'GM1', data: hoje, tipo: 'Cupom', desc: 'Conectores RJ45 e patch cords', valor: 120.00 }
+        ],
+        dataFechamento: null
+      },
+      {
+        id: 'AD_JULIANA',
+        solicitante: 'Juliana - Comercial',
+        ccusto: 'Comercial / Vendas',
+        dataLib: hoje,
+        valor: 350.00,
+        forma: 'TED',
+        motivo: 'Almoço de alinhamento com cliente',
+        status: 'QUITADO_EXATO',
+        gastos: [
+          { id: 'GJ1', data: hoje, tipo: 'NFS-e', desc: 'Restaurante Terraço Grill', valor: 350.00 }
+        ],
+        dataFechamento: hoje
+      }
+    ];
+
+    adiantamentoAtivoId = 'AD_LUIZA';
+    salvarAdiantamentos();
+    alert('⚡ 3 Adiantamentos simultâneos carregados:\n• Luiza (Marketing) - R$ 1.000,00\n• Marcos (TI) - R$ 500,00\n• Juliana (Comercial) - R$ 350,00\n\nClique em qualquer um na tabela à esquerda para alternar!');
+  }
+
+  function carregarExemploLuizaMarketing() {
+    carregarExemploMultiplosAdiantamentos();
+  }
+
+  function atualizarSelectAdiantamentos() {
+    const sel = document.getElementById('sel_adiantamento_ativo');
+    sel.innerHTML = '';
+
+    if (adiantamentos.length === 0) {
+      sel.innerHTML = '<option value="">Nenhum adiantamento</option>';
+      return;
+    }
+
+    if (!adiantamentoAtivoId || !adiantamentos.some(a => a.id === adiantamentoAtivoId)) {
+      adiantamentoAtivoId = adiantamentos[0].id;
+    }
+
+    adiantamentos.forEach(a => {
+      const opt = document.createElement('option');
+      opt.value = a.id;
+      const statusIcon = a.status === 'ABERTO' ? '⏳' : '✅';
+      opt.innerText = `${statusIcon} ${a.solicitante} (${formatarMoeda(a.valor)})`;
+      if (a.id === adiantamentoAtivoId) opt.selected = true;
+      sel.appendChild(opt);
+    });
+  }
+
+  function trocarAdiantamentoAtivo() {
+    adiantamentoAtivoId = document.getElementById('sel_adiantamento_ativo').value;
+    renderizarPainelAdiantamentoAtivo();
+  }
+
+  function renderizarPainelAdiantamentoAtivo() {
+    const ativo = adiantamentos.find(a => a.id === adiantamentoAtivoId);
+    const gridGastos = document.getElementById('grid-gastos-body');
+    const emptyGastos = document.getElementById('empty-gastos-msg');
+    const formGastoContainer = document.getElementById('form-inserir-gasto-container');
+    const painelEncerramento = document.getElementById('painel-encerramento');
+    const textoAcao = document.getElementById('texto-acao-fechamento');
+    const botoesAcao = document.getElementById('botoes-acao-fechamento');
+
+    gridGastos.innerHTML = '';
+
+    if (!ativo) {
+      document.getElementById('ad-resumo-concedido').innerText = 'R$ 0,00';
+      document.getElementById('ad-resumo-comprovado').innerText = 'R$ 0,00';
+      document.getElementById('ad-resumo-saldo').innerText = 'R$ 0,00';
+      document.getElementById('ad-resumo-status-msg').innerText = 'Nenhum adiantamento selecionado.';
+      emptyGastos.style.display = 'block';
+      painelEncerramento.style.display = 'none';
+      atualizarBarraRodape();
+      return;
+    }
+
+    painelEncerramento.style.display = 'flex';
+
+    const totalComprovado = ativo.gastos.reduce((acc, g) => acc + g.valor, 0);
+    const saldo = ativo.valor - totalComprovado;
+
+    document.getElementById('ad-resumo-concedido').innerText = formatarMoeda(ativo.valor);
+    document.getElementById('ad-resumo-comprovado').innerText = formatarMoeda(totalComprovado);
+
+    const elSaldo = document.getElementById('ad-resumo-saldo');
+    const elLblSaldo = document.getElementById('ad-lbl-saldo');
+    const elMsg = document.getElementById('ad-resumo-status-msg');
+
+    if (saldo > 0) {
+      elLblSaldo.innerText = '3. Saldo Restante a Prestar / Devolver';
+      elSaldo.style.color = 'var(--alterdata-blue)';
+      elSaldo.innerText = formatarMoeda(saldo);
+      elMsg.style.background = '#e0f2fe';
+      elMsg.style.color = '#0369a1';
+      elMsg.innerText = `💡 ${ativo.solicitante} ainda tem ${formatarMoeda(saldo)} a prestar contas ou devolver para a empresa.`;
+    } else if (saldo < 0) {
+      elLblSaldo.innerText = '3. Saldo a Reembolsar à ' + ativo.solicitante.split(' ')[0];
+      elSaldo.style.color = 'var(--danger)';
+      elSaldo.innerText = formatarMoeda(Math.abs(saldo));
+      elMsg.style.background = '#fee2e2';
+      elMsg.style.color = '#991b1b';
+      elMsg.innerText = `⚠️ Os gastos ultrapassaram o adiantamento em ${formatarMoeda(Math.abs(saldo))}. A empresa deve reembolsar ${ativo.solicitante.split(' ')[0]}.`;
+    } else {
+      elLblSaldo.innerText = '3. Saldo da Prestação de Contas';
+      elSaldo.style.color = 'var(--success)';
+      elSaldo.innerText = 'R$ 0,00 (Exato)';
+      elMsg.style.background = '#dcfce7';
+      elMsg.style.color = '#15803d';
+      elMsg.innerText = `🎯 Prestação de contas fechou exatamente em 100% do valor concedido!`;
+    }
+
+    if (ativo.gastos.length === 0) {
+      emptyGastos.style.display = 'block';
+    } else {
+      emptyGastos.style.display = 'none';
+      ativo.gastos.forEach(g => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="text-align: center;">${formatarData(g.data)}</td>
+          <td><span class="tag-tipo" style="background:#e0f2fe; color:#0369a1;">${g.tipo}</span></td>
+          <td><strong>${g.desc}</strong></td>
+          <td style="text-align: right;"><strong style="color: var(--alterdata-blue);">${formatarMoeda(g.valor)}</strong></td>
+          <td style="text-align: center;">
+            ${ativo.status === 'ABERTO' ? `
+              <button class="tool-btn" style="display:inline-flex; padding: 2px 6px; font-size: 10px; color: var(--danger);" onclick="excluirComprovanteGasto('${g.id}')">✖</button>
+            ` : '-'}
+          </td>
+        `;
+        gridGastos.appendChild(tr);
+      });
+    }
+
+    if (ativo.status === 'ABERTO') {
+      formGastoContainer.style.display = 'block';
+      if (saldo > 0) {
+        textoAcao.innerHTML = `Sobrou <strong>${formatarMoeda(saldo)}</strong> não utilizado por ${ativo.solicitante}.`;
+        botoesAcao.innerHTML = `
+          <button class="tool-btn primary" onclick="fecharAdiantamentoDevolucao('${ativo.id}')">
+            💰 Registrar Devolução de ${formatarMoeda(saldo)} e Quitar
+          </button>
+        `;
+      } else if (saldo < 0) {
+        const dif = Math.abs(saldo);
+        textoAcao.innerHTML = `Gastou a mais: reembolsar <strong>${formatarMoeda(dif)}</strong> para ${ativo.solicitante}.`;
+        botoesAcao.innerHTML = `
+          <button class="tool-btn primary" onclick="fecharAdiantamentoReembolso('${ativo.id}')">
+            💳 Gerar Reembolso no Contas a Pagar e Quitar
+          </button>
+        `;
+      } else {
+        textoAcao.innerHTML = `Total comprovado bateu perfeitamente com os ${formatarMoeda(ativo.valor)}.`;
+        botoesAcao.innerHTML = `
+          <button class="tool-btn primary" onclick="fecharAdiantamentoExato('${ativo.id}')">
+            ✅ Quitar Prestação de Contas (Sem Pendências)
+          </button>
+        `;
+      }
+    } else {
+      formGastoContainer.style.display = 'none';
+      textoAcao.innerHTML = `✅ Este adiantamento já foi <strong>FINALIZADO E QUITADO</strong> em ${formatarData(ativo.dataFechamento)}.`;
+      botoesAcao.innerHTML = `
+        <button class="tool-btn" onclick="reabrirAdiantamento('${ativo.id}')">
+          ↩️ Reabrir para Ajustes
+        </button>
+      `;
+    }
+    atualizarBarraRodape();
+  }
+
+  function adicionarComprovanteGasto() {
+    const ativo = adiantamentos.find(a => a.id === adiantamentoAtivoId);
+    if (!ativo) return;
+
+    if (ativo.status !== 'ABERTO') {
+      alert('Este adiantamento já está quitado. Reabra-o se precisar lançar mais comprovantes.');
+      return;
+    }
+
+    const data = document.getElementById('gasto_data').value || hoje;
+    const tipo = document.getElementById('gasto_tipo').value;
+    const desc = document.getElementById('gasto_desc').value.trim();
+    const valor = parseFloat(document.getElementById('gasto_valor').value) || 0;
+
+    if (!desc || valor <= 0) {
+      alert('Por favor, informe a descrição/fornecedor e o valor do gasto.');
+      return;
+    }
+
+    ativo.gastos.push({
+      id: 'G_' + Date.now(),
+      data,
+      tipo,
+      desc,
+      valor
+    });
+
+    salvarAdiantamentos();
+    document.getElementById('gasto_desc').value = '';
+    document.getElementById('gasto_valor').value = '';
+  }
+
+  function excluirComprovanteGasto(gastoId) {
+    const ativo = adiantamentos.find(a => a.id === adiantamentoAtivoId);
+    if (!ativo) return;
+    ativo.gastos = ativo.gastos.filter(g => g.id !== gastoId);
+    salvarAdiantamentos();
+  }
+
+  function fecharAdiantamentoDevolucao(id) {
+    const ativo = adiantamentos.find(a => a.id === id);
+    if (!ativo) return;
+
+    const totalComprovado = ativo.gastos.reduce((acc, g) => acc + g.valor, 0);
+    const sobra = ativo.valor - totalComprovado;
+
+    if (confirm(`Confirmar que ${ativo.solicitante} devolveu ${formatarMoeda(sobra)} via PIX/Caixa para a empresa e encerrar o adiantamento?`)) {
+      ativo.status = 'QUITADO_DEVOLUCAO';
+      ativo.dataFechamento = hoje;
+      salvarAdiantamentos();
+      alert(`✅ Prestação de contas concluída!\nO adiantamento de ${ativo.solicitante} foi liquidado com a devolução de ${formatarMoeda(sobra)}.`);
+    }
+  }
+
+  function fecharAdiantamentoReembolso(id) {
+    const ativo = adiantamentos.find(a => a.id === id);
+    if (!ativo) return;
+
+    const totalComprovado = ativo.gastos.reduce((acc, g) => acc + g.valor, 0);
+    const dif = Math.abs(ativo.valor - totalComprovado);
+
+    if (confirm(`Gerar um título no Contas a Pagar para pagar o reembolso de ${formatarMoeda(dif)} à ${ativo.solicitante}?`)) {
+      titulos.push({
+        id: 'TIT_REEMB_' + Date.now(),
+        loteId: 'LOTE_REEMB_' + Date.now(),
+        tipo: 'DESPESA_GERAL',
+        tipo_doc: 'DESPESA_INTERNA',
+        favorecido: ativo.solicitante,
+        cnpj: 'Colaborador Interno',
+        numero_doc: `REEMB-${ativo.id.slice(-4)}`,
+        vencimento: hoje,
+        valor: dif,
+        valor_bruto: dif,
+        historico: `Vlr. ref. reembolso de despesas excedentes do adiantamento (${ativo.motivo})`,
+        descricao: `Reembolso de gastos excedentes no evento/projeto por ${ativo.solicitante}`,
+        ccusto: ativo.ccusto,
+        solicitante: ativo.solicitante,
+        contrato: '',
+        forma_pgto: 'PIX',
+        dados_banco: 'Chave PIX do colaborador',
+        linha_dig: '',
+        dataCriacao: hoje,
+        status: 'PENDENTE'
+      });
+
+      ativo.status = 'QUITADO_REEMBOLSO';
+      ativo.dataFechamento = hoje;
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(titulos));
+      salvarAdiantamentos();
+      renderizarGridTitulos();
+      atualizarTotaisGerais();
+
+      alert(`🎉 REEMBOLSO GERADO COM SUCESSO!\nFoi criado um título no Contas a Pagar (Aba 4) no valor de ${formatarMoeda(dif)} em nome de ${ativo.solicitante}.`);
+    }
+  }
+
+  function fecharAdiantamentoExato(id) {
+    const ativo = adiantamentos.find(a => a.id === id);
+    if (!ativo) return;
+    ativo.status = 'QUITADO_EXATO';
+    ativo.dataFechamento = hoje;
+    salvarAdiantamentos();
+    alert('✅ Prestação de contas encerrada perfeitamente com 100% de comprovação!');
+  }
+
+  function reabrirAdiantamento(id) {
+    const ativo = adiantamentos.find(a => a.id === id);
+    if (!ativo) return;
+    ativo.status = 'ABERTO';
+    ativo.dataFechamento = null;
+    salvarAdiantamentos();
+  }
+
+  function abrirRelatorioPrestacaoContas() {
+    const ativo = adiantamentos.find(a => a.id === adiantamentoAtivoId);
+    if (!ativo) {
+      alert('Selecione um adiantamento para imprimir o fechamento.');
+      return;
+    }
+
+    const totalComprovado = ativo.gastos.reduce((acc, g) => acc + g.valor, 0);
+    const saldo = ativo.valor - totalComprovado;
+
+    document.getElementById('pc-colaborador').innerText = ativo.solicitante;
+    document.getElementById('pc-ccusto').innerText = ativo.ccusto;
+    document.getElementById('pc-data-concessao').innerText = formatarData(ativo.dataLib);
+    document.getElementById('pc-motivo').innerText = ativo.motivo;
+    document.getElementById('pc-forma').innerText = ativo.forma;
+    document.getElementById('pc-data-emissao').innerText = 'Data: ' + formatarData(hoje);
+
+    const stBadge = document.getElementById('pc-status-badge');
+    if (ativo.status === 'ABERTO') {
+      stBadge.className = 'status-badge status-pendente';
+      stBadge.innerText = 'PRESTAÇÃO EM ANDAMENTO';
+    } else {
+      stBadge.className = 'status-badge status-pago';
+      stBadge.innerText = 'PRESTAÇÃO CONCLUÍDA & QUITADA';
+    }
+
+    const tbody = document.getElementById('pc-tabela-gastos-body');
+    tbody.innerHTML = '';
+
+    if (ativo.gastos.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 12px; color:#64748b;">Nenhum gasto comprovado até o momento.</td></tr>';
+    } else {
+      ativo.gastos.forEach(g => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td style="padding: 6px; border: 1px solid #cbd5e1; text-align: center;">${formatarData(g.data)}</td>
+          <td style="padding: 6px; border: 1px solid #cbd5e1;">${g.tipo}</td>
+          <td style="padding: 6px; border: 1px solid #cbd5e1;"><strong>${g.desc}</strong></td>
+          <td style="padding: 6px; border: 1px solid #cbd5e1; text-align: right; font-weight: 600;">${formatarMoeda(g.valor)}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    document.getElementById('pc-val-concedido').innerText = formatarMoeda(ativo.valor);
+    document.getElementById('pc-val-comprovado').innerText = formatarMoeda(totalComprovado);
+
+    const elResLabel = document.getElementById('pc-resultado-label');
+    const elResVal = document.getElementById('pc-val-saldo-final');
+    const elParecer = document.getElementById('pc-parecer-resultado');
+
+    if (saldo > 0) {
+      elResLabel.innerText = '(=) SALDO A DEVOLVER PELO COLABORADOR:';
+      elResVal.style.color = '#004b87';
+      elResVal.innerText = formatarMoeda(saldo);
+      elParecer.innerText = `O colaborador ${ativo.solicitante} deve recolher/devolver aos cofres da empresa o montante de ${formatarMoeda(saldo)}.`;
+    } else if (saldo < 0) {
+      elResLabel.innerText = '(=) SALDO A REEMBOLSAR AO COLABORADOR:';
+      elResVal.style.color = 'var(--danger)';
+      elResVal.innerText = formatarMoeda(Math.abs(saldo));
+      elParecer.innerText = `A empresa deve efetuar o reembolso complementar de ${formatarMoeda(Math.abs(saldo))} em favor de ${ativo.solicitante}.`;
+    } else {
+      elResLabel.innerText = '(=) SALDO FINAL:';
+      elResVal.style.color = 'var(--success)';
+      elResVal.innerText = 'R$ 0,00 (Contas Liquidadas Sem Diferença)';
+      elParecer.innerText = 'Todas as despesas apresentadas cobriram precisamente o valor concedido inicial.';
+    }
+
+    document.getElementById('pc-sign-colaborador').innerText = ativo.solicitante;
+    document.getElementById('modal-fechamento-prestacao').style.display = 'flex';
+  }
+
+  function fecharRelatorioPrestacaoContas() {
+    document.getElementById('modal-fechamento-prestacao').style.display = 'none';
+  }
+
+  // Inicialização
+  recalcularValores();
+  atualizarHistoricoDinamico();
+  renderizarGridTitulos();
+  atualizarTotaisGerais();
+  atualizarAgendaFinanceira();
+  atualizarFiltrosMeses();
+  renderizarGridPrevisoes();
+  atualizarSelectAdiantamentos();
+  renderizarListaAdiantamentosLateral();
+  renderizarPainelAdiantamentoAtivo();
+  atualizarBarraRodape();
+
+  // Conecta e sincroniza dados em tempo real com SQLite (robo_boah.db)
+  carregarDadosIniciais();
+</script>
+
+</body>
+</html>

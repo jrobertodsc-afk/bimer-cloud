@@ -1,0 +1,31 @@
+# Python & Bytecode
+__pycache__/
+*.py[cod]
+*.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+
+# Ambiente e Chaves
+.env
+.env.local
+.env.*.local
+
+# Banco de dados de desenvolvimento local (opcional: se quiser manter o bimer.db no git para semente inicial, mantemos; descarte backups)
+*.db-journal
+*.db-wal
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Vercel & Deploy
+.vercel/
+
+# Sistema Operacional
+.DS_Store
+Thumbs.db

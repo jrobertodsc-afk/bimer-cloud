@@ -1,0 +1,42 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from .core.config import PROJECT_NAME, VERSION, API_PREFIX, CORS_ORIGINS
+from .api import titulos, previsoes, adiantamentos
+
+app = FastAPI(
+    title=PROJECT_NAME,
+    version=VERSION,
+    description=\"Backend Oficial Bimer Cloud ERP - Gestao Financeira, Contas a Pagar e Retencoes Tributarias\"
+)
+
+# Configuracao de CORS para permitir chamadas da Vercel e localhost
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[\"*\"],
+    allow_credentials=True,
+    allow_methods=[\"*\"],
+    allow_headers=[\"*\"],
+)
+
+# Rotas v1
+app.include_router(titulos.router, prefix=API_PREFIX)
+app.include_router(previsoes.router, prefix=API_PREFIX)
+app.include_router(adiantamentos.router, prefix=API_PREFIX)
+
+# Rotas com prefixo direto /api/contas-a-pagar para compatibilidade
+app.include_router(titulos.router, prefix=\"/api/contas-a-pagar\")
+app.include_router(previsoes.router, prefix=\"/api/contas-a-pagar\")
+app.include_router(adiantamentos.router, prefix=\"/api/contas-a-pagar\")
+
+@app.get(\"/\")
+def root():
+    return {
+        \"app\": PROJECT_NAME,
+        \"version\": VERSION,
+        \"status\": \"online\",
+        \"docs\": \"/docs\"
+    }
+
+@app.get(\"/health\")
+def health_check():
+    return {\"status\": \"healthy\", \"service\": \"bimer-cloud-api\"}
