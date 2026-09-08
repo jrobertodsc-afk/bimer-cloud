@@ -496,6 +496,12 @@
         <button type="button" class="tool-btn" style="padding: 2px 5px; font-size: 10px;" id="btn-zoom-90" onclick="alterarZoom('90%')">90%</button>
         <button type="button" class="tool-btn" style="padding: 2px 5px; font-size: 10px;" id="btn-zoom-100" onclick="alterarZoom('100%')">100%</button>
       </div>
+      <!-- Perfil do Gestor Roberto & Logout -->
+      <div id="user-session-bar" style="display: inline-flex; align-items: center; gap: 5px; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 1px 7px; border-radius: 3px; font-size: 10.5px;">
+        <span style="color: #166534; font-weight: 700;">👤 <span id="user-name-display">Roberto</span></span>
+        <button type="button" class="tool-btn" style="padding: 1px 4px; font-size: 9.5px;" onclick="abrirModalSenha()" title="Alterar Senha de Acesso">🔑</button>
+        <button type="button" class="tool-btn" style="padding: 1px 4px; font-size: 9.5px; color: var(--danger);" onclick="fazerLogout()" title="Sair da Sessão">🚪</button>
+      </div>
 
       <button class="tool-btn primary" onclick="gravarDocumento()">💾 Gravar (F10)</button>
       <button class="tool-btn" onclick="novoDocumento()">➕ Novo Lançamento</button>
@@ -1373,6 +1379,93 @@
   </div>
 </div>
 
+<!-- ==================== MODAL DE AUTENTICAÇÃO / LOGIN (ALTERDATA BIMER) ==================== -->
+<div id="bimer-login-modal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.82); backdrop-filter: blur(5px); z-index: 99999; justify-content: center; align-items: center;">
+  <div style="background: white; border: 2px solid #004b87; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border-radius: 6px; width: 360px; overflow: hidden;">
+    <!-- Barra de Título Windows / Alterdata -->
+    <div style="background: linear-gradient(to right, #004b87, #002d54); color: white; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 11.5px;">
+        <span>🔒</span>
+        <span>Alterdata Bimer ERP • Acesso Restrito</span>
+      </div>
+      <span style="font-size: 10px; opacity: 0.85;">Cloud 2.0</span>
+    </div>
+
+    <!-- Conteúdo do Formulário -->
+    <div style="padding: 20px; background: #f8fafc;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
+        <div style="background: #004b87; color: white; font-weight: 900; font-size: 14px; padding: 6px 10px; border-radius: 4px; letter-spacing: 0.5px;">ALTERDATA</div>
+        <div>
+          <div style="font-size: 12.5px; font-weight: 700; color: #002d54;">Central de Contas a Pagar</div>
+          <div style="font-size: 10.5px; color: #64748b;">Acesso Pessoal do Gestor Roberto</div>
+        </div>
+      </div>
+
+      <div id="login-erro-alerta" style="display: none; background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 8px 10px; border-radius: 4px; font-size: 11px; margin-bottom: 12px;">
+        ⚠️ E-mail ou senha incorretos.
+      </div>
+
+      <form id="form-login-bimer" onsubmit="executarLogin(event)">
+        <div style="margin-bottom: 10px;">
+          <label style="display: block; font-size: 10.5px; font-weight: 700; color: #334155; margin-bottom: 3px;">E-mail do Gestor:</label>
+          <input type="email" id="login_email" required value="roberto@bimer.com" style="width: 100%; padding: 7px 9px; font-size: 11.5px; border: 1px solid #cbd5e1; border-radius: 4px; outline: none; background: #ffffff;">
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label style="display: block; font-size: 10.5px; font-weight: 700; color: #334155; margin-bottom: 3px;">Senha de Acesso:</label>
+          <input type="password" id="login_senha" required placeholder="Digite sua senha" style="width: 100%; padding: 7px 9px; font-size: 11.5px; border: 1px solid #cbd5e1; border-radius: 4px; outline: none; background: #ffffff;">
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <label style="display: flex; align-items: center; gap: 5px; font-size: 10.5px; color: #475569; cursor: pointer;">
+            <input type="checkbox" id="login_lembrar" checked>
+            <span>Manter conectado neste navegador</span>
+          </label>
+        </div>
+
+        <button type="submit" id="btn-submit-login" class="tool-btn primary" style="width: 100%; justify-content: center; padding: 8px 12px; font-size: 12px; font-weight: 700; cursor: pointer;">
+          🔑 Entrar no Sistema (Enter)
+        </button>
+      </form>
+    </div>
+
+    <div style="background: #e2e8f0; border-top: 1px solid #cbd5e1; padding: 7px 12px; text-align: center; font-size: 10px; color: #64748b;">
+      Bimer Cloud ERP • Proteção de Dados Financeiros
+    </div>
+  </div>
+</div>
+
+<!-- ==================== MODAL DE ALTERAÇÃO DE SENHA ==================== -->
+<div id="bimer-senha-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(2px); z-index: 99998; justify-content: center; align-items: center;">
+  <div style="background: white; border: 1px solid #004b87; box-shadow: 0 15px 20px -5px rgba(0,0,0,0.3); border-radius: 6px; width: 340px; overflow: hidden;">
+    <div style="background: linear-gradient(to right, #004b87, #002d54); color: white; padding: 7px 12px; display: flex; justify-content: space-between; align-items: center;">
+      <span style="font-weight: 700; font-size: 11.5px;">🔑 Alterar Senha de Acesso</span>
+      <button type="button" onclick="fecharModalSenha()" style="background: none; border: none; color: white; cursor: pointer; font-size: 14px;">✕</button>
+    </div>
+    <div style="padding: 16px; background: #f8fafc;">
+      <div id="senha-msg-alerta" style="display: none; padding: 6px 8px; border-radius: 4px; font-size: 11px; margin-bottom: 10px;"></div>
+      <form id="form-alterar-senha" onsubmit="executarAlteracaoSenha(event)">
+        <div style="margin-bottom: 8px;">
+          <label style="display: block; font-size: 10.5px; font-weight: 700; color: #334155; margin-bottom: 2px;">Senha Atual:</label>
+          <input type="password" id="senha_atual" required style="width: 100%; padding: 6px 8px; font-size: 11.5px; border: 1px solid #cbd5e1; border-radius: 3px;">
+        </div>
+        <div style="margin-bottom: 8px;">
+          <label style="display: block; font-size: 10.5px; font-weight: 700; color: #334155; margin-bottom: 2px;">Nova Senha:</label>
+          <input type="password" id="nova_senha" required minlength="6" placeholder="Mínimo 6 caracteres" style="width: 100%; padding: 6px 8px; font-size: 11.5px; border: 1px solid #cbd5e1; border-radius: 3px;">
+        </div>
+        <div style="margin-bottom: 14px;">
+          <label style="display: block; font-size: 10.5px; font-weight: 700; color: #334155; margin-bottom: 2px;">Confirmar Nova Senha:</label>
+          <input type="password" id="confirma_nova_senha" required minlength="6" style="width: 100%; padding: 6px 8px; font-size: 11.5px; border: 1px solid #cbd5e1; border-radius: 3px;">
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 8px;">
+          <button type="button" class="tool-btn" onclick="fecharModalSenha()">Cancelar</button>
+          <button type="submit" class="tool-btn primary">Salvar Nova Senha</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <script>
   let API_BASE = localStorage.getItem('bimer_cloud_api_url') || (
     window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
@@ -1380,6 +1473,177 @@
       : 'https://bimer-cloud-api.onrender.com/api/contas-a-pagar'
   );
   let isBackendOnline = false;
+
+  // ── AUTENTICAÇÃO & SESSÃO PESSOAL (ROBERTO) ───────────────────────────
+  const AUTH_STORAGE_TOKEN = 'bimer_auth_token_v1';
+  const AUTH_STORAGE_USER = 'bimer_auth_user_v1';
+
+  function obterToken() {
+    return localStorage.getItem(AUTH_STORAGE_TOKEN) || '';
+  }
+
+  function getAuthHeaders(extraHeaders = {}) {
+    const token = obterToken();
+    const headers = { ...extraHeaders };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    return headers;
+  }
+
+  async function verificarSessao() {
+    const token = obterToken();
+    const loginModal = document.getElementById('bimer-login-modal');
+    const userDisplay = document.getElementById('user-name-display');
+
+    if (!token) {
+      if (loginModal) loginModal.style.display = 'flex';
+      return false;
+    }
+
+    try {
+      const userCached = JSON.parse(localStorage.getItem(AUTH_STORAGE_USER) || '{}');
+      if (userCached && userCached.nome && userDisplay) {
+        userDisplay.textContent = userCached.nome;
+      }
+    } catch (e) {}
+
+    try {
+      const resp = await fetch(`${API_BASE}/auth/me`, {
+        headers: getAuthHeaders(),
+        cache: 'no-store'
+      });
+      if (resp.ok) {
+        const data = await resp.json();
+        if (data.success && data.usuario) {
+          localStorage.setItem(AUTH_STORAGE_USER, JSON.stringify(data.usuario));
+          if (userDisplay) userDisplay.textContent = data.usuario.nome || 'Roberto';
+          if (loginModal) loginModal.style.display = 'none';
+          return true;
+        }
+      }
+    } catch (e) {
+      console.warn('Verificação de sessão remota falhou, operando via sessão local:', e);
+      if (localStorage.getItem(AUTH_STORAGE_USER)) {
+        if (loginModal) loginModal.style.display = 'none';
+        return true;
+      }
+    }
+
+    localStorage.removeItem(AUTH_STORAGE_TOKEN);
+    localStorage.removeItem(AUTH_STORAGE_USER);
+    if (loginModal) loginModal.style.display = 'flex';
+    return false;
+  }
+
+  async function executarLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById('login_email').value.trim();
+    const senha = document.getElementById('login_senha').value;
+    const alertBox = document.getElementById('login-erro-alerta');
+    const btnSubmit = document.getElementById('btn-submit-login');
+
+    if (alertBox) alertBox.style.display = 'none';
+    if (btnSubmit) {
+      btnSubmit.disabled = true;
+      btnSubmit.innerHTML = '⏳ Autenticando...';
+    }
+
+    try {
+      const resp = await fetch(`${API_BASE}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, senha })
+      });
+
+      const data = await resp.json();
+
+      if (resp.ok && data.success && data.access_token) {
+        localStorage.setItem(AUTH_STORAGE_TOKEN, data.access_token);
+        localStorage.setItem(AUTH_STORAGE_USER, JSON.stringify(data.usuario));
+        document.getElementById('bimer-login-modal').style.display = 'none';
+        document.getElementById('user-name-display').textContent = data.usuario.nome || 'Roberto';
+        await carregarDadosIniciais();
+      } else {
+        if (alertBox) {
+          alertBox.textContent = `⚠️ ${data.detail || 'E-mail ou senha incorretos.'}`;
+          alertBox.style.display = 'block';
+        }
+      }
+    } catch (err) {
+      if (alertBox) {
+        alertBox.textContent = '⚠️ Erro ao conectar ao servidor de autenticação. Verifique se o servidor está online.';
+        alertBox.style.display = 'block';
+      }
+    } finally {
+      if (btnSubmit) {
+        btnSubmit.disabled = false;
+        btnSubmit.innerHTML = '🔑 Entrar no Sistema (Enter)';
+      }
+    }
+  }
+
+  function fazerLogout() {
+    if (!confirm('Deseja realmente sair da sua sessão?')) return;
+    localStorage.removeItem(AUTH_STORAGE_TOKEN);
+    localStorage.removeItem(AUTH_STORAGE_USER);
+    document.getElementById('bimer-login-modal').style.display = 'flex';
+    document.getElementById('login_senha').value = '';
+  }
+
+  function abrirModalSenha() {
+    document.getElementById('senha_atual').value = '';
+    document.getElementById('nova_senha').value = '';
+    document.getElementById('confirma_nova_senha').value = '';
+    document.getElementById('senha-msg-alerta').style.display = 'none';
+    document.getElementById('bimer-senha-modal').style.display = 'flex';
+  }
+
+  function fecharModalSenha() {
+    document.getElementById('bimer-senha-modal').style.display = 'none';
+  }
+
+  async function executarAlteracaoSenha(e) {
+    e.preventDefault();
+    const atual = document.getElementById('senha_atual').value;
+    const nova = document.getElementById('nova_senha').value;
+    const confirma = document.getElementById('confirma_nova_senha').value;
+    const msg = document.getElementById('senha-msg-alerta');
+
+    if (nova !== confirma) {
+      msg.style.display = 'block';
+      msg.style.background = '#fef2f2';
+      msg.style.color = '#991b1b';
+      msg.textContent = '⚠️ A confirmação da nova senha não coincide.';
+      return;
+    }
+
+    try {
+      const resp = await fetch(`${API_BASE}/auth/alterar-senha`, {
+        method: 'POST',
+        headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify({ senha_atual: atual, nova_senha: nova })
+      });
+      const data = await resp.json();
+      if (resp.ok && data.success) {
+        msg.style.display = 'block';
+        msg.style.background = '#f0fdf4';
+        msg.style.color = '#166534';
+        msg.textContent = '✅ Senha alterada com sucesso!';
+        setTimeout(() => fecharModalSenha(), 1500);
+      } else {
+        msg.style.display = 'block';
+        msg.style.background = '#fef2f2';
+        msg.style.color = '#991b1b';
+        msg.textContent = `⚠️ ${data.detail || 'Erro ao alterar senha.'}`;
+      }
+    } catch (err) {
+      msg.style.display = 'block';
+      msg.style.background = '#fef2f2';
+      msg.style.color = '#991b1b';
+      msg.textContent = '⚠️ Erro ao comunicar com o servidor.';
+    }
+  }
 
   function configurarServidorNuvem() {
     const atual = localStorage.getItem('bimer_cloud_api_url') || 'http://localhost:8000/api/contas-a-pagar';
@@ -3411,8 +3675,12 @@
   renderizarPainelAdiantamentoAtivo();
   atualizarBarraRodape();
 
-  // Conecta e sincroniza dados em tempo real com SQLite (robo_boah.db)
-  carregarDadosIniciais();
+  // Conecta e sincroniza dados após autenticação
+  verificarSessao().then(autenticado => {
+    if (autenticado) {
+      carregarDadosIniciais();
+    }
+  });
 </script>
 
 </body>

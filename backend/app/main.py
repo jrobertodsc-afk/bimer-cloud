@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .core.config import PROJECT_NAME, VERSION, API_PREFIX, CORS_ORIGINS
-from .api import titulos, previsoes, adiantamentos
+from .api import titulos, previsoes, adiantamentos, auth
 
 app = FastAPI(
     title=PROJECT_NAME,
@@ -16,6 +16,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(auth.router, prefix=f"{API_PREFIX}/auth")
+app.include_router(auth.router, prefix="/api/contas-a-pagar/auth")
 
 app.include_router(titulos.router, prefix=API_PREFIX)
 app.include_router(previsoes.router, prefix=API_PREFIX)
