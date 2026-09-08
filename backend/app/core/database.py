@@ -3,23 +3,17 @@ import os
 from .config import DATABASE_PATH
 
 def get_connection():
-    \"\"\"Retorna conexao SQLite ativa com suporte a Row Factory.\"\"\"
     db_file = DATABASE_PATH
-    
-    # Cria diretorio pai se nao existir
     os.makedirs(os.path.dirname(os.path.abspath(db_file)), exist_ok=True)
-    
     conn = sqlite3.connect(db_file, check_same_thread=False, timeout=15)
     conn.row_factory = sqlite3.Row
     return conn
 
 def init_db():
-    \"\"\"Garante que todas as tabelas necessarias estejam criadas.\"\"\"
     conn = get_connection()
     cur = conn.cursor()
     
-    # 1. Tabela Principal de Notas / Titulos
-    cur.execute(\"\"\"
+    cur.execute('''
     CREATE TABLE IF NOT EXISTS notas (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         numero_tx TEXT,
@@ -44,10 +38,9 @@ def init_db():
         is_previsao INTEGER DEFAULT 0,
         conciliada INTEGER DEFAULT 0
     )
-    \"\"\")
+    ''')
     
-    # 2. Tabela de Impostos Retidos
-    cur.execute(\"\"\"
+    cur.execute('''
     CREATE TABLE IF NOT EXISTS nota_impostos (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nota_id INTEGER,
@@ -59,10 +52,9 @@ def init_db():
         numero_doc TEXT,
         FOREIGN KEY (nota_id) REFERENCES notas(id) ON DELETE CASCADE
     )
-    \"\"\")
+    ''')
     
-    # 3. Tabela de Adiantamentos
-    cur.execute(\"\"\"
+    cur.execute('''
     CREATE TABLE IF NOT EXISTS adiantamentos (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         fornecedor TEXT,
@@ -75,10 +67,9 @@ def init_db():
         motivo TEXT,
         data_fechamento TEXT
     )
-    \"\"\")
+    ''')
     
-    # 4. Tabela de Comprovantes de Adiantamento
-    cur.execute(\"\"\"
+    cur.execute('''
     CREATE TABLE IF NOT EXISTS adiantamento_comprovantes (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         adiantamento_id INTEGER,
@@ -89,10 +80,9 @@ def init_db():
         data_criacao TEXT,
         FOREIGN KEY (adiantamento_id) REFERENCES adiantamentos(id) ON DELETE CASCADE
     )
-    \"\"\")
+    ''')
     
     conn.commit()
     conn.close()
 
-# Inicializa o schema
 init_db()
