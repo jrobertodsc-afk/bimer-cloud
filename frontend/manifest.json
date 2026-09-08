@@ -1,0 +1,25 @@
+{
+  "short_name": "Bimer Cloud",
+  "name": "Bimer Cloud ERP - Gestão Financeira",
+  "description": "Sistema de Gestão Financeira, Contas a Pagar e Retenções Tributárias no padrão Alterdata Bimer",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#002d54",
+  "theme_color": "#004b87",
+  "display": "standalone",
+  "scope": "/",
+  "lang": "pt-BR"
+}

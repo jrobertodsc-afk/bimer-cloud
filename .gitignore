@@ -29,3 +29,6 @@ yarn-debug.log*
 # Sistema Operacional
 .DS_Store
 Thumbs.db
+
+*.backup*
+
