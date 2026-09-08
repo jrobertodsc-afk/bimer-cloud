@@ -40,6 +40,8 @@
       height: 100%;
       height: 100vh;
       height: 100dvh;
+      width: 100%;
+      min-width: 100%;
       margin: 0;
       padding: 0;
       overflow: hidden;
@@ -55,10 +57,24 @@
       height: 100vh;
       height: 100dvh;
       max-height: 100vh;
-      width: 100vw;
+      width: 100%;
+      min-width: 100%;
       overflow: hidden;
       margin: 0;
       position: relative;
+    }
+
+    .layout-duas-colunas {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 10px;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .layout-duas-colunas {
+        grid-template-columns: 1fr;
+      }
     }
 
     /* BARRA SUPERIOR ALTERDATA */
@@ -538,115 +554,154 @@
 
     <!-- ==================== ABA 1: IDENTIFICAÇÃO DO DOCUMENTO ==================== -->
     <div id="aba-geral" class="tab-content active">
-      <fieldset>
-        <legend>Tipo de Operação & Documento de Origem</legend>
-        <div class="form-grid-4">
-          <div class="form-field">
-            <label>Tipo de Documento *</label>
-            <select id="tipo_documento" onchange="ajustarTipoDocumento()">
-              <option value="NFSE">NFS-e - Nota Fiscal de Serviços Eletrônica</option>
-              <option value="NFE">NF-e - Nota Fiscal de Produtos/Mercadorias</option>
-              <option value="RECIBO">Recibo / RPA (Sem Documento Fiscal)</option>
-              <option value="CONTRATO">Contrato / Locação / Aluguel Mensal</option>
-              <option value="FATURA">Fatura de Concessionária (Luz, Água, Internet)</option>
-              <option value="DESPESA_INTERNA">Adiantamento / Reembolso / Despesa Interna</option>
-            </select>
-          </div>
-          <div class="form-field">
-            <label id="lbl-numero-doc">Número da NFS-e / Documento *</label>
-            <input type="text" id="numero_doc" placeholder="Ex: 2026105" oninput="checarDuplicidadeLive(); atualizarHistoricoDinamico();">
-          </div>
-          <div class="form-field">
-            <label>Série / Subsérie</label>
-            <input type="text" id="serie_doc" value="E - 1">
-          </div>
-          <div class="form-field">
-            <label>Código da Operação (CFOP)</label>
-            <input type="text" id="cod_operacao" value="1.933 - Aquisição de Serviços">
-          </div>
-        </div>
-      <!-- DECODIFICADOR INTELIGENTE DE BOLETO / LINHA DIGITÁVEL -->
-      <fieldset style="background: #f0fdf4; border: 1px solid #86efac; margin-bottom: 8px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; flex-wrap: wrap; gap: 4px;">
-          <legend style="color: #166534; font-weight: 700; background: #dcfce7; padding: 2px 8px; border-radius: 3px; border: 1px solid #86efac;">
-            ⚡ Leitura Rápida de Boleto (Código de Barras Febraban)
-          </legend>
-          <div style="display: flex; gap: 6px;">
-            <button type="button" class="tool-btn" style="background: #ffffff; border: 1px solid #86efac; font-weight: 700; color: #15803d;" onclick="testarBoletoExemplo('itau')">⚡ Testar Itaú (47 dígitos)</button>
-            <button type="button" class="tool-btn" style="background: #ffffff; border: 1px solid #fcd34d; font-weight: 700; color: #92400e;" onclick="testarBoletoExemplo('enel')">⚡ Testar Luz (48 dígitos)</button>
-          </div>
-        </div>
-        <div class="form-field">
-          <input type="text" id="linha_digitavel" oninput="processarLinhaDigitavelLive()" placeholder="Cole aqui a linha digitável (47 ou 48 dígitos) para auto-preencher banco, vencimento e valor..." style="font-family: monospace; font-size: 12px; font-weight: 600; color: #1e3a8a; padding: 5px 8px;">
-          <div id="badge-boleto-decodificado" style="display: none; margin-top: 4px; padding: 4px 8px; border-radius: 3px; font-size: 11px; font-weight: 600;"></div>
-        </div>
-      </fieldset>
+      <div class="layout-duas-colunas">
 
-      <fieldset>
-        <legend>Favorecido / Prestador / Beneficiário</legend>
-        <div class="form-grid-3">
-          <div class="form-field">
-            <label>CNPJ / CPF do Favorecido *</label>
-            <input type="text" id="cnpj_favorecido" placeholder="00.000.000/0001-00" oninput="checarDuplicidadeLive()">
-          </div>
-          <div class="form-field" style="grid-column: span 2;">
-            <label>Razão Social / Nome do Favorecido *</label>
-            <input type="text" id="razao_favorecido" placeholder="Ex: Alfa Prestadora de Serviços e Tecnologia Ltda" oninput="atualizarHistoricoDinamico()">
-          </div>
-        </div>
-      </fieldset>
+        <!-- COLUNA ESQUERDA: DADOS FISCAIS DO DOCUMENTO -->
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <fieldset>
+            <legend>Tipo de Operação & Documento de Origem</legend>
+            <div class="form-grid-4">
+              <div class="form-field">
+                <label>Tipo de Documento *</label>
+                <select id="tipo_documento" onchange="ajustarTipoDocumento()">
+                  <option value="NFSE">NFS-e - Nota Fiscal de Serviços Eletrônica</option>
+                  <option value="NFE">NF-e - Nota Fiscal de Produtos/Mercadorias</option>
+                  <option value="RECIBO">Recibo / RPA (Sem Documento Fiscal)</option>
+                  <option value="CONTRATO">Contrato / Locação / Aluguel Mensal</option>
+                  <option value="FATURA">Fatura de Concessionária (Luz, Água, Internet)</option>
+                  <option value="DESPESA_INTERNA">Adiantamento / Reembolso / Despesa Interna</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label id="lbl-numero-doc">Número da NFS-e / Documento *</label>
+                <input type="text" id="numero_doc" placeholder="Ex: 2026105" oninput="checarDuplicidadeLive(); atualizarHistoricoDinamico();">
+              </div>
+              <div class="form-field">
+                <label>Série / Subsérie</label>
+                <input type="text" id="serie_doc" value="E - 1">
+              </div>
+              <div class="form-field">
+                <label>Código da Operação (CFOP)</label>
+                <input type="text" id="cod_operacao" value="1.933 - Aquisição de Serviços">
+              </div>
+            </div>
+          </fieldset>
 
-      <fieldset>
-        <legend>Datas do Movimento & Vencimento do Principal</legend>
-        <div class="form-grid-4">
-          <div class="form-field">
-            <label>Data de Emissão *</label>
-            <input type="date" id="data_emissao" onchange="sugerirVencimentosFiscais()">
-          </div>
-          <div class="form-field">
-            <label>Data de Entrada / Competência *</label>
-            <input type="date" id="data_entrada">
-          </div>
-          <div class="form-field">
-            <label>Vencimento do Boleto / Prestador *</label>
-            <input type="date" id="vencimento_principal">
-          </div>
-          <div class="form-field">
-            <label>Valor Bruto do Documento (R$) *</label>
-            <input type="number" step="0.01" id="valor_bruto" placeholder="0.00" oninput="recalcularValores()" style="font-size: 13px; font-weight: 700; color: var(--alterdata-blue);">
-          </div>
+          <fieldset>
+            <legend>Favorecido / Prestador / Beneficiário</legend>
+            <div class="form-grid-3">
+              <div class="form-field">
+                <label>CNPJ / CPF do Favorecido *</label>
+                <input type="text" id="cnpj_favorecido" placeholder="00.000.000/0001-00" oninput="checarDuplicidadeLive()">
+              </div>
+              <div class="form-field" style="grid-column: span 2;">
+                <label>Razão Social / Nome do Favorecido *</label>
+                <input type="text" id="razao_favorecido" placeholder="Ex: Alfa Prestadora de Serviços e Tecnologia Ltda" oninput="atualizarHistoricoDinamico()">
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Datas do Movimento & Vencimento do Principal</legend>
+            <div class="form-grid-4">
+              <div class="form-field">
+                <label>Data de Emissão *</label>
+                <input type="date" id="data_emissao" onchange="sugerirVencimentosFiscais()">
+              </div>
+              <div class="form-field">
+                <label>Data de Entrada / Competência *</label>
+                <input type="date" id="data_entrada">
+              </div>
+              <div class="form-field">
+                <label>Vencimento do Prestador *</label>
+                <input type="date" id="vencimento_principal">
+              </div>
+              <div class="form-field">
+                <label>Valor Bruto do Documento (R$) *</label>
+                <input type="number" step="0.01" id="valor_bruto" placeholder="0.00" oninput="recalcularValores()" style="font-size: 13px; font-weight: 700; color: var(--alterdata-blue);">
+              </div>
+            </div>
+          </fieldset>
         </div>
-      </fieldset>
+
+        <!-- COLUNA DIREITA: LEITURA DE BOLETO & CONFERÊNCIA EXECUTIVA -->
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <!-- DECODIFICADOR INTELIGENTE DE BOLETO / LINHA DIGITÁVEL -->
+          <fieldset style="background: #f0fdf4; border: 1px solid #86efac;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; flex-wrap: wrap; gap: 4px;">
+              <legend style="color: #166534; font-weight: 700; background: #dcfce7; padding: 2px 8px; border-radius: 3px; border: 1px solid #86efac;">
+                ⚡ Leitura Rápida de Boleto (Febraban)
+              </legend>
+              <div style="display: flex; gap: 4px;">
+                <button type="button" class="tool-btn" style="background: #ffffff; border: 1px solid #86efac; font-weight: 700; color: #15803d; padding: 2px 6px; font-size: 10px;" onclick="testarBoletoExemplo('itau')">⚡ Testar Itaú</button>
+                <button type="button" class="tool-btn" style="background: #ffffff; border: 1px solid #fcd34d; font-weight: 700; color: #92400e; padding: 2px 6px; font-size: 10px;" onclick="testarBoletoExemplo('enel')">⚡ Testar Luz</button>
+              </div>
+            </div>
+            <div class="form-field">
+              <input type="text" id="linha_digitavel" oninput="processarLinhaDigitavelLive()" placeholder="Cole aqui a linha digitável (47 ou 48 dígitos) para auto-preencher..." style="font-family: monospace; font-size: 11.5px; font-weight: 600; color: #1e3a8a; padding: 5px 8px;">
+              <div id="badge-boleto-decodificado" style="display: none; margin-top: 4px; padding: 4px 8px; border-radius: 3px; font-size: 10.5px; font-weight: 600;"></div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Origem, Departamento & Solicitação</legend>
+            <div class="form-grid-2">
+              <div class="form-field">
+                <label>Centro de Custo / Departamento *</label>
+                <select id="centro_custo" onchange="atualizarHistoricoDinamico()">
+                  <option value="TI e Infraestrutura">01.02 - TI e Infraestrutura</option>
+                  <option value="Administrativo / Diretoria">01.01 - Administrativo / Diretoria</option>
+                  <option value="Financeiro / Contabilidade">01.03 - Financeiro / Contabilidade</option>
+                  <option value="Operacional / Produção">02.01 - Operacional / Produção</option>
+                  <option value="Comercial / Vendas">03.01 - Comercial / Vendas</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label>Solicitante / Quem Autorizou *</label>
+                <input type="text" id="solicitante_despesa" placeholder="Ex: Roberto (Gerência)" oninput="atualizarHistoricoDinamico()">
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- CONFERÊNCIA EXPRESSA DE VALORES -->
+          <fieldset style="background: #f8fafc; border: 1px solid #cbd5e1;">
+            <legend>Espelho Tributário & Ações Imediatas</legend>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 6px;">
+              <div style="background: #e0f2fe; border: 1px solid #bae6fd; padding: 4px 6px; border-radius: 3px; text-align: center;">
+                <span style="font-size: 9.5px; font-weight: 600; color: #0369a1; display: block;">Vlr. Bruto</span>
+                <span id="card-espelho-bruto" style="font-size: 12px; font-weight: 800; color: #0284c7;">R$ 0,00</span>
+              </div>
+              <div style="background: #f5f3ff; border: 1px solid #ddd6fe; padding: 4px 6px; border-radius: 3px; text-align: center;">
+                <span style="font-size: 9.5px; font-weight: 600; color: #6b21a8; display: block;">(-) Retenções</span>
+                <span id="card-espelho-retencoes" style="font-size: 12px; font-weight: 800; color: #7c3aed;">R$ 0,00</span>
+              </div>
+              <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 4px 6px; border-radius: 3px; text-align: center;">
+                <span style="font-size: 9.5px; font-weight: 600; color: #15803d; display: block;">(=) Líquido</span>
+                <span id="card-espelho-liquido" style="font-size: 12px; font-weight: 800; color: #16a34a;">R$ 0,00</span>
+              </div>
+            </div>
+            <div style="display: flex; gap: 6px; justify-content: flex-end;">
+              <button type="button" class="tool-btn" onclick="trocarAba('aba-retencoes')" style="font-size: 10px;">🏛️ Ver Guias de Retenção</button>
+              <button type="button" class="tool-btn primary" onclick="gravarDocumento()" style="font-size: 10.5px;">💾 Gravar Lançamento (F10)</button>
+            </div>
+          </fieldset>
+        </div>
+
+      </div>
     </div>
 
     <!-- ==================== ABA 2: RIQUEZA DE DETALHES ==================== -->
     <div id="aba-detalhes" class="tab-content">
       <fieldset>
         <legend>Origem, Motivo & Rastreabilidade da Despesa (Mesmo sem Documento Fiscal)</legend>
-        <div class="form-grid-3">
-          <div class="form-field">
-            <label>Centro de Custo / Departamento *</label>
-            <select id="centro_custo" onchange="atualizarHistoricoDinamico()">
-              <option value="TI e Infraestrutura">01.02 - TI e Infraestrutura</option>
-              <option value="Administrativo / Diretoria">01.01 - Administrativo / Diretoria</option>
-              <option value="Financeiro / Contabilidade">01.03 - Financeiro / Contabilidade</option>
-              <option value="Operacional / Produção">02.01 - Operacional / Produção</option>
-              <option value="Comercial / Vendas">03.01 - Comercial / Vendas</option>
-            </select>
-          </div>
-          <div class="form-field">
-            <label>Solicitante / Quem Autorizou *</label>
-            <input type="text" id="solicitante_despesa" placeholder="Ex: Roberto (Gerência de TI)" oninput="atualizarHistoricoDinamico()">
-          </div>
-          <div class="form-field">
-            <label>Nº Contrato / Pedido de Compra / O.S.</label>
-            <input type="text" id="num_contrato_pedido" placeholder="Ex: CT-2026/04 ou OS-8841" oninput="atualizarHistoricoDinamico()">
-          </div>
+        <div class="form-field">
+          <label>Nº Contrato / Pedido de Compra / O.S.</label>
+          <input type="text" id="num_contrato_pedido" placeholder="Ex: CT-2026/04 ou OS-8841" oninput="atualizarHistoricoDinamico()">
         </div>
 
         <div class="form-field" style="margin-top: 6px;">
           <label>Descrição Completa / Objeto Detalhado do Serviço ou Despesa *</label>
-          <textarea id="descricao_detalhada" rows="3" placeholder="Detalhe com riqueza de informações: qual o serviço, finalidade, período de atendimento, equipamentos atendidos ou justificativa do pagamento..." oninput="atualizarHistoricoDinamico()"></textarea>
+          <textarea id="descricao_detalhada" rows="4" placeholder="Detalhe com riqueza de informações: qual o serviço, finalidade, período de atendimento, equipamentos atendidos ou justificativa do pagamento..." oninput="atualizarHistoricoDinamico()"></textarea>
         </div>
       </fieldset>
 
@@ -2008,6 +2063,13 @@
     if (elFed) elFed.innerText = formatarMoeda(totFederais);
     const elMun = document.getElementById('tot-municipal');
     if (elMun) elMun.innerText = formatarMoeda(iss);
+
+    const cardBruto = document.getElementById('card-espelho-bruto');
+    if (cardBruto) cardBruto.innerText = formatarMoeda(bruto);
+    const cardRet = document.getElementById('card-espelho-retencoes');
+    if (cardRet) cardRet.innerText = formatarMoeda(totalRet);
+    const cardLiq = document.getElementById('card-espelho-liquido');
+    if (cardLiq) cardLiq.innerText = formatarMoeda(liquido);
 
     checarDuplicidadeLive();
     atualizarBarraRodape();
