@@ -6,7 +6,7 @@ from .api import titulos, previsoes, adiantamentos, auth
 app = FastAPI(
     title=PROJECT_NAME,
     version=VERSION,
-    description="Backend Oficial Bimer Cloud ERP - Gestao Financeira, Contas a Pagar e Retencoes Tributarias"
+    description="Backend Oficial JR Solutions - Plataforma de Gestao Financeira, Contas a Pagar e Retencoes Tributarias"
 )
 
 app.add_middleware(

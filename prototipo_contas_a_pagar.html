@@ -5,16 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
-  <meta name="theme-color" content="#004b87">
+  <meta name="theme-color" content="#059669">
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
   <link rel="apple-touch-icon" href="/icon-192.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Bimer Cloud">
-  <title>Alterdata Bimer / Pack - Lançamento Completo & Gestão de Despesas Fixas</title>
+  <meta name="apple-mobile-web-app-title" content="JR Solutions">
+  <title>JR Solutions - Plataforma de Gestão Financeira</title>
   <style>
     :root {
+      --brand-green-translucent: rgba(16, 185, 129, 0.16);
+      --brand-green-border: rgba(16, 185, 129, 0.45);
+      --brand-green-text: #065f46;
       --alterdata-blue: #004b87;
       --alterdata-dark: #002d54;
       --alterdata-light: #e6f0fa;
@@ -481,17 +484,17 @@
   <!-- BARRA DE FERRAMENTAS SUPERIOR -->
   <div class="top-toolbar">
     <div class="system-badge">
-      <div class="system-logo">ALTERDATA</div>
+      <div class="system-logo" style="background: var(--brand-green-translucent); color: var(--brand-green-text); border: 1px solid var(--brand-green-border); backdrop-filter: blur(4px); font-weight: 900; letter-spacing: 0.8px; padding: 4px 10px; border-radius: 4px; box-shadow: 0 1px 3px rgba(16, 185, 129, 0.1);">JR SOLUTIONS</div>
       <div class="system-title">
-        <h1>Central de Documentos & Contas a Pagar</h1>
-        <p>Lançamentos de NFS-e, Retenções Tributárias, Rastreabilidade e Despesas Fixas</p>
+        <h1>Plataforma de Gestão Financeira</h1>
+        <p>Central de Contas a Pagar, Retenções Tributárias, Rastreabilidade & Prestação de Contas</p>
       </div>
       <div style="display: flex; align-items: center; gap: 6px;">
         <span id="status-conexao-db" style="display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; color: #15803d; background: #dcfce7; padding: 2px 6px; border-radius: 3px; border: 1px solid #86efac;">
-          🟢 Conectado ao SQLite (bimer.db)
+          🟢 Conectado ao Servidor (JR Solutions)
         </span>
         <button type="button" class="tool-btn" style="padding: 1px 5px; font-size: 10px;" onclick="configurarServidorNuvem()" title="Configurar Servidor / API Cloud">⚙️ Nuvem</button>
-        <button type="button" id="btn-instalar-pwa" class="tool-btn" style="display: none; padding: 1px 6px; font-size: 10px; background: #e0f2fe; color: #0284c7; border-color: #7dd3fc; font-weight: 700;" onclick="instalarPwa()" title="Instalar Bimer Cloud no Computador">📥 Instalar no PC</button>
+        <button type="button" id="btn-instalar-pwa" class="tool-btn" style="display: none; padding: 1px 6px; font-size: 10px; background: #e0f2fe; color: #0284c7; border-color: #7dd3fc; font-weight: 700;" onclick="instalarPwa()" title="Instalar JR Solutions no Computador">📥 Instalar no PC</button>
       </div>
     </div>
 
@@ -1389,22 +1392,22 @@
 <!-- ==================== MODAL DE AUTENTICAÇÃO / LOGIN (ALTERDATA BIMER) ==================== -->
 <div id="bimer-login-modal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.82); backdrop-filter: blur(5px); z-index: 99999; justify-content: center; align-items: center;">
   <div style="background: white; border: 2px solid #004b87; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border-radius: 6px; width: 360px; overflow: hidden;">
-    <!-- Barra de Título Windows / Alterdata -->
-    <div style="background: linear-gradient(to right, #004b87, #002d54); color: white; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+    <!-- Barra de Título Windows / JR Solutions -->
+    <div style="background: linear-gradient(to right, #064e3b, #047857); color: white; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
       <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 11.5px;">
         <span>🔒</span>
-        <span>Alterdata Bimer ERP • Acesso Restrito</span>
+        <span>JR Solutions • Acesso Restrito</span>
       </div>
-      <span style="font-size: 10px; opacity: 0.85;">Cloud 2.0</span>
+      <span style="font-size: 10px; opacity: 0.85;">Enterprise</span>
     </div>
 
     <!-- Conteúdo do Formulário -->
     <div style="padding: 20px; background: #f8fafc;">
       <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
-        <div style="background: #004b87; color: white; font-weight: 900; font-size: 14px; padding: 6px 10px; border-radius: 4px; letter-spacing: 0.5px;">ALTERDATA</div>
+        <div style="background: rgba(16, 185, 129, 0.18); color: #065f46; border: 1px solid rgba(16, 185, 129, 0.45); font-weight: 900; font-size: 13px; padding: 6px 10px; border-radius: 4px; letter-spacing: 0.8px;">JR SOLUTIONS</div>
         <div>
-          <div style="font-size: 12.5px; font-weight: 700; color: #002d54;">Central de Contas a Pagar</div>
-          <div style="font-size: 10.5px; color: #64748b;">Acesso Pessoal do Gestor Roberto</div>
+          <div style="font-size: 12.5px; font-weight: 700; color: #065f46;">Plataforma de Gestão Financeira</div>
+          <div style="font-size: 10.5px; color: #64748b;">Acesso do Gestor José Roberto</div>
         </div>
       </div>
 
@@ -1437,7 +1440,7 @@
     </div>
 
     <div style="background: #e2e8f0; border-top: 1px solid #cbd5e1; padding: 7px 12px; text-align: center; font-size: 10px; color: #64748b;">
-      Bimer Cloud ERP • Proteção de Dados Financeiros
+      JR Solutions • Plataforma de Gestão Financeira • Proteção de Dados
     </div>
   </div>
 </div>
@@ -2904,7 +2907,7 @@
       { nome: 'Aluguel Galpão Logístico', fav: 'Imobiliária Barão Ltda', cnpj: '11.222.333/0001-44', dia: 10, val: 4200.00, tipo: 'FIXO', ccusto: 'Administrativo / Diretoria', obs: 'Contrato nº 104/2025 reajuste anual' },
       { nome: 'Energia Elétrica (Média)', fav: 'Enel Distribuição', cnpj: '07.123.456/0001-99', dia: 15, val: 1350.00, tipo: 'ESTIMADO', ccusto: 'Operacional / Produção', obs: 'Conta de consumo mensal' },
       { nome: 'Link Fibra Óptica Dedicado', fav: 'Telecom Connect S/A', cnpj: '02.999.000/0001-11', dia: 5, val: 480.00, tipo: 'FIXO', ccusto: 'TI e Infraestrutura', obs: 'IP Dedicado 500Mbps' },
-      { nome: 'Software ERP Alterdata', fav: 'Alterdata Tecnologia Ltda', cnpj: '36.888.777/0001-55', dia: 20, val: 890.00, tipo: 'FIXO', ccusto: 'TI e Infraestrutura', obs: 'Licenciamento mensal Bimer/Pack' },
+      { nome: 'Infraestrutura em Nuvem / Servidores', fav: 'Cloud Hosting & Servers Ltda', cnpj: '36.888.777/0001-55', dia: 20, val: 890.00, tipo: 'FIXO', ccusto: 'TI e Infraestrutura', obs: 'Serviços de hospedagem e banco de dados' },
       { nome: 'Honorários Contábeis', fav: 'Audicont Assessoria Contábil', cnpj: '05.444.333/0001-22', dia: 25, val: 1800.00, tipo: 'FIXO', ccusto: 'Financeiro / Contabilidade', obs: 'Fechamento fiscal e contábil' }
     ];
 
@@ -3706,19 +3709,19 @@
       deferredPrompt.prompt();
       deferredPrompt.userChoice.then((choiceResult) => {
         if (choiceResult.outcome === 'accepted') {
-          console.log('Bimer Cloud PWA aceito');
+          console.log('JR Solutions PWA aceito');
           if (btnInstalarPwa) btnInstalarPwa.style.display = 'none';
         }
         deferredPrompt = null;
       });
     } else {
-      alert('Para instalar o Bimer Cloud no seu computador:\n\n1. No Google Chrome ou Microsoft Edge, clique no ícone de "Instalar" (ou monitorzinho) no canto direito da barra de endereços.\n2. Ou clique nos 3 pontinhos do navegador e escolha "Instalar Bimer Cloud".\n\nEle será adicionado à sua Área de Trabalho!');
+      alert('Para instalar o JR Solutions no seu computador:\n\n1. No Google Chrome ou Microsoft Edge, clique no ícone de "Instalar" (ou monitorzinho) no canto direito da barra de endereços.\n2. Ou clique nos 3 pontinhos do navegador e escolha "Instalar JR Solutions".\n\nEle será adicionado à sua Área de Trabalho!');
     }
   }
 
   window.addEventListener('appinstalled', () => {
     if (btnInstalarPwa) btnInstalarPwa.style.display = 'none';
-    console.log('Bimer Cloud PWA instalado com sucesso!');
+    console.log('JR Solutions PWA instalado com sucesso!');
   });
 
   if ('serviceWorker' in navigator) {

@@ -1,7 +1,7 @@
 {
-  "short_name": "Bimer Cloud",
-  "name": "Bimer Cloud ERP - Gestão Financeira",
-  "description": "Sistema de Gestão Financeira, Contas a Pagar e Retenções Tributárias no padrão Alterdata Bimer",
+  "short_name": "JR Solutions",
+  "name": "JR Solutions - Plataforma de Gestão Financeira",
+  "description": "Plataforma de Gestão Financeira, Contas a Pagar e Retenções Tributárias",
   "icons": [
     {
       "src": "/icon-192.png",
@@ -17,8 +17,8 @@
     }
   ],
   "start_url": "/",
-  "background_color": "#002d54",
-  "theme_color": "#004b87",
+  "background_color": "#064e3b",
+  "theme_color": "#059669",
   "display": "standalone",
   "scope": "/",
   "lang": "pt-BR"
