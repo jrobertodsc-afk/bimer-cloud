@@ -94,7 +94,11 @@ def listar_titulos(
         for n in rows_notas:
             nota_dict = dict(n)
             n_id = nota_dict["id"]
-            n_venc = nota_dict["dt_vencimento"] or ""
+            n_venc = (nota_dict["dt_vencimento"] or "").strip()
+            if n_venc and "/" in n_venc:
+                parts = n_venc.split("/")
+                if len(parts) == 3 and len(parts[2]) == 4:
+                    n_venc = f"{parts[2]}-{parts[1].zfill(2)}-{parts[0].zfill(2)}"
             n_conciliada = bool(nota_dict.get("conciliada"))
             is_pago = (nota_dict.get("status") in ("PAGO", "CONCILIADO")) or n_conciliada
             n_status = "CONCILIADO" if is_pago else "PENDENTE"

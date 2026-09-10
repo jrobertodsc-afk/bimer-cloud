@@ -6454,6 +6454,20 @@
     renderizarGridTitulos();
   }
 
+  function parseDataVencimento(vStr) {
+    if (!vStr) return null;
+    vStr = String(vStr).trim();
+    if (vStr.includes('/')) {
+      const [d, m, a] = vStr.split('/').map(Number);
+      if (d && m && a) return new Date(a, m - 1, d, 0, 0, 0);
+    }
+    if (vStr.includes('-')) {
+      const [a, m, d] = vStr.split('-').map(Number);
+      if (a && m && d) return new Date(a, m - 1, d, 0, 0, 0);
+    }
+    return null;
+  }
+
   function renderizarGridTitulos() {
     const tbody = document.getElementById('grid-titulos-body');
     const emptyMsg = document.getElementById('empty-titulos-msg');
@@ -6480,24 +6494,23 @@
       // Filtros da Agenda Financeira (apenas para títulos que ainda estão EM ABERTO)
       if (filtroAtual === 'agenda_vencidos') {
         if (isPago || !item.vencimento) return false;
-        const [a, m, d] = item.vencimento.split('-').map(Number);
-        const dVenc = new Date(a, m - 1, d, 0, 0, 0);
-        return dVenc < hojeData;
+        const dVenc = parseDataVencimento(item.vencimento);
+        return dVenc && dVenc < hojeData;
       }
       if (filtroAtual === 'agenda_hoje') {
         if (isPago || !item.vencimento) return false;
-        return item.vencimento === hojeStr;
+        const dVenc = parseDataVencimento(item.vencimento);
+        return dVenc && dVenc.getTime() === hojeData.getTime();
       }
       if (filtroAtual === 'agenda_semana') {
         if (isPago || !item.vencimento) return false;
-        const [a, m, d] = item.vencimento.split('-').map(Number);
-        const dVenc = new Date(a, m - 1, d, 0, 0, 0);
-        return dVenc >= hojeData && dVenc <= semanaLimite;
+        const dVenc = parseDataVencimento(item.vencimento);
+        return dVenc && dVenc >= hojeData && dVenc <= semanaLimite;
       }
       if (filtroAtual === 'agenda_mes') {
         if (isPago || !item.vencimento) return false;
-        const [a, m, d] = item.vencimento.split('-').map(Number);
-        return a === anoAtual && (m - 1) === mesAtual;
+        const dVenc = parseDataVencimento(item.vencimento);
+        return dVenc && dVenc.getFullYear() === anoAtual && dVenc.getMonth() === mesAtual;
       }
 
       return true;
@@ -6521,11 +6534,10 @@
       // Status de vencimento: apenas se NÃO estiver liquidado
       let vencDestaque = '';
       if (!isPago && item.vencimento) {
-        const [a, m, d] = item.vencimento.split('-').map(Number);
-        const dVenc = new Date(a, m - 1, d, 0, 0, 0);
-        if (dVenc < hojeData) {
+        const dVenc = parseDataVencimento(item.vencimento);
+        if (dVenc && dVenc < hojeData) {
           vencDestaque = `<span style="display: block; font-size: 9.5px; font-weight: 700; color: #dc2626;">🚨 ATRASADO</span>`;
-        } else if (dVenc.getTime() === hojeData.getTime()) {
+        } else if (dVenc && dVenc.getTime() === hojeData.getTime()) {
           vencDestaque = `<span style="display: block; font-size: 9.5px; font-weight: 700; color: #b45309;">📅 VENCE HOJE</span>`;
         }
       } else if (isPago) {
