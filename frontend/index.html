@@ -969,11 +969,17 @@
         <div class="form-grid-3">
           <div class="form-field">
             <label>CNPJ / CPF do Favorecido *</label>
-            <input type="text" id="cnpj_favorecido" placeholder="00.000.000/0001-00" oninput="checarDuplicidadeLive(); atualizarHistoricoDinamico();">
+            <div class="bimer-lookup-group">
+              <input type="text" id="cnpj_favorecido" placeholder="00.000.000/0001-00" oninput="onInputCNPJFavorecidoLive(this); checarDuplicidadeLive(); atualizarHistoricoDinamico();" onkeydown="onKeyDownLookupInput(event, 'fornecedor')" ondblclick="abrirBuscaRapida('fornecedor')" autocomplete="off">
+              <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('fornecedor')" title="Abrir Lista e Busca Rápida de Fornecedores/Prestadores (F2 ou duplo clique)">🔍 <span style="font-size: 8px;">▼</span></button>
+            </div>
           </div>
           <div class="form-field" style="grid-column: span 2;">
             <label>Razão Social / Nome do Favorecido *</label>
-            <input type="text" id="razao_favorecido" placeholder="Ex: Alfa Prestadora de Serviços e Tecnologia Ltda" oninput="atualizarHistoricoDinamico()">
+            <div class="bimer-lookup-group">
+              <input type="text" id="razao_favorecido" placeholder="Ex: Alfa Prestadora de Serviços e Tecnologia Ltda" oninput="atualizarHistoricoDinamico(); autocompletarFornecedorLive(this);" onkeydown="onKeyDownLookupInput(event, 'fornecedor')" ondblclick="abrirBuscaRapida('fornecedor')" autocomplete="off">
+              <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('fornecedor')" title="Abrir Lista e Busca Rápida de Fornecedores/Prestadores (F2 ou duplo clique)">🔍 <span style="font-size: 8px;">▼</span></button>
+            </div>
           </div>
         </div>
       </fieldset>
@@ -2466,11 +2472,17 @@
         <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-bottom: 8px;">
           <div class="form-field">
             <label style="font-size: 11px; font-weight: 700;">CNPJ / CPF</label>
-            <input type="text" id="edit-cnpj" style="font-family: monospace; width: 100%;">
+            <div class="bimer-lookup-group">
+              <input type="text" id="edit-cnpj" style="font-family: monospace; width: 100%;" onkeydown="onKeyDownLookupInput(event, 'fornecedor', 'edicao')" ondblclick="abrirBuscaRapida('fornecedor', 'edicao')" autocomplete="off">
+              <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('fornecedor', 'edicao')" title="Buscar Fornecedor (F2)">🔍 <span style="font-size: 8px;">▼</span></button>
+            </div>
           </div>
           <div class="form-field">
             <label style="font-size: 11px; font-weight: 700;">Razão Social / Favorecido *</label>
-            <input type="text" id="edit-favorecido" style="font-weight: 700; width: 100%;">
+            <div class="bimer-lookup-group">
+              <input type="text" id="edit-favorecido" style="font-weight: 700; width: 100%;" onkeydown="onKeyDownLookupInput(event, 'fornecedor', 'edicao')" ondblclick="abrirBuscaRapida('fornecedor', 'edicao')" autocomplete="off">
+              <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('fornecedor', 'edicao')" title="Buscar Fornecedor (F2)">🔍 <span style="font-size: 8px;">▼</span></button>
+            </div>
           </div>
         </div>
 
@@ -4357,6 +4369,27 @@
   // ==========================================================================
   // BUSCA RÁPIDA & LISTA COMPLETA BIMER (CATEGORIAS, CNAE, CFOP)
   // ==========================================================================
+  let LISTA_FORNECEDORES = JSON.parse(localStorage.getItem('bimer_fornecedores_cache') || '[]');
+  async function carregarFornecedores() {
+    try {
+      const resp = await fetch(`${API_BASE}/fornecedores`, { cache: 'no-store' });
+      if (resp.ok) {
+        const data = await resp.json();
+        if (data.success && Array.isArray(data.fornecedores)) {
+          LISTA_FORNECEDORES = data.fornecedores;
+          try {
+            localStorage.setItem('bimer_fornecedores_cache', JSON.stringify(LISTA_FORNECEDORES));
+          } catch (e) {}
+          const elTotal = document.getElementById('chip-total-fornecedores');
+          if (elTotal) elTotal.innerText = LISTA_FORNECEDORES.length;
+        }
+      }
+    } catch (e) {
+      console.warn('Aviso: usando cache local de fornecedores:', e);
+    }
+  }
+  carregarFornecedores();
+
   let buscaRapidaTipoAtual = null;
   let buscaRapidaContexto = 'aba1';
   let buscaRapidaFiltroChip = 'TODOS';
@@ -4436,6 +4469,24 @@
         <span class="bimer-chip" onclick="selecionarChipBuscaRapida('3.', this)">3.xxx - Importação</span>
         <span class="bimer-chip" onclick="selecionarChipBuscaRapida('5.', this)">5.xxx - Saídas Fornecedor</span>
       `;
+    } else if (tipo === 'fornecedor') {
+      titulo.innerHTML = '👥 <strong>Busca Rápida:</strong> Cadastro de Fornecedores & Prestadores';
+      inputBusca.placeholder = 'Digite Razão Social, Nome Fantasia, CNPJ ou ID...';
+      thead.innerHTML = `
+        <tr>
+          <th style="width: 65px;">ID</th>
+          <th>Razão Social / Nome do Favorecido</th>
+          <th style="width: 155px;">CNPJ / CPF</th>
+          <th style="width: 140px;">Categoria Padrão</th>
+          <th style="width: 95px;">Forma Pgto</th>
+        </tr>
+      `;
+      chipsCont.innerHTML = `
+        <span class="bimer-chip ativo" onclick="selecionarChipBuscaRapida('TODOS', this)">Todos (<span id="chip-total-fornecedores">${LISTA_FORNECEDORES.length || 115}</span>)</span>
+        <span class="bimer-chip" onclick="selecionarChipBuscaRapida('SERVICO', this)">Serviços & NFS-e</span>
+        <span class="bimer-chip" onclick="selecionarChipBuscaRapida('PRODUCAO', this)">Tecidos & Produção</span>
+        <span class="bimer-chip" onclick="selecionarChipBuscaRapida('TI', this)">TI & Software</span>
+      `;
     }
 
     // Posicionamento
@@ -4444,10 +4495,12 @@
       if (tipo === 'categoria') elRef = document.getElementById('edit-categoria');
       else if (tipo === 'cnae') elRef = document.getElementById('edit-cnae');
       else if (tipo === 'cfop') elRef = document.getElementById('edit-cod-operacao');
+      else if (tipo === 'fornecedor') elRef = document.getElementById('edit-favorecido');
     } else {
       if (tipo === 'categoria') elRef = document.getElementById('categoria_rapida_aba1');
       else if (tipo === 'cnae') elRef = document.getElementById('cnae_servico');
       else if (tipo === 'cfop') elRef = document.getElementById('cod_operacao');
+      else if (tipo === 'fornecedor') elRef = document.getElementById('razao_favorecido');
     }
 
     if (elRef && !buscaRapidaModoModal && contexto !== 'edicao') {
@@ -4624,13 +4677,51 @@
       });
 
       if (contador) contador.innerText = `${itens.length} de ${listaCfops.length} CFOPs`;
+    } else if (buscaRapidaTipoAtual === 'fornecedor') {
+      itens = (LISTA_FORNECEDORES || []).filter(f => {
+        if (buscaRapidaFiltroChip === 'SERVICO' && !((f.cnae || f.tipo === 'PRESTADOR' || (f.categoria || '').includes('Serviço') || (f.categoria || '').startsWith('21')))) return false;
+        if (buscaRapidaFiltroChip === 'PRODUCAO' && !((f.categoria || '').includes('Tecido') || (f.categoria || '').startsWith('121'))) return false;
+        if (buscaRapidaFiltroChip === 'TI' && !((f.cnae || '').startsWith('620') || (f.razao_social || '').toLowerCase().includes('software') || (f.razao_social || '').toLowerCase().includes('tech') || (f.razao_social || '').toLowerCase().includes('informatica'))) return false;
+        if (!termo) return true;
+        const termoDigits = termo.replace(/\D/g, '');
+        const cnpjDigits = (f.cnpj_cpf || '').replace(/\D/g, '');
+        return normalizarTextoBusca(f.id).includes(termo) ||
+               normalizarTextoBusca(f.razao_social).includes(termo) ||
+               normalizarTextoBusca(f.nome_fantasia).includes(termo) ||
+               (termoDigits.length >= 2 && cnpjDigits.includes(termoDigits)) ||
+               normalizarTextoBusca(f.cnpj_cpf).includes(termo) ||
+               normalizarTextoBusca(f.categoria).includes(termo);
+      });
+
+      buscaRapidaItensFiltrados = itens;
+      buscaRapidaIndiceAtivo = itens.length > 0 ? 0 : -1;
+
+      itens.forEach((item, idx) => {
+        const tr = document.createElement('tr');
+        if (idx === 0) tr.classList.add('linha-selecionada');
+        tr.onclick = () => selecionarItemBuscaRapida(item);
+        tr.innerHTML = `
+          <td style="font-weight: 700; color: #004b87; font-family: monospace;">#${item.id}</td>
+          <td style="font-weight: 700; color: #1e293b;">
+            ${item.razao_social}
+            ${item.nome_fantasia && item.nome_fantasia !== item.razao_social ? `<div style="font-size: 10px; color: #64748b; font-weight: normal;">${item.nome_fantasia}</div>` : ''}
+          </td>
+          <td style="font-family: monospace; font-weight: 600; color: #0f766e;">${item.cnpj_cpf || '---'}</td>
+          <td style="font-size: 10.5px; color: #334155;">${item.categoria || '<span style="color: #94a3b8;">12101 - Tecidos</span>'}</td>
+          <td><span style="background: #f1f5f9; color: #475569; padding: 1px 6px; border-radius: 3px; font-weight: 600; font-size: 10px;">${item.forma_pgto || 'Boleto'}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      if (contador) contador.innerText = `${itens.length} de ${LISTA_FORNECEDORES.length} fornecedores`;
     }
 
     if (itens.length === 0) {
+      const colunasTotal = buscaRapidaTipoAtual === 'fornecedor' ? 5 : 4;
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td colspan="4" style="text-align: center; padding: 18px; color: #94a3b8; font-style: italic;">
-          🔍 Nenhum registro encontrado para "${termoRaw}". Tente outro código ou termo.
+        <td colspan="${colunasTotal}" style="text-align: center; padding: 18px; color: #94a3b8; font-style: italic;">
+          🔍 Nenhum registro encontrado para "${termoRaw}". Tente outro código, CNPJ ou nome.
         </td>
       `;
       tbody.appendChild(tr);
@@ -4656,6 +4747,35 @@
       } else if (buscaRapidaTipoAtual === 'cfop') {
         const input = document.getElementById('edit-cod-operacao');
         if (input) input.value = `${item.cfop} - ${item.desc}`;
+      } else if (buscaRapidaTipoAtual === 'fornecedor') {
+        const inputFav = document.getElementById('edit-favorecido');
+        if (inputFav) inputFav.value = item.razao_social;
+        const inputCnpj = document.getElementById('edit-cnpj');
+        if (inputCnpj && item.cnpj_cpf) inputCnpj.value = item.cnpj_cpf;
+        if (item.categoria) {
+          const inputCat = document.getElementById('edit-categoria');
+          if (inputCat) inputCat.value = item.categoria;
+        }
+        if (item.responsavel) {
+          const inputResp = document.getElementById('edit-solicitante');
+          if (inputResp) inputResp.value = item.responsavel;
+        }
+        if (item.forma_pgto) {
+          const selForma = document.getElementById('edit-forma-pgto');
+          if (selForma) selForma.value = item.forma_pgto;
+        }
+        if (item.cnae) {
+          const inputCnae = document.getElementById('edit-cnae');
+          if (inputCnae) inputCnae.value = item.cnae;
+        }
+        if (item.item_lc116) {
+          const inputLc = document.getElementById('edit-item-lc116');
+          if (inputLc) inputLc.value = item.item_lc116;
+        }
+        if (item.cod_operacao) {
+          const inputCfop = document.getElementById('edit-cod-operacao');
+          if (inputCfop) inputCfop.value = item.cod_operacao;
+        }
       }
       fecharBuscaRapida();
       return;
@@ -4679,6 +4799,72 @@
         input.value = `${item.cfop} - ${item.desc}`;
         autocompletarCFOPLive(input);
       }
+    } else if (buscaRapidaTipoAtual === 'fornecedor') {
+      const inputFav = document.getElementById('razao_favorecido');
+      if (inputFav) {
+        inputFav.value = item.razao_social;
+        atualizarHistoricoDinamico();
+      }
+      const inputCnpj = document.getElementById('cnpj_favorecido');
+      if (inputCnpj && item.cnpj_cpf) {
+        inputCnpj.value = item.cnpj_cpf;
+        checarDuplicidadeLive();
+      }
+      if (item.categoria) {
+        const inputCat = document.getElementById('categoria_rapida_aba1');
+        if (inputCat) {
+          inputCat.value = item.categoria;
+          autocompletarCategoriaLive(inputCat);
+        }
+      }
+      if (item.cnae) {
+        const inputCnae = document.getElementById('cnae_servico');
+        if (inputCnae) {
+          inputCnae.value = item.cnae;
+          autocompletarCNAELive(inputCnae);
+        }
+      }
+      if (item.item_lc116) {
+        const inputLc = document.getElementById('item_lc116');
+        if (inputLc) inputLc.value = item.item_lc116;
+      }
+      if (item.cod_operacao) {
+        const inputCfop = document.getElementById('cod_operacao');
+        if (inputCfop) {
+          inputCfop.value = item.cod_operacao;
+          autocompletarCFOPLive(inputCfop);
+        }
+      }
+      if (item.responsavel) {
+        const inputResp = document.getElementById('solicitante_despesa');
+        if (inputResp) inputResp.value = item.responsavel;
+      }
+      if (item.ccusto) {
+        const selCcusto = document.getElementById('centro_custo');
+        if (selCcusto) {
+          for (let opt of selCcusto.options) {
+            if (opt.text.toLowerCase().includes(item.ccusto.toLowerCase())) {
+              selCcusto.value = opt.value;
+              break;
+            }
+          }
+        }
+      }
+      if (item.forma_pgto) {
+        const selForma = document.getElementById('forma_pagamento');
+        if (selForma) {
+          for (let opt of selForma.options) {
+            if (opt.value.toLowerCase() === item.forma_pgto.toLowerCase() || opt.text.toLowerCase().includes(item.forma_pgto.toLowerCase())) {
+              selForma.value = opt.value;
+              break;
+            }
+          }
+        }
+      }
+      if (item.dados_banco) {
+        const inputBanco = document.getElementById('dados_bancarios');
+        if (inputBanco && !inputBanco.value) inputBanco.value = item.dados_banco;
+      }
     }
 
     fecharBuscaRapida();
@@ -4689,6 +4875,148 @@
       abrirBuscaRapida(tipo, contexto);
       e.preventDefault();
     }
+  }
+
+  // ── AUTOCOMPLETAÇÃO INTELIGENTE & AUTO-SALVAR DE FORNECEDORES ───────────
+  function onInputCNPJFavorecidoLive(input) {
+    if (!input || !input.value) return;
+    const raw = input.value.replace(/\D/g, '');
+    if (raw.length === 11 || raw.length === 14) {
+      const match = (LISTA_FORNECEDORES || []).find(f => (f.cnpj_cpf || '').replace(/\D/g, '') === raw);
+      if (match) {
+        const fav = document.getElementById('razao_favorecido');
+        if (fav && (!fav.value || fav.value.trim().length < 3)) {
+          fav.value = match.razao_social;
+        }
+        if (match.categoria) {
+          const cat = document.getElementById('categoria_rapida_aba1');
+          if (cat && (!cat.value || cat.value === '12101 - Tecidos')) {
+            cat.value = match.categoria;
+            autocompletarCategoriaLive(cat);
+          }
+        }
+        if (match.cnae) {
+          const cnae = document.getElementById('cnae_servico');
+          if (cnae) {
+            cnae.value = match.cnae;
+            autocompletarCNAELive(cnae);
+          }
+        }
+        if (match.item_lc116) {
+          const lc = document.getElementById('item_lc116');
+          if (lc) lc.value = match.item_lc116;
+        }
+        if (match.cod_operacao) {
+          const cfop = document.getElementById('cod_operacao');
+          if (cfop) {
+            cfop.value = match.cod_operacao;
+            autocompletarCFOPLive(cfop);
+          }
+        }
+        if (match.responsavel) {
+          const resp = document.getElementById('solicitante_despesa');
+          if (resp && (!resp.value || resp.value === 'Compras')) resp.value = match.responsavel;
+        }
+        if (match.forma_pgto) {
+          const selForma = document.getElementById('forma_pagamento');
+          if (selForma) {
+            for (let opt of selForma.options) {
+              if (opt.value.toLowerCase() === match.forma_pgto.toLowerCase() || opt.text.toLowerCase().includes(match.forma_pgto.toLowerCase())) {
+                selForma.value = opt.value;
+                break;
+              }
+            }
+          }
+        }
+        if (match.dados_banco) {
+          const dadosB = document.getElementById('dados_bancarios');
+          if (dadosB && !dadosB.value) dadosB.value = match.dados_banco;
+        }
+      }
+    }
+  }
+
+  function autocompletarFornecedorLive(input) {
+    if (!input || !input.value) return;
+    const termo = normalizarTextoBusca(input.value);
+    if (termo.length < 3) return;
+    const matchExato = (LISTA_FORNECEDORES || []).find(f => normalizarTextoBusca(f.razao_social) === termo || normalizarTextoBusca(f.nome_fantasia) === termo);
+    if (matchExato) {
+      const cnpj = document.getElementById('cnpj_favorecido');
+      if (cnpj && !cnpj.value && matchExato.cnpj_cpf) {
+        cnpj.value = matchExato.cnpj_cpf;
+        checarDuplicidadeLive();
+      }
+    }
+  }
+
+  function autoSalvarFornecedorLocal(payload) {
+    if (!payload || !payload.razao_social) return;
+    const razao = payload.razao_social.trim();
+    const cnpj = (payload.cnpj_cpf || '').trim();
+    const cnpjDigits = cnpj.replace(/\D/g, '');
+
+    let exist = (LISTA_FORNECEDORES || []).find(f => 
+      (cnpjDigits && (f.cnpj_cpf || '').replace(/\D/g, '') === cnpjDigits) ||
+      (f.razao_social && normalizarTextoBusca(f.razao_social) === normalizarTextoBusca(razao))
+    );
+
+    if (exist) {
+      if (payload.categoria) exist.categoria = payload.categoria;
+      if (payload.ccusto) exist.ccusto = payload.ccusto;
+      if (payload.responsavel) exist.responsavel = payload.responsavel;
+      if (payload.forma_pgto) exist.forma_pgto = payload.forma_pgto;
+      if (payload.dados_banco) exist.dados_banco = payload.dados_banco;
+      if (payload.cod_operacao) exist.cod_operacao = payload.cod_operacao;
+      if (payload.cnae) exist.cnae = payload.cnae;
+      if (payload.item_lc116) exist.item_lc116 = payload.item_lc116;
+      if (!exist.cnpj_cpf && cnpj) exist.cnpj_cpf = cnpj;
+    } else {
+      const maxId = (LISTA_FORNECEDORES && LISTA_FORNECEDORES.length > 0) ? Math.max(...LISTA_FORNECEDORES.map(x => x.id || 0)) : 0;
+      LISTA_FORNECEDORES.push({
+        id: maxId + 1,
+        razao_social: razao,
+        nome_fantasia: payload.nome_fantasia || razao,
+        cnpj_cpf: cnpj,
+        tipo: payload.tipo || 'FORNECEDOR',
+        categoria: payload.categoria || '',
+        ccusto: payload.ccusto || '',
+        responsavel: payload.responsavel || '',
+        forma_pgto: payload.forma_pgto || '',
+        dados_banco: payload.dados_banco || '',
+        cod_operacao: payload.cod_operacao || '',
+        cnae: payload.cnae || '',
+        item_lc116: payload.item_lc116 || '',
+        ativo: 1
+      });
+    }
+
+    try {
+      localStorage.setItem('bimer_fornecedores_cache', JSON.stringify(LISTA_FORNECEDORES));
+      const elTotal = document.getElementById('chip-total-fornecedores');
+      if (elTotal) elTotal.innerText = LISTA_FORNECEDORES.length;
+    } catch (e) {}
+
+    try {
+      fetch(`${API_BASE}/fornecedores`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          razao_social: razao,
+          nome_fantasia: payload.nome_fantasia || razao,
+          cnpj_cpf: cnpj,
+          tipo: payload.tipo || 'FORNECEDOR',
+          categoria: payload.categoria || '',
+          ccusto: payload.ccusto || '',
+          responsavel: payload.responsavel || '',
+          forma_pgto: payload.forma_pgto || '',
+          dados_banco: payload.dados_banco || '',
+          cod_operacao: payload.cod_operacao || '',
+          cnae: payload.cnae || '',
+          item_lc116: payload.item_lc116 || ''
+        })
+      }).catch(() => {});
+    } catch (e) {}
   }
 
   // ==========================================================================
@@ -4776,6 +5104,20 @@
       historico: document.getElementById('edit-descricao')?.value.trim() || '',
       linha_dig: document.getElementById('edit-linha-dig')?.value.trim() || ''
     };
+
+    if (payload.favorecido) {
+      autoSalvarFornecedorLocal({
+        razao_social: payload.favorecido,
+        nome_fantasia: payload.favorecido,
+        cnpj_cpf: payload.cnpj,
+        categoria: payload.categoria,
+        responsavel: payload.solicitante,
+        forma_pgto: payload.forma_pgto,
+        cod_operacao: payload.cod_operacao,
+        cnae: payload.cnae,
+        item_lc116: payload.item_lc116
+      });
+    }
 
     try {
       const resp = await fetch(`${API_BASE}/titulos/${encodeURIComponent(id)}/editar`, {
@@ -5839,6 +6181,11 @@
         }
       } catch (eAd) {}
 
+      // Sincroniza fornecedores do backend
+      try {
+        await carregarFornecedores();
+      } catch (eForn) {}
+
     } catch (err) {
       console.warn('Backend SQLite indisponível. Operando via cache local:', err);
       isBackendOnline = false;
@@ -5939,6 +6286,22 @@
       item_lc116: item_lc116 || '',
       impostos
     };
+
+    // Auto-salvar no cadastro de fornecedores/prestadores
+    autoSalvarFornecedorLocal({
+      razao_social: favorecido,
+      nome_fantasia: favorecido,
+      cnpj_cpf: cnpj,
+      tipo: tipo_doc === 'NFSE' ? 'PRESTADOR' : 'FORNECEDOR',
+      categoria: ccusto,
+      ccusto: document.getElementById('centro_custo')?.value || 'MATRIZ',
+      responsavel: solicitante,
+      forma_pgto,
+      dados_banco,
+      cod_operacao,
+      cnae,
+      item_lc116
+    });
 
     if (isBackendOnline) {
       try {

@@ -285,6 +285,28 @@ def init_db():
         criado_em TEXT DEFAULT CURRENT_TIMESTAMP
     )
     ''')
+
+    cur.execute('''
+    CREATE TABLE IF NOT EXISTS fornecedores (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        razao_social TEXT NOT NULL,
+        nome_fantasia TEXT,
+        cnpj_cpf TEXT UNIQUE,
+        tipo TEXT DEFAULT 'FORNECEDOR',
+        categoria TEXT,
+        ccusto TEXT,
+        responsavel TEXT,
+        forma_pgto TEXT,
+        pix_chave TEXT,
+        dados_banco TEXT,
+        cod_operacao TEXT,
+        cnae TEXT,
+        item_lc116 TEXT,
+        ativo INTEGER DEFAULT 1,
+        criado_em TEXT DEFAULT CURRENT_TIMESTAMP,
+        atualizado_em TEXT DEFAULT CURRENT_TIMESTAMP
+    )
+    ''')
     
     conn.commit()
     conn.close()

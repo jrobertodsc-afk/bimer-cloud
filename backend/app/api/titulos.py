@@ -270,6 +270,91 @@ def gravar_documento(doc: DocumentoEntrada):
                     doc.numero_doc.strip()
                 ))
 
+        # Auto-salvar/atualizar cadastro de fornecedor
+        try:
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS fornecedores (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    razao_social TEXT NOT NULL,
+                    nome_fantasia TEXT,
+                    cnpj_cpf TEXT UNIQUE,
+                    tipo TEXT DEFAULT 'FORNECEDOR',
+                    categoria TEXT,
+                    ccusto TEXT,
+                    responsavel TEXT,
+                    forma_pgto TEXT,
+                    pix_chave TEXT,
+                    dados_banco TEXT,
+                    cod_operacao TEXT,
+                    cnae TEXT,
+                    item_lc116 TEXT,
+                    ativo INTEGER DEFAULT 1,
+                    criado_em TEXT DEFAULT CURRENT_TIMESTAMP,
+                    atualizado_em TEXT DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+            f_cnpj = doc.cnpj.strip() if doc.cnpj else ""
+            f_razao = doc.favorecido.strip() if doc.favorecido else ""
+            if f_razao:
+                f_exist = None
+                if f_cnpj:
+                    cur.execute("SELECT id FROM fornecedores WHERE cnpj_cpf = ?", (f_cnpj,))
+                    f_exist = cur.fetchone()
+                if not f_exist:
+                    cur.execute("SELECT id FROM fornecedores WHERE razao_social = ? COLLATE NOCASE", (f_razao,))
+                    f_exist = cur.fetchone()
+
+                if f_exist:
+                    cur.execute("""
+                        UPDATE fornecedores SET
+                            razao_social = COALESCE(NULLIF(?, ''), razao_social),
+                            cnpj_cpf = CASE WHEN (cnpj_cpf IS NULL OR cnpj_cpf = '') AND ? != '' THEN ? ELSE cnpj_cpf END,
+                            categoria = COALESCE(NULLIF(?, ''), categoria),
+                            ccusto = COALESCE(NULLIF(?, ''), ccusto),
+                            responsavel = COALESCE(NULLIF(?, ''), responsavel),
+                            forma_pgto = COALESCE(NULLIF(?, ''), forma_pgto),
+                            dados_banco = COALESCE(NULLIF(?, ''), dados_banco),
+                            cod_operacao = COALESCE(NULLIF(?, ''), cod_operacao),
+                            cnae = COALESCE(NULLIF(?, ''), cnae),
+                            item_lc116 = COALESCE(NULLIF(?, ''), item_lc116),
+                            atualizado_em = CURRENT_TIMESTAMP
+                        WHERE id = ?
+                    """, (
+                        f_razao,
+                        f_cnpj, f_cnpj,
+                        doc.tipo_doc or "",
+                        doc.ccusto or "",
+                        doc.solicitante or "",
+                        doc.forma_pgto or "",
+                        doc.dados_banco or "",
+                        doc.cod_operacao or "",
+                        doc.cnae or "",
+                        doc.item_lc116 or "",
+                        f_exist["id"]
+                    ))
+                else:
+                    cur.execute("""
+                        INSERT INTO fornecedores (
+                            razao_social, nome_fantasia, cnpj_cpf, tipo, categoria,
+                            ccusto, responsavel, forma_pgto, dados_banco,
+                            cod_operacao, cnae, item_lc116
+                        ) VALUES (?, ?, ?, 'FORNECEDOR', ?, ?, ?, ?, ?, ?, ?, ?)
+                    """, (
+                        f_razao,
+                        f_razao,
+                        f_cnpj if f_cnpj else None,
+                        doc.tipo_doc or "",
+                        doc.ccusto or "",
+                        doc.solicitante or "",
+                        doc.forma_pgto or "",
+                        doc.dados_banco or "",
+                        doc.cod_operacao or "",
+                        doc.cnae or "",
+                        doc.item_lc116 or ""
+                    ))
+        except Exception as e_forn:
+            print(f"Aviso ao auto-salvar fornecedor: {e_forn}")
+
         conn.commit()
         conn.close()
 
@@ -464,6 +549,66 @@ def editar_titulo(identificador: str, dados: TituloEdicao):
                 dados.item_lc116 if dados.item_lc116 else None,
                 nota_id
             ))
+
+            # Sincronizar dados do fornecedor se alterados
+            if dados.favorecido:
+                try:
+                    f_cnpj = dados.cnpj.strip() if dados.cnpj else ""
+                    f_razao = dados.favorecido.strip()
+                    f_exist = None
+                    if f_cnpj:
+                        cur.execute("SELECT id FROM fornecedores WHERE cnpj_cpf = ?", (f_cnpj,))
+                        f_exist = cur.fetchone()
+                    if not f_exist:
+                        cur.execute("SELECT id FROM fornecedores WHERE razao_social = ? COLLATE NOCASE", (f_razao,))
+                        f_exist = cur.fetchone()
+
+                    if f_exist:
+                        cur.execute("""
+                            UPDATE fornecedores SET
+                                razao_social = COALESCE(NULLIF(?, ''), razao_social),
+                                cnpj_cpf = CASE WHEN (cnpj_cpf IS NULL OR cnpj_cpf = '') AND ? != '' THEN ? ELSE cnpj_cpf END,
+                                categoria = COALESCE(NULLIF(?, ''), categoria),
+                                ccusto = COALESCE(NULLIF(?, ''), ccusto),
+                                responsavel = COALESCE(NULLIF(?, ''), responsavel),
+                                forma_pgto = COALESCE(NULLIF(?, ''), forma_pgto),
+                                cod_operacao = COALESCE(NULLIF(?, ''), cod_operacao),
+                                cnae = COALESCE(NULLIF(?, ''), cnae),
+                                item_lc116 = COALESCE(NULLIF(?, ''), item_lc116),
+                                atualizado_em = CURRENT_TIMESTAMP
+                            WHERE id = ?
+                        """, (
+                            f_razao,
+                            f_cnpj, f_cnpj,
+                            dados.categoria or "",
+                            dados.ccusto or "",
+                            dados.solicitante or "",
+                            dados.forma_pgto or "",
+                            dados.cod_operacao or "",
+                            dados.cnae or "",
+                            dados.item_lc116 or "",
+                            f_exist["id"]
+                        ))
+                    else:
+                        cur.execute("""
+                            INSERT INTO fornecedores (
+                                razao_social, nome_fantasia, cnpj_cpf, tipo, categoria,
+                                ccusto, responsavel, forma_pgto, cod_operacao, cnae, item_lc116
+                            ) VALUES (?, ?, ?, 'FORNECEDOR', ?, ?, ?, ?, ?, ?, ?)
+                        """, (
+                            f_razao,
+                            f_razao,
+                            f_cnpj if f_cnpj else None,
+                            dados.categoria or "",
+                            dados.ccusto or "",
+                            dados.solicitante or "",
+                            dados.forma_pgto or "",
+                            dados.cod_operacao or "",
+                            dados.cnae or "",
+                            dados.item_lc116 or ""
+                        ))
+                except Exception as e_forn:
+                    print(f"Aviso ao auto-salvar fornecedor em editar_titulo: {e_forn}")
 
         conn.commit()
         conn.close()

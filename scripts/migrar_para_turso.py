@@ -74,7 +74,7 @@ def migrar(turso_url: str, turso_token: str):
                 raise RuntimeError(f"Erro SQL no Turso: {item}")
         return data
     
-    tabelas = ["notas", "nota_impostos", "adiantamentos", "adiantamento_comprovantes", "audit_log", "usuarios"]
+    tabelas = ["notas", "nota_impostos", "adiantamentos", "adiantamento_comprovantes", "audit_log", "usuarios", "fornecedores"]
     
     for tab in tabelas:
         print(f"\n⚙️ Processando tabela [{tab}]...")
