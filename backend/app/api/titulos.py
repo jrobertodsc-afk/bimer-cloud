@@ -357,3 +357,119 @@ def excluir_titulo(identificador: str):
         return {"success": True, "message": "Título excluído com sucesso."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+class TituloEdicao(BaseModel):
+    numero_doc: Optional[str] = None
+    favorecido: Optional[str] = None
+    cnpj: Optional[str] = None
+    cod_operacao: Optional[str] = None
+    cnae: Optional[str] = None
+    item_lc116: Optional[str] = None
+    categoria: Optional[str] = None
+    descricao: Optional[str] = None
+    historico: Optional[str] = None
+    ccusto: Optional[str] = None
+    solicitante: Optional[str] = None
+    vencimento: Optional[str] = None
+    data_emissao: Optional[str] = None
+    valor: Optional[float] = None
+    forma_pgto: Optional[str] = None
+    linha_dig: Optional[str] = None
+    dados_banco: Optional[str] = None
+
+@router.put("/{identificador}")
+@router.put("/titulos/{identificador}")
+@router.post("/{identificador}/editar")
+@router.post("/titulos/{identificador}/editar")
+def editar_titulo(identificador: str, dados: TituloEdicao):
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+
+        # Garantir colunas
+        for col in ["cod_operacao", "cnae", "item_lc116"]:
+            try:
+                cur.execute(f"ALTER TABLE notas ADD COLUMN {col} TEXT")
+                conn.commit()
+            except Exception:
+                pass
+
+        if identificador.startswith("IMP_"):
+            imp_id = int(identificador.replace("IMP_", ""))
+            cur.execute("SELECT * FROM nota_impostos WHERE id = ?", (imp_id,))
+            row = cur.fetchone()
+            if not row:
+                conn.close()
+                raise HTTPException(status_code=404, detail="Imposto não localizado.")
+
+            cur.execute("""
+                UPDATE nota_impostos
+                SET valor = COALESCE(?, valor),
+                    dt_venc_imp = COALESCE(?, dt_venc_imp),
+                    numero_doc = COALESCE(?, numero_doc)
+                WHERE id = ?
+            """, (dados.valor, dados.vencimento, dados.numero_doc, imp_id))
+        else:
+            clean_id = identificador.replace("NOTA_", "").strip()
+            nota_id = None
+            if clean_id.isdigit():
+                nota_id = int(clean_id)
+            else:
+                cur.execute("SELECT id FROM notas WHERE numero_nf = ? OR numero_tx = ?", (identificador, identificador))
+                r = cur.fetchone()
+                if r:
+                    nota_id = r["id"]
+
+            if not nota_id:
+                conn.close()
+                raise HTTPException(status_code=404, detail="Título não localizado.")
+
+            cur.execute("""
+                UPDATE notas
+                SET fornecedor = COALESCE(?, fornecedor),
+                    cnpj = COALESCE(?, cnpj),
+                    numero_nf = COALESCE(?, numero_nf),
+                    dt_vencimento = COALESCE(?, dt_vencimento),
+                    dt_emissao = COALESCE(?, dt_emissao),
+                    valor_bruto = COALESCE(?, valor_bruto),
+                    valor_liquido = COALESCE(?, valor_liquido),
+                    categoria = COALESCE(?, categoria),
+                    descricao = COALESCE(?, descricao),
+                    observacao = COALESCE(?, observacao),
+                    filial = COALESCE(?, filial),
+                    responsavel = COALESCE(?, responsavel),
+                    forma_pgto = COALESCE(?, forma_pgto),
+                    cod_barras = COALESCE(?, cod_barras),
+                    cod_operacao = COALESCE(?, cod_operacao),
+                    cnae = COALESCE(?, cnae),
+                    item_lc116 = COALESCE(?, item_lc116)
+                WHERE id = ?
+            """, (
+                dados.favorecido.strip() if dados.favorecido else None,
+                dados.cnpj.strip() if dados.cnpj else None,
+                dados.numero_doc.strip() if dados.numero_doc else None,
+                dados.vencimento if dados.vencimento else None,
+                dados.data_emissao if dados.data_emissao else None,
+                dados.valor if dados.valor is not None else None,
+                dados.valor if dados.valor is not None else None,
+                dados.categoria if dados.categoria else None,
+                dados.descricao if dados.descricao else None,
+                dados.historico if dados.historico else None,
+                dados.ccusto if dados.ccusto else None,
+                dados.solicitante if dados.solicitante else None,
+                dados.forma_pgto if dados.forma_pgto else None,
+                dados.linha_dig if dados.linha_dig else None,
+                dados.cod_operacao if dados.cod_operacao else None,
+                dados.cnae if dados.cnae else None,
+                dados.item_lc116 if dados.item_lc116 else None,
+                nota_id
+            ))
+
+        conn.commit()
+        conn.close()
+        return {"success": True, "message": "Título atualizado com sucesso!"}
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

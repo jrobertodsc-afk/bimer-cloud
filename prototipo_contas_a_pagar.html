@@ -2397,6 +2397,128 @@
   </div>
 </div>
 
+<!-- ==================== MODAL DE EDIÇÃO DE LANÇAMENTO / TÍTULO ==================== -->
+<div id="bimer-modal-edicao-titulo" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(2px); z-index: 99999; justify-content: center; align-items: center; padding: 15px;">
+  <div style="background: white; border: 1.5px solid #004b87; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45); border-radius: 4px; width: 720px; max-width: 95vw; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden;">
+    <!-- Barra de Título Windows / Bimer -->
+    <div style="background: #004b87; color: white; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 11.5px;">
+        <span>✏️</span>
+        <span id="modal-edit-titulo-header">Editar Lançamento / Título</span>
+      </div>
+      <button type="button" onclick="fecharModalEdicaoTitulo()" style="background: transparent; border: none; color: white; font-size: 14px; cursor: pointer; font-weight: bold;">✕</button>
+    </div>
+
+    <!-- Conteúdo do Formulário -->
+    <div style="padding: 14px 16px; overflow-y: auto; flex: 1; background: #f8fafc;">
+      <input type="hidden" id="edit-titulo-id">
+
+      <fieldset style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 3px; padding: 8px 12px; margin-bottom: 8px;">
+        <legend style="color: #004b87; font-weight: 700; font-size: 10.5px;">IDENTIFICAÇÃO FISCAL & DOCUMENTO</legend>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px;">
+          <div class="form-field">
+            <label style="font-size: 11px; font-weight: 700;">Número do Documento / NFS-e *</label>
+            <input type="text" id="edit-numero-doc" style="font-weight: 700; color: #004b87; width: 100%;">
+          </div>
+          <div class="form-field">
+            <label style="font-size: 11px; font-weight: 700;">Data de Vencimento *</label>
+            <input type="date" id="edit-vencimento" style="font-weight: 700; width: 100%;">
+          </div>
+        </div>
+
+        <div class="form-field" style="margin-bottom: 8px; position: relative;">
+          <label style="font-size: 11px; font-weight: 700; color: #1e3a8a;">Código da Operação (CFOP) *</label>
+          <div class="bimer-lookup-group">
+            <input type="text" id="edit-cod-operacao" style="font-weight: 600; width: 100%;" autocomplete="off">
+            <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('cfop', 'edicao')" title="Buscar CFOP (F2)">🔍 <span style="font-size: 8px;">▼</span></button>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 8px;">
+          <div class="form-field" style="position: relative;">
+            <label style="font-size: 11px; font-weight: 700; color: #1e3a8a;">CNAE do Prestador</label>
+            <div class="bimer-lookup-group">
+              <input type="text" id="edit-cnae" style="font-weight: 600; width: 100%;" autocomplete="off">
+              <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('cnae', 'edicao')" title="Buscar CNAE (F2)">🔍 <span style="font-size: 8px;">▼</span></button>
+            </div>
+          </div>
+          <div class="form-field">
+            <label style="font-size: 11px; font-weight: 700; color: #1e3a8a;">Item LC 116/03</label>
+            <input type="text" id="edit-item-lc116" style="font-weight: 600; width: 100%;">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
+          <div class="form-field" style="position: relative;">
+            <label style="font-size: 11px; font-weight: 700; color: #004b87;">Categoria / Plano de Contas Oficial *</label>
+            <div class="bimer-lookup-group">
+              <input type="text" id="edit-categoria" style="font-weight: 600; width: 100%;" autocomplete="off">
+              <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('categoria', 'edicao')" title="Buscar Categoria (F2)">🔍 <span style="font-size: 8px;">▼</span></button>
+            </div>
+          </div>
+          <div class="form-field">
+            <label style="font-size: 11px; font-weight: 700; color: #004b87;">Área / Responsável</label>
+            <input type="text" id="edit-solicitante" style="font-weight: 600; width: 100%;">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 3px; padding: 8px 12px;">
+        <legend style="color: #004b87; font-weight: 700; font-size: 10.5px;">FAVORECIDO & VALORES FINANCEIROS</legend>
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-bottom: 8px;">
+          <div class="form-field">
+            <label style="font-size: 11px; font-weight: 700;">CNPJ / CPF</label>
+            <input type="text" id="edit-cnpj" style="font-family: monospace; width: 100%;">
+          </div>
+          <div class="form-field">
+            <label style="font-size: 11px; font-weight: 700;">Razão Social / Favorecido *</label>
+            <input type="text" id="edit-favorecido" style="font-weight: 700; width: 100%;">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px;">
+          <div class="form-field">
+            <label style="font-size: 11px; font-weight: 700; color: #004b87;">Valor do Lançamento (R$) *</label>
+            <input type="number" step="0.01" id="edit-valor" style="font-size: 13px; font-weight: 800; color: #004b87; width: 100%;">
+          </div>
+          <div class="form-field">
+            <label style="font-size: 11px; font-weight: 700;">Forma de Pagamento</label>
+            <select id="edit-forma-pgto" style="width: 100%; font-weight: 600;">
+              <option value="Boleto Itaú">Boleto Itaú</option>
+              <option value="Boleto Outros Bancos">Boleto Outros Bancos</option>
+              <option value="PIX Chave CNPJ">PIX Chave CNPJ</option>
+              <option value="PIX Chave CPF">PIX Chave CPF</option>
+              <option value="PIX Chave Tel / E-mail">PIX Chave Tel / E-mail</option>
+              <option value="Transferência Bancária">Transferência Bancária</option>
+              <option value="Guia Municipal">Guia Municipal</option>
+              <option value="DARF Federal">DARF Federal</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-field" style="margin-bottom: 8px;">
+          <label style="font-size: 11px; font-weight: 700;">Descrição / Histórico Oficial do Lançamento</label>
+          <input type="text" id="edit-descricao" style="width: 100%; font-weight: 600;">
+        </div>
+
+        <div class="form-field">
+          <label style="font-size: 10.5px; font-weight: 600; color: #475569;">Linha Digitável / Código de Barras (opcional)</label>
+          <input type="text" id="edit-linha-dig" placeholder="Código de 47 ou 48 dígitos" style="font-family: monospace; font-size: 11px; width: 100%;">
+        </div>
+      </fieldset>
+    </div>
+
+    <!-- Barra de Rodapé / Ações -->
+    <div style="background: #e2e8f0; border-top: 1px solid #cbd5e1; padding: 8px 14px; display: flex; justify-content: space-between; align-items: center;">
+      <span style="font-size: 10.5px; color: #64748b;">💡 Pressione <strong>ESC</strong> para cancelar</span>
+      <div style="display: flex; gap: 8px;">
+        <button type="button" class="tool-btn" onclick="fecharModalEdicaoTitulo()">Cancelar</button>
+        <button type="button" class="tool-btn primary" onclick="salvarEdicaoTitulo()" style="background: #004b87; color: white; font-weight: 700;">💾 Salvar Alterações</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ==================== MODAL DE ALTERAÇÃO DE SENHA ==================== -->
 <div id="bimer-senha-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(2px); z-index: 99998; justify-content: center; align-items: center;">
   <div style="background: white; border: 1px solid #004b87; box-shadow: 0 15px 20px -5px rgba(0,0,0,0.3); border-radius: 6px; width: 340px; overflow: hidden;">
@@ -4238,13 +4360,15 @@
   // BUSCA RÁPIDA & LISTA COMPLETA BIMER (CATEGORIAS, CNAE, CFOP)
   // ==========================================================================
   let buscaRapidaTipoAtual = null;
+  let buscaRapidaContexto = 'aba1';
   let buscaRapidaFiltroChip = 'TODOS';
   let buscaRapidaModoModal = false;
   let buscaRapidaItensFiltrados = [];
   let buscaRapidaIndiceAtivo = -1;
 
-  function abrirBuscaRapida(tipo) {
+  function abrirBuscaRapida(tipo, contexto = 'aba1') {
     buscaRapidaTipoAtual = tipo;
+    buscaRapidaContexto = contexto;
     buscaRapidaFiltroChip = 'TODOS';
     buscaRapidaIndiceAtivo = -1;
     const painel = document.getElementById('bimer-busca-rapida-painel');
@@ -4318,11 +4442,17 @@
 
     // Posicionamento
     let elRef = null;
-    if (tipo === 'categoria') elRef = document.getElementById('categoria_rapida_aba1');
-    else if (tipo === 'cnae') elRef = document.getElementById('cnae_servico');
-    else if (tipo === 'cfop') elRef = document.getElementById('cod_operacao');
+    if (contexto === 'edicao') {
+      if (tipo === 'categoria') elRef = document.getElementById('edit-categoria');
+      else if (tipo === 'cnae') elRef = document.getElementById('edit-cnae');
+      else if (tipo === 'cfop') elRef = document.getElementById('edit-cod-operacao');
+    } else {
+      if (tipo === 'categoria') elRef = document.getElementById('categoria_rapida_aba1');
+      else if (tipo === 'cnae') elRef = document.getElementById('cnae_servico');
+      else if (tipo === 'cfop') elRef = document.getElementById('cod_operacao');
+    }
 
-    if (elRef && !buscaRapidaModoModal) {
+    if (elRef && !buscaRapidaModoModal && contexto !== 'edicao') {
       const rect = elRef.getBoundingClientRect();
       painel.classList.remove('modo-modal');
       if (backdrop) backdrop.classList.remove('ativo');
@@ -4349,6 +4479,7 @@
     if (painel) painel.classList.remove('aberto');
     if (backdrop) backdrop.classList.remove('ativo');
     buscaRapidaTipoAtual = null;
+    buscaRapidaContexto = 'aba1';
     buscaRapidaItensFiltrados = [];
     buscaRapidaIndiceAtivo = -1;
   }
@@ -4358,7 +4489,7 @@
     const btn = document.getElementById('bimer-busca-btn-expandir');
     if (btn) btn.innerText = buscaRapidaModoModal ? '🗗 Restaurar' : '⛶ Expandir';
     if (buscaRapidaTipoAtual) {
-      abrirBuscaRapida(buscaRapidaTipoAtual);
+      abrirBuscaRapida(buscaRapidaTipoAtual, buscaRapidaContexto);
     }
   }
 
@@ -4511,6 +4642,27 @@
   function selecionarItemBuscaRapida(item) {
     if (!item || !buscaRapidaTipoAtual) return;
 
+    if (buscaRapidaContexto === 'edicao') {
+      if (buscaRapidaTipoAtual === 'categoria') {
+        const input = document.getElementById('edit-categoria');
+        if (input) input.value = item.rotulo;
+        const resp = document.getElementById('edit-solicitante');
+        if (resp && (!resp.value || resp.value === 'Compras' || resp.value === 'Financeiro')) {
+          resp.value = item.responsavel;
+        }
+      } else if (buscaRapidaTipoAtual === 'cnae') {
+        const input = document.getElementById('edit-cnae');
+        if (input) input.value = `${item.cnae} - ${item.desc}`;
+        const lc = document.getElementById('edit-item-lc116');
+        if (lc) lc.value = item.lc116;
+      } else if (buscaRapidaTipoAtual === 'cfop') {
+        const input = document.getElementById('edit-cod-operacao');
+        if (input) input.value = `${item.cfop} - ${item.desc}`;
+      }
+      fecharBuscaRapida();
+      return;
+    }
+
     if (buscaRapidaTipoAtual === 'categoria') {
       const input = document.getElementById('categoria_rapida_aba1');
       if (input) {
@@ -4534,17 +4686,178 @@
     fecharBuscaRapida();
   }
 
-  function onKeyDownLookupInput(e, tipo) {
+  function onKeyDownLookupInput(e, tipo, contexto = 'aba1') {
     if (e.key === 'F2' || (e.altKey && e.key === 'ArrowDown') || e.key === 'ArrowDown') {
-      abrirBuscaRapida(tipo);
+      abrirBuscaRapida(tipo, contexto);
       e.preventDefault();
     }
+  }
+
+  // ==========================================================================
+  // FUNÇÕES DE EDIÇÃO DE TÍTULO / LANÇAMENTO (POP-UP & CONTINGÊNCIA)
+  // ==========================================================================
+  function abrirModalEdicaoTitulo(idOuNumero) {
+    if (!idOuNumero) return;
+    let t = (titulos || []).find(x => String(x.id) === String(idOuNumero) || String(x.numero_doc) === String(idOuNumero) || String(x.numero_id) === String(idOuNumero));
+    if (!t && window._relatorioExemplosAtivos) {
+      t = window._relatorioExemplosAtivos.find(x => String(x.id) === String(idOuNumero) || String(x.numero_doc) === String(idOuNumero) || String(x.numero_id) === String(idOuNumero));
+      if (t) {
+        if (!t.id) t.id = t.numero_id || t.numero_doc;
+        if (!titulos.some(x => String(x.id) === String(t.id))) {
+          titulos.push(t);
+        }
+      }
+    }
+    if (!t) {
+      alert('Lançamento não localizado para edição.');
+      return;
+    }
+
+    const inputId = document.getElementById('edit-titulo-id');
+    const inputDoc = document.getElementById('edit-numero-doc');
+    const inputVenc = document.getElementById('edit-vencimento');
+    const inputCfop = document.getElementById('edit-cod-operacao');
+    const inputCnae = document.getElementById('edit-cnae');
+    const inputLc = document.getElementById('edit-item-lc116');
+    const inputCat = document.getElementById('edit-categoria');
+    const inputResp = document.getElementById('edit-solicitante');
+    const inputCnpj = document.getElementById('edit-cnpj');
+    const inputFav = document.getElementById('edit-favorecido');
+    const inputVal = document.getElementById('edit-valor');
+    const selForma = document.getElementById('edit-forma-pgto');
+    const inputDesc = document.getElementById('edit-descricao');
+    const inputLinha = document.getElementById('edit-linha-dig');
+
+    if (inputId) inputId.value = t.id || idOuNumero;
+    if (inputDoc) inputDoc.value = t.numero_doc || t.numero_id || '';
+    if (inputVenc) inputVenc.value = t.vencimento ? t.vencimento.split('T')[0] : '';
+    if (inputCfop) inputCfop.value = t.cod_operacao || '1.933 - Aquisição de serviço tributado pelo ISSQN';
+    if (inputCnae) inputCnae.value = t.cnae || '';
+    if (inputLc) inputLc.value = t.item_lc116 || '';
+    if (inputCat) inputCat.value = t.ccusto || t.categoria || '12101 - Tecidos';
+    if (inputResp) inputResp.value = t.solicitante || '';
+    if (inputCnpj) inputCnpj.value = t.cnpj || '';
+    if (inputFav) inputFav.value = t.favorecido || '';
+    if (inputVal) inputVal.value = parseFloat(t.valor) || 0;
+    if (selForma) selForma.value = t.forma_pgto || 'Boleto Itaú';
+    if (inputDesc) inputDesc.value = t.descricao || t.historico || '';
+    if (inputLinha) inputLinha.value = t.linha_dig || '';
+
+    const header = document.getElementById('modal-edit-titulo-header');
+    if (header) {
+      header.innerText = `Editar Lançamento: ${t.numero_doc || t.numero_id || idOuNumero} — ${t.favorecido || ''}`;
+    }
+
+    const modal = document.getElementById('bimer-modal-edicao-titulo');
+    if (modal) modal.style.display = 'flex';
+  }
+
+  function fecharModalEdicaoTitulo() {
+    const modal = document.getElementById('bimer-modal-edicao-titulo');
+    if (modal) modal.style.display = 'none';
+  }
+
+  async function salvarEdicaoTitulo() {
+    const id = document.getElementById('edit-titulo-id')?.value;
+    if (!id) return;
+
+    const payload = {
+      numero_doc: document.getElementById('edit-numero-doc')?.value.trim() || '',
+      vencimento: document.getElementById('edit-vencimento')?.value || '',
+      cod_operacao: document.getElementById('edit-cod-operacao')?.value.trim() || '',
+      cnae: document.getElementById('edit-cnae')?.value.trim() || '',
+      item_lc116: document.getElementById('edit-item-lc116')?.value.trim() || '',
+      categoria: document.getElementById('edit-categoria')?.value.trim() || '',
+      ccusto: document.getElementById('edit-categoria')?.value.trim() || '',
+      solicitante: document.getElementById('edit-solicitante')?.value.trim() || '',
+      cnpj: document.getElementById('edit-cnpj')?.value.trim() || '',
+      favorecido: document.getElementById('edit-favorecido')?.value.trim() || '',
+      valor: parseFloat(document.getElementById('edit-valor')?.value) || 0,
+      forma_pgto: document.getElementById('edit-forma-pgto')?.value || 'Boleto Itaú',
+      descricao: document.getElementById('edit-descricao')?.value.trim() || '',
+      historico: document.getElementById('edit-descricao')?.value.trim() || '',
+      linha_dig: document.getElementById('edit-linha-dig')?.value.trim() || ''
+    };
+
+    try {
+      const resp = await fetch(`${API_BASE}/titulos/${encodeURIComponent(id)}/editar`, {
+        method: 'POST',
+        headers: {
+          ...getAuthHeaders(),
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+    } catch (e) {
+      console.warn('Persistindo alteração via contingência local:', e);
+    }
+
+    // Atualizar no array local titulos
+    const idx = (titulos || []).findIndex(x => String(x.id) === String(id) || String(x.numero_doc) === String(id) || String(x.numero_id) === String(id));
+    if (idx !== -1) {
+      titulos[idx] = {
+        ...titulos[idx],
+        ...payload
+      };
+    }
+    if (window._relatorioExemplosAtivos) {
+      const exIdx = window._relatorioExemplosAtivos.findIndex(x => String(x.id) === String(id) || String(x.numero_doc) === String(id) || String(x.numero_id) === String(id));
+      if (exIdx !== -1) {
+        window._relatorioExemplosAtivos[exIdx] = {
+          ...window._relatorioExemplosAtivos[exIdx],
+          ...payload
+        };
+      }
+    }
+
+    // Re-renderizar grids e relatórios
+    if (typeof renderizarGridTitulos === 'function') renderizarGridTitulos();
+    if (document.getElementById('modal-relatorio-autorizacao')?.style.display === 'flex') {
+      renderizarRelatorioAutorizacao();
+    }
+    if (typeof atualizarBarraRodape === 'function') atualizarBarraRodape();
+    if (typeof atualizarAgendaFinanceira === 'function') atualizarAgendaFinanceira();
+
+    fecharModalEdicaoTitulo();
+    mostrarToastSucesso('✅ Lançamento e CFOP atualizados com sucesso!');
+  }
+
+  function mostrarToastSucesso(msg) {
+    let toast = document.getElementById('bimer-toast-notificacao');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'bimer-toast-notificacao';
+      toast.style.cssText = 'position: fixed; bottom: 25px; right: 25px; background: #065f46; color: white; padding: 10px 16px; border-radius: 4px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); font-size: 11.5px; font-weight: 700; z-index: 100000; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s;';
+      document.body.appendChild(toast);
+    }
+    toast.innerHTML = msg;
+    toast.style.opacity = '1';
+    toast.style.display = 'flex';
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      setTimeout(() => { toast.style.display = 'none'; }, 200);
+    }, 3000);
   }
 
   // Teclado na busca rápida (seta cima, baixo, enter, esc)
   document.addEventListener('keydown', function(e) {
     const painel = document.getElementById('bimer-busca-rapida-painel');
-    if (!painel || !painel.classList.contains('aberto')) return;
+    if (painel && painel.classList.contains('aberto')) {
+      if (e.key === 'Escape') {
+        fecharBuscaRapida();
+        e.preventDefault();
+        return;
+      }
+    }
+
+    const modalEdicao = document.getElementById('bimer-modal-edicao-titulo');
+    if (modalEdicao && modalEdicao.style.display === 'flex') {
+      if (e.key === 'Escape' && (!painel || !painel.classList.contains('aberto'))) {
+        fecharModalEdicaoTitulo();
+        e.preventDefault();
+        return;
+      }
+    }
 
     if (e.key === 'Escape') {
       fecharBuscaRapida();
@@ -5926,6 +6239,9 @@
 
         <!-- 10. Ações -->
         <td style="text-align: center; white-space: nowrap;">
+          <button class="tool-btn" style="display: inline-flex; padding: 3px 6px; font-size: 10.5px; color: var(--alterdata-blue);" onclick="abrirModalEdicaoTitulo('${item.id}')" title="Editar Lançamento (CFOP, Categoria, Valores...)">
+            ✏️
+          </button>
           <button class="tool-btn" style="display: inline-flex; padding: 3px 6px; font-size: 10.5px;" onclick="alternarBaixa('${item.id}')" title="${isPago ? 'Reabrir título' : 'Baixar / Liquidar'}">
             ${isPago ? '↩️' : '✔️'}
           </button>
@@ -6421,116 +6737,130 @@
     let usandoExemplosReais = false;
     if (lista.length === 0) {
       usandoExemplosReais = true;
-      lista = [
-        {
-          numero_doc: '454120',
-          numero_id: 'LCT-2026-0001',
-          favorecido: 'MENEGOTTI TEXTIL LTDA',
-          descricao: 'Tecido Ribana e Viscolycra',
-          cnpj: '10.474.553/0001-30',
-          solicitante: 'Compras',
-          ccusto: '12101 - Tecidos',
-          forma_pgto: 'Boleto Itaú',
-          tipo: 'FORNECEDOR',
-          valor: 3910.49
-        },
-        {
-          numero_doc: '88410',
-          numero_id: 'LCT-2026-0002',
-          favorecido: 'ALAMEDA VERT EM IMOB LTDA',
-          descricao: 'Aluguel Unidade Vilas - Comp. 08/26',
-          cnpj: '44.926.364/0001-72',
-          solicitante: 'ADM / Financeiro',
-          ccusto: '21101 - Aluguel',
-          forma_pgto: 'Boleto Itaú',
-          tipo: 'FORNECEDOR',
-          valor: 9773.01
-        },
-        {
-          numero_doc: '91028',
-          numero_id: 'LCT-2026-0003',
-          favorecido: 'ANANDA TEXTIL LTDA',
-          descricao: 'Tecido Tricoline Estampado',
-          cnpj: '04.263.005/0001-68',
-          solicitante: 'Compras',
-          ccusto: '31101 - Tecidos',
-          forma_pgto: 'Boleto Itaú',
-          tipo: 'FORNECEDOR',
-          valor: 6206.03
-        },
-        {
-          numero_doc: '30491',
-          numero_id: 'LCT-2026-0004',
-          favorecido: 'ABR PLANEJAMENTO E GESTÃO',
-          descricao: 'Aluguel e Taxa Adm Paseo',
-          cnpj: '01.397.927/0001-70',
-          solicitante: 'ADM / Financeiro',
-          ccusto: '21101 - Aluguel',
-          forma_pgto: 'Boleto Outros Bancos',
-          tipo: 'FORNECEDOR',
-          valor: 3776.00
-        },
-        {
-          numero_doc: 'RPA-09',
-          numero_id: 'LCT-2026-0005',
-          favorecido: 'BRUNA MELO SÁ (MEI)',
-          descricao: 'Prestação de Serviços - Modelagem',
-          cnpj: '68.339.232/0001-02',
-          solicitante: 'ADM / Financeiro',
-          ccusto: '12202 - Salários Meis',
-          forma_pgto: 'PIX Chave CNPJ',
-          tipo: 'FORNECEDOR',
-          valor: 3575.48
-        },
-        {
-          numero_doc: 'REC-0901',
-          numero_id: 'LCT-2026-0006',
-          favorecido: 'ADRIANA JESUS DOS SANTOS',
-          descricao: 'Faccionista - Confecção 150 Vestidos',
-          cnpj: '044.573.925-10',
-          solicitante: 'Produção',
-          ccusto: '31111 - Faccionista',
-          forma_pgto: 'PIX Chave CPF',
-          tipo: 'FORNECEDOR',
-          valor: 1770.00
-        },
-        {
-          numero_doc: 'OS-7712',
-          numero_id: 'LCT-2026-0007',
-          favorecido: 'ELZA DA CRUZ',
-          descricao: 'Bolsas Linha Praia Coleção Verão',
-          cnpj: '697.263.535-72',
-          solicitante: 'Compras',
-          ccusto: '31104 - Revenda',
-          forma_pgto: 'PIX Chave Tel',
-          tipo: 'FORNECEDOR',
-          valor: 1600.00
-        },
-        {
-          numero_doc: 'DAM-0926',
-          numero_id: 'LCT-2026-0008',
-          favorecido: 'PREFEITURA MUNICIPAL DE SALVADOR',
-          descricao: 'ISS Substituto s/ Serviços Tomados',
-          cnpj: '13.927.801/0004-91',
-          solicitante: 'ADM / Financeiro',
-          ccusto: '21420 - ISS Substituto',
-          forma_pgto: 'Guia Municipal',
-          tipo: 'IMPOSTO_ISS',
-          valor: 2961.91
-        },
-        {
-          numero_doc: 'GNRE-SP',
-          numero_id: 'LCT-2026-0009',
-          favorecido: 'SEFAZ SÃO PAULO - DARE',
-          descricao: 'DIFAL / ICMS Venda Online E-commerce',
-          cnpj: '46.379.400/0001-50',
-          solicitante: 'Gerente Online',
-          ccusto: '22309 - GNRE',
-          forma_pgto: 'Cód. Barras',
-          tipo: 'IMPOSTO_GNRE',
-          valor: 141.74
-        }
-      ];
+      if (!window._relatorioExemplosAtivos) {
+        window._relatorioExemplosAtivos = [
+          {
+            numero_doc: '454120',
+            numero_id: 'LCT-2026-0001',
+            favorecido: 'MENEGOTTI TEXTIL LTDA',
+            descricao: 'Tecido Ribana e Viscolycra',
+            cod_operacao: '1.101 - Compra para industrialização',
+            cnpj: '10.474.553/0001-30',
+            solicitante: 'Compras',
+            ccusto: '12101 - Tecidos',
+            forma_pgto: 'Boleto Itaú',
+            tipo: 'FORNECEDOR',
+            valor: 3910.49
+          },
+          {
+            numero_doc: '88410',
+            numero_id: 'LCT-2026-0002',
+            favorecido: 'ALAMEDA VERT EM IMOB LTDA',
+            descricao: 'Aluguel Unidade Vilas - Comp. 08/26',
+            cod_operacao: '1.933 - Aquisição de serviço tributado pelo ISSQN',
+            cnpj: '44.926.364/0001-72',
+            solicitante: 'ADM / Financeiro',
+            ccusto: '21101 - Aluguel',
+            forma_pgto: 'Boleto Itaú',
+            tipo: 'FORNECEDOR',
+            valor: 9773.01
+          },
+          {
+            numero_doc: '91028',
+            numero_id: 'LCT-2026-0003',
+            favorecido: 'ANANDA TEXTIL LTDA',
+            descricao: 'Tecido Tricoline Estampado',
+            cod_operacao: '1.101 - Compra para industrialização',
+            cnpj: '04.263.005/0001-68',
+            solicitante: 'Compras',
+            ccusto: '31101 - Tecidos',
+            forma_pgto: 'Boleto Itaú',
+            tipo: 'FORNECEDOR',
+            valor: 6206.03
+          },
+          {
+            numero_doc: '30491',
+            numero_id: 'LCT-2026-0004',
+            favorecido: 'ABR PLANEJAMENTO E GESTÃO',
+            descricao: 'Aluguel e Taxa Adm Paseo',
+            cod_operacao: '1.933 - Aquisição de serviço tributado pelo ISSQN',
+            cnpj: '01.397.927/0001-70',
+            solicitante: 'ADM / Financeiro',
+            ccusto: '21101 - Aluguel',
+            forma_pgto: 'Boleto Outros Bancos',
+            tipo: 'FORNECEDOR',
+            valor: 3776.00
+          },
+          {
+            numero_doc: 'RPA-09',
+            numero_id: 'LCT-2026-0005',
+            favorecido: 'BRUNA MELO SÁ (MEI)',
+            descricao: 'Prestação de Serviços - Modelagem',
+            cod_operacao: '1.933 - Aquisição de serviço tributado pelo ISSQN',
+            cnpj: '68.339.232/0001-02',
+            solicitante: 'ADM / Financeiro',
+            ccusto: '12202 - Salários Meis',
+            forma_pgto: 'PIX Chave CNPJ',
+            tipo: 'FORNECEDOR',
+            valor: 3575.48
+          },
+          {
+            numero_doc: 'REC-0901',
+            numero_id: 'LCT-2026-0006',
+            favorecido: 'ADRIANA JESUS DOS SANTOS',
+            descricao: 'Faccionista - Confecção 150 Vestidos',
+            cod_operacao: '1.933 - Aquisição de serviço tributado pelo ISSQN',
+            cnpj: '044.573.925-10',
+            solicitante: 'Produção',
+            ccusto: '31111 - Faccionista',
+            forma_pgto: 'PIX Chave CPF',
+            tipo: 'FORNECEDOR',
+            valor: 1770.00
+          },
+          {
+            numero_doc: 'OS-7712',
+            numero_id: 'LCT-2026-0007',
+            favorecido: 'ELZA DA CRUZ',
+            descricao: 'Bolsas Linha Praia Coleção Verão',
+            cod_operacao: '1.102 - Compra para comercialização',
+            cnpj: '697.263.535-72',
+            solicitante: 'Compras',
+            ccusto: '31104 - Revenda',
+            forma_pgto: 'PIX Chave Tel',
+            tipo: 'FORNECEDOR',
+            valor: 1600.00
+          },
+          {
+            numero_doc: 'DAM-0926',
+            numero_id: 'LCT-2026-0008',
+            favorecido: 'PREFEITURA MUNICIPAL DE SALVADOR',
+            descricao: 'ISS Substituto s/ Serviços Tomados',
+            cod_operacao: '0.000 - Tributo / Guia Municipal',
+            cnpj: '13.927.801/0004-91',
+            solicitante: 'ADM / Financeiro',
+            ccusto: '21420 - ISS Substituto',
+            forma_pgto: 'Guia Municipal',
+            tipo: 'IMPOSTO_ISS',
+            valor: 2961.91
+          },
+          {
+            numero_doc: 'GNRE-SP',
+            numero_id: 'LCT-2026-0009',
+            favorecido: 'SEFAZ SÃO PAULO - DARE',
+            descricao: 'DIFAL / ICMS Venda Online E-commerce',
+            cod_operacao: '0.000 - Tributo Estadual / GNRE',
+            cnpj: '46.379.400/0001-50',
+            solicitante: 'Gerente Online',
+            ccusto: '22309 - GNRE',
+            forma_pgto: 'Cód. Barras',
+            tipo: 'IMPOSTO_GNRE',
+            valor: 141.74
+          }
+        ];
+      }
+      lista = window._relatorioExemplosAtivos;
+    } else {
+      window._relatorioExemplosAtivos = lista;
     }
 
     // Classifica em grupos
@@ -6664,6 +6994,9 @@
             <td style="padding: 8px 10px; border: 1px solid #cbd5e1; text-align: right; font-weight: 800; color: #0f172a; font-size: 12px; white-space: nowrap; vertical-align: top;">
               ${valFmt}
             </td>
+            <td class="no-print" style="padding: 6px 4px; border: 1px solid #cbd5e1; text-align: center; vertical-align: middle;">
+              <button type="button" class="tool-btn" style="display: inline-flex; align-items: center; justify-content: center; padding: 3px 6px; font-size: 11px; color: #004b87; border: 1px solid #94a3b8; background: #ffffff; border-radius: 3px; cursor: pointer;" onclick="abrirModalEdicaoTitulo('${item.id || item.numero_doc || item.numero_id}')" title="Editar Lançamento (CFOP, Categoria, Valores...)">✏️</button>
+            </td>
           </tr>
         `;
       });
@@ -6684,6 +7017,7 @@
                 <th style="padding: 8px 8px; font-weight: 700; font-size: 10.5px; border: 1px solid #cbd5e1; text-align: left; width: 115px;">Área / Resp.</th>
                 <th style="padding: 8px 6px; font-weight: 700; font-size: 10.5px; border: 1px solid #cbd5e1; text-align: center; width: 85px;">Tipo Pag.</th>
                 <th style="padding: 8px 10px; font-weight: 700; font-size: 10.5px; border: 1px solid #cbd5e1; text-align: right; width: 105px;">Valor (R$)</th>
+                <th class="no-print" style="padding: 8px 4px; font-weight: 700; font-size: 10.5px; border: 1px solid #cbd5e1; text-align: center; width: 45px;">Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -6691,6 +7025,7 @@
               <tr style="background: #f8fafc; font-weight: 800; color: #0f172a; border: 1.5px solid #cbd5e1;">
                 <td colspan="6" style="padding: 8px 10px; text-align: right; text-transform: uppercase; font-size: 10.5px; border: 1px solid #cbd5e1;">Subtotal ${grp.titulo.replace(/^[^\s]+\s*\d+\.\s*/, '')}:</td>
                 <td style="padding: 8px 10px; text-align: right; color: ${grp.subtotalColor}; font-size: 12px; font-weight: 800; white-space: nowrap; border: 1px solid #cbd5e1;">${formatarMoeda(subtotal)}</td>
+                <td class="no-print" style="border: 1px solid #cbd5e1; background: #f8fafc;"></td>
               </tr>
             </tbody>
           </table>
