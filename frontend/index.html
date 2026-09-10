@@ -890,6 +890,8 @@
             <select id="tipo_documento" onchange="ajustarTipoDocumento()">
               <option value="NFSE">NFS-e - Nota Fiscal de Serviços Eletrônica</option>
               <option value="NFE">NF-e - Nota Fiscal de Produtos/Mercadorias</option>
+              <option value="DOMINGO_FERIADO">🛍️ Domingo / Feriado Trabalhado (Individual Vendedora)</option>
+              <option value="FOLHA">👥 Folha de Pagamento / Salários (Total Consolidado)</option>
               <option value="RECIBO">Recibo / RPA (Sem Documento Fiscal)</option>
               <option value="CONTRATO">Contrato / Locação / Aluguel Mensal</option>
               <option value="FATURA">Fatura de Concessionária (Luz, Água, Internet)</option>
@@ -4483,6 +4485,7 @@
       `;
       chipsCont.innerHTML = `
         <span class="bimer-chip ativo" onclick="selecionarChipBuscaRapida('TODOS', this)">Todos (<span id="chip-total-fornecedores">${LISTA_FORNECEDORES.length || 115}</span>)</span>
+        <span class="bimer-chip" onclick="selecionarChipBuscaRapida('COLABORADOR', this)">Vendedoras & Folha</span>
         <span class="bimer-chip" onclick="selecionarChipBuscaRapida('SERVICO', this)">Serviços & NFS-e</span>
         <span class="bimer-chip" onclick="selecionarChipBuscaRapida('PRODUCAO', this)">Tecidos & Produção</span>
         <span class="bimer-chip" onclick="selecionarChipBuscaRapida('TI', this)">TI & Software</span>
@@ -4679,6 +4682,7 @@
       if (contador) contador.innerText = `${itens.length} de ${listaCfops.length} CFOPs`;
     } else if (buscaRapidaTipoAtual === 'fornecedor') {
       itens = (LISTA_FORNECEDORES || []).filter(f => {
+        if (buscaRapidaFiltroChip === 'COLABORADOR' && !(f.tipo === 'COLABORADOR' || (f.categoria || '').includes('Salário') || (f.categoria || '').includes('Domingo') || (f.razao_social || '').includes('FOLHA'))) return false;
         if (buscaRapidaFiltroChip === 'SERVICO' && !((f.cnae || f.tipo === 'PRESTADOR' || (f.categoria || '').includes('Serviço') || (f.categoria || '').startsWith('21')))) return false;
         if (buscaRapidaFiltroChip === 'PRODUCAO' && !((f.categoria || '').includes('Tecido') || (f.categoria || '').startsWith('121'))) return false;
         if (buscaRapidaFiltroChip === 'TI' && !((f.cnae || '').startsWith('620') || (f.razao_social || '').toLowerCase().includes('software') || (f.razao_social || '').toLowerCase().includes('tech') || (f.razao_social || '').toLowerCase().includes('informatica'))) return false;
@@ -5895,20 +5899,55 @@
     const tipo = document.getElementById('tipo_documento').value;
     const lblNum = document.getElementById('lbl-numero-doc');
     const inputNum = document.getElementById('numero_doc');
+    const inputCat = document.getElementById('categoria_rapida_aba1');
+    const selForma = document.getElementById('forma_pagamento');
+    const inputHist = document.getElementById('historico_contabil_completo');
 
-    if (tipo === 'RECIBO') {
+    if (tipo === 'DOMINGO_FERIADO') {
+      lblNum.innerText = 'Ref. / Identificador Feriado ou Domingo *';
+      const d = new Date();
+      const mesAbrev = ['JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ'][d.getMonth()];
+      if (!inputNum.value || inputNum.value.startsWith('REC-') || inputNum.value.startsWith('LOC-') || inputNum.value.startsWith('SOL-') || inputNum.value.startsWith('FOL-')) {
+        inputNum.value = 'DOM-' + String(d.getDate()).padStart(2, '0') + mesAbrev;
+      }
+      sugerirCFOPPorDocumento('Sem Documento Fiscal - Remuneração de Pessoal');
+      if (selForma) selForma.value = 'PIX';
+      if (inputCat) {
+        inputCat.value = '12208 - Domingos e Feriados Trabalhados';
+        if (typeof autocompletarCategoriaLive === 'function') autocompletarCategoriaLive(inputCat);
+      }
+      if (inputHist && (!inputHist.value || inputHist.value.includes('Aquisição') || inputHist.value.includes('Prestação'))) {
+        inputHist.value = 'Pagamento de domingo / feriado trabalhado - Vendedora';
+      }
+      alternarVisibilidadeRetencoes(false);
+    } else if (tipo === 'FOLHA') {
+      lblNum.innerText = 'Mês Ref. / Lote da Folha *';
+      if (!inputNum.value || inputNum.value.startsWith('REC-') || inputNum.value.startsWith('LOC-') || inputNum.value.startsWith('SOL-') || inputNum.value.startsWith('DOM-')) {
+        inputNum.value = 'FOL-' + new Date().toISOString().slice(0, 7);
+      }
+      sugerirCFOPPorDocumento('Folha de Pagamento - Salários e Encargos');
+      if (selForma) selForma.value = 'TED_DOC';
+      if (inputCat) {
+        inputCat.value = '12201 - Salários';
+        if (typeof autocompletarCategoriaLive === 'function') autocompletarCategoriaLive(inputCat);
+      }
+      if (inputHist && (!inputHist.value || inputHist.value.includes('Aquisição') || inputHist.value.includes('Prestação'))) {
+        inputHist.value = 'Folha de pagamento de salários consolidada - Mês Ref. ' + new Date().toLocaleDateString('pt-BR', { month: '2-digit', year: 'numeric' });
+      }
+      alternarVisibilidadeRetencoes(false);
+    } else if (tipo === 'RECIBO') {
       lblNum.innerText = 'Nº do Recibo / Identificador Interno *';
-      if (!inputNum.value) inputNum.value = 'REC-' + new Date().getFullYear() + '-' + Math.floor(100 + Math.random() * 900);
+      if (!inputNum.value || inputNum.value.startsWith('DOM-') || inputNum.value.startsWith('FOL-')) inputNum.value = 'REC-' + new Date().getFullYear() + '-' + Math.floor(100 + Math.random() * 900);
       sugerirCFOPPorDocumento('1949');
       verificarRecolhimentoRetencoes();
     } else if (tipo === 'CONTRATO') {
       lblNum.innerText = 'Nº do Contrato / Mês Ref. *';
-      if (!inputNum.value) inputNum.value = 'LOC-' + new Date().toISOString().slice(0,7);
+      if (!inputNum.value || inputNum.value.startsWith('DOM-') || inputNum.value.startsWith('FOL-')) inputNum.value = 'LOC-' + new Date().toISOString().slice(0,7);
       sugerirCFOPPorDocumento('1933');
       verificarRecolhimentoRetencoes();
     } else if (tipo === 'DESPESA_INTERNA') {
       lblNum.innerText = 'Nº do Adiantamento / Solicitação *';
-      if (!inputNum.value) inputNum.value = 'SOL-' + Date.now().toString().slice(-5);
+      if (!inputNum.value || inputNum.value.startsWith('DOM-') || inputNum.value.startsWith('FOL-')) inputNum.value = 'SOL-' + Date.now().toString().slice(-5);
       sugerirCFOPPorDocumento('1949');
       verificarRecolhimentoRetencoes();
     } else if (tipo === 'FATURA') {
@@ -6292,7 +6331,7 @@
       razao_social: favorecido,
       nome_fantasia: favorecido,
       cnpj_cpf: cnpj,
-      tipo: tipo_doc === 'NFSE' ? 'PRESTADOR' : 'FORNECEDOR',
+      tipo: tipo_doc === 'NFSE' ? 'PRESTADOR' : ((tipo_doc === 'DOMINGO_FERIADO' || tipo_doc === 'FOLHA') ? 'COLABORADOR' : 'FORNECEDOR'),
       categoria: ccusto,
       ccusto: document.getElementById('centro_custo')?.value || 'MATRIZ',
       responsavel: solicitante,
@@ -6547,9 +6586,15 @@
       tr.innerHTML = `
         <!-- 1. Tipo Título -->
         <td>
-          <span class="tag-tipo ${isForn ? (item.tipo_doc === 'NFSE' ? 'tag-fornecedor' : 'tag-sem-nf') : 'tag-imposto'}">
-            ${isForn ? (item.tipo_doc === 'NFSE' ? '🏢 PRESTADOR' : '📋 ' + (item.tipo_doc || 'DESPESA')) : '🏛️ ' + (item.tipo || '').replace('IMPOSTO_', '')}
-          </span>
+          ${item.tipo_doc === 'DOMINGO_FERIADO' ? `
+            <span class="tag-tipo" style="background: #fef3c7; color: #b45309; border: 1px solid #fde68a;">🛍️ DOM / FER</span>
+          ` : (item.tipo_doc === 'FOLHA' ? `
+            <span class="tag-tipo" style="background: #ede9fe; color: #5b21b6; border: 1px solid #ddd6fe;">👥 FOLHA</span>
+          ` : `
+            <span class="tag-tipo ${isForn ? (item.tipo_doc === 'NFSE' ? 'tag-fornecedor' : 'tag-sem-nf') : 'tag-imposto'}">
+              ${isForn ? (item.tipo_doc === 'NFSE' ? '🏢 PRESTADOR' : '📋 ' + (item.tipo_doc || 'DESPESA')) : '🏛️ ' + (item.tipo || '').replace('IMPOSTO_', '')}
+            </span>
+          `)}
         </td>
 
         <!-- 2. ID -->
