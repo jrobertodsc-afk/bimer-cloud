@@ -31,6 +31,9 @@ class DocumentoEntrada(BaseModel):
     forma_pgto: Optional[str] = "PIX"
     dados_banco: Optional[str] = ""
     linha_dig: Optional[str] = ""
+    cod_operacao: Optional[str] = "1.933 - Aquisição de serviço tributado pelo ISSQN"
+    cnae: Optional[str] = ""
+    item_lc116: Optional[str] = ""
     impostos: Optional[List[ImpostoItem]] = []
 
 @router.get("")
@@ -44,10 +47,27 @@ def listar_titulos(
         conn = get_connection()
         cur = conn.cursor()
 
+        try:
+            cur.execute("ALTER TABLE notas ADD COLUMN cod_operacao TEXT")
+            conn.commit()
+        except Exception:
+            pass
+        try:
+            cur.execute("ALTER TABLE notas ADD COLUMN cnae TEXT")
+            conn.commit()
+        except Exception:
+            pass
+        try:
+            cur.execute("ALTER TABLE notas ADD COLUMN item_lc116 TEXT")
+            conn.commit()
+        except Exception:
+            pass
+
         cur.execute("""
             SELECT id, numero_tx, numero_nf, fornecedor, cnpj, dt_emissao, dt_vencimento,
                    valor_bruto, valor_liquido, status, categoria, filial, responsavel,
-                   descricao, forma_pgto, cod_barras, pix_chave, observacao
+                   descricao, forma_pgto, cod_barras, pix_chave, observacao,
+                   conciliada, dt_pagamento, cod_operacao, cnae, item_lc116
             FROM notas
             WHERE (is_previsao = 0 OR is_previsao IS NULL)
         """)
@@ -75,7 +95,10 @@ def listar_titulos(
             nota_dict = dict(n)
             n_id = nota_dict["id"]
             n_venc = nota_dict["dt_vencimento"] or ""
-            n_status = "CONCILIADO" if (nota_dict.get("status") in ("PAGO", "CONCILIADO")) else "PENDENTE"
+            n_conciliada = bool(nota_dict.get("conciliada"))
+            is_pago = (nota_dict.get("status") in ("PAGO", "CONCILIADO")) or n_conciliada
+            n_status = "CONCILIADO" if is_pago else "PENDENTE"
+            n_situacao = "BAIXADO" if is_pago else "ABERTO"
 
             titulos.append({
                 "id": f"NOTA_{n_id}",
@@ -84,6 +107,9 @@ def listar_titulos(
                 "tipo": "FORNECEDOR",
                 "tipo_doc": nota_dict.get("categoria") or "NFSE",
                 "numero_doc": nota_dict.get("numero_nf") or nota_dict.get("numero_tx"),
+                "cod_operacao": nota_dict.get("cod_operacao") or "1.933 - Aquisição de serviço tributado pelo ISSQN",
+                "cnae": nota_dict.get("cnae") or "",
+                "item_lc116": nota_dict.get("item_lc116") or "",
                 "favorecido": nota_dict.get("fornecedor"),
                 "cnpj": nota_dict.get("cnpj"),
                 "vencimento": n_venc,
@@ -96,6 +122,9 @@ def listar_titulos(
                 "forma_pgto": nota_dict.get("forma_pgto") or "PIX",
                 "linha_dig": nota_dict.get("cod_barras") or "",
                 "status": n_status,
+                "situacao": n_situacao,
+                "conciliada": n_conciliada,
+                "data_baixa": nota_dict.get("dt_pagamento"),
                 "loteId": nota_dict.get("numero_tx")
             })
 
@@ -183,13 +212,24 @@ def gravar_documento(doc: DocumentoEntrada):
         valor_liquido = max(0.0, round(doc.valor_bruto - tot_ret, 2))
         lote_id = f"TX_{int(time.time() * 100)}"
 
+        try:
+            cur.execute("ALTER TABLE notas ADD COLUMN cnae TEXT")
+            conn.commit()
+        except Exception:
+            pass
+        try:
+            cur.execute("ALTER TABLE notas ADD COLUMN item_lc116 TEXT")
+            conn.commit()
+        except Exception:
+            pass
+
         cur.execute("""
             INSERT INTO notas (
                 numero_tx, tipo, fornecedor, cnpj, dt_emissao, dt_vencimento,
                 valor_bruto, valor_liquido, status, categoria, observacao,
                 responsavel, descricao, filial, forma_pgto, cod_barras,
-                pix_chave, numero_nf, is_previsao, conciliada
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0)
+                pix_chave, numero_nf, cod_operacao, cnae, item_lc116, is_previsao, conciliada
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0)
         """, (
             lote_id,
             "FORNECEDOR" if doc.tipo_doc == "NFSE" else "DESPESA_GERAL",
@@ -208,7 +248,10 @@ def gravar_documento(doc: DocumentoEntrada):
             doc.forma_pgto,
             doc.linha_dig,
             doc.dados_banco,
-            doc.numero_doc.strip()
+            doc.numero_doc.strip(),
+            doc.cod_operacao or "1.933 - Aquisição de serviço tributado pelo ISSQN",
+            doc.cnae or "",
+            doc.item_lc116 or ""
         ))
         nota_id = cur.lastrowid
 
@@ -246,7 +289,7 @@ def gravar_documento(doc: DocumentoEntrada):
 
 @router.post("/{identificador}/baixa")
 @router.post("/titulos/{identificador}/baixa")
-def alternar_baixa(identificador: str):
+def alternar_baixa(identificador: str, forcar_baixa: Optional[bool] = Query(False)):
     try:
         conn = get_connection()
         cur = conn.cursor()
@@ -259,16 +302,28 @@ def alternar_baixa(identificador: str):
             if not row:
                 conn.close()
                 raise HTTPException(status_code=404, detail="Imposto não localizado.")
-            novo_status = "PENDENTE" if row["status"] == "PAGO" else "PAGO"
+            novo_status = "PAGO" if forcar_baixa else ("PENDENTE" if row["status"] == "PAGO" else "PAGO")
             cur.execute("UPDATE nota_impostos SET status = ? WHERE id = ?", (novo_status, imp_id))
         else:
-            nota_id = int(identificador.replace("NOTA_", ""))
-            cur.execute("SELECT status FROM notas WHERE id = ?", (nota_id,))
-            row = cur.fetchone()
+            clean_id = identificador.replace("NOTA_", "").strip()
+            row = None
+            nota_id = None
+            if clean_id.isdigit():
+                nota_id = int(clean_id)
+                cur.execute("SELECT id, status FROM notas WHERE id = ?", (nota_id,))
+                row = cur.fetchone()
+            
+            if not row:
+                cur.execute("SELECT id, status FROM notas WHERE numero_nf = ? OR numero_tx = ?", (identificador, identificador))
+                row = cur.fetchone()
+                if row:
+                    nota_id = row["id"]
+
             if not row:
                 conn.close()
                 raise HTTPException(status_code=404, detail="Título não localizado.")
-            novo_status = "PENDENTE" if row["status"] in ("PAGO", "CONCILIADO") else "CONCILIADO"
+
+            novo_status = "CONCILIADO" if forcar_baixa else ("PENDENTE" if row["status"] in ("PAGO", "CONCILIADO") else "CONCILIADO")
             cur.execute("""
                 UPDATE notas
                 SET status = ?, conciliada = ?, dt_pagamento = ?

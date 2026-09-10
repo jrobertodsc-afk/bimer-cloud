@@ -1,5 +1,5 @@
 // Service Worker do Bimer Cloud ERP
-const CACHE_NAME = 'bimer-cloud-v1';
+const CACHE_NAME = 'jr-solutions-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
