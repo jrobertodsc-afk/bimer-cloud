@@ -6903,17 +6903,37 @@
      MÓDULO DE FOLHA DE ROSTO RESUMIDA DO MOVIMENTO DO DIA (JR SOLUTIONS)
      ========================================================================== */
 
+  // ── OBTENÇÃO INTELIGENTE DE DATA PADRÃO PARA RELATÓRIOS ──────────────────
+  function obterDataPadraoParaRelatorios() {
+    const hojeStr = new Date().toISOString().split('T')[0];
+    const abertos = (titulos || []).filter(t => t.vencimento && t.situacao !== 'BAIXADO' && t.situacao !== 'CONCILIADO' && !t.conciliada && !t.data_baixa);
+    if (abertos.length === 0) return hojeStr;
+
+    // 1. Se tem títulos vencendo na data de hoje do sistema:
+    if (abertos.some(t => t.vencimento === hojeStr)) return hojeStr;
+
+    // 2. Agrupa por data de vencimento e calcula a quantidade de títulos em aberto de cada data
+    const contagemPorData = {};
+    abertos.forEach(t => {
+      contagemPorData[t.vencimento] = (contagemPorData[t.vencimento] || 0) + 1;
+    });
+
+    // 3. Prioriza a data que tem a MAIOR concentração de títulos em aberto
+    // Em caso de empate, prioriza a data mais próxima de hoje
+    const datas = Object.keys(contagemPorData).sort((a, b) => {
+      if (contagemPorData[b] !== contagemPorData[a]) {
+        return contagemPorData[b] - contagemPorData[a];
+      }
+      return Math.abs(new Date(a) - new Date(hojeStr)) - Math.abs(new Date(b) - new Date(hojeStr));
+    });
+
+    return datas[0] || hojeStr;
+  }
+
   function abrirModalFolhaRostoDiaria() {
     const inputData = document.getElementById('frd-data-movimento');
     if (inputData) {
-      let dataPadrao = new Date().toISOString().split('T')[0];
-      if (titulos && titulos.length > 0) {
-        const comVenc = titulos.filter(t => t.vencimento).sort((a, b) => b.vencimento.localeCompare(a.vencimento));
-        if (comVenc.length > 0) {
-          dataPadrao = comVenc[0].vencimento;
-        }
-      }
-      inputData.value = dataPadrao;
+      inputData.value = obterDataPadraoParaRelatorios();
     }
     renderizarFolhaRostoDiaria();
     document.getElementById('modal-folha-rosto-diaria').style.display = 'flex';
@@ -7074,14 +7094,7 @@
   function abrirModalAutorizacao() {
     const inputData = document.getElementById('aut-data-lote');
     if (inputData) {
-      let dataPadrao = new Date().toISOString().split('T')[0];
-      if (titulos && titulos.length > 0) {
-        const titulosComVenc = titulos.filter(t => t.vencimento).sort((a, b) => b.vencimento.localeCompare(a.vencimento));
-        if (titulosComVenc.length > 0) {
-          dataPadrao = titulosComVenc[0].vencimento;
-        }
-      }
-      inputData.value = dataPadrao;
+      inputData.value = obterDataPadraoParaRelatorios();
     }
     renderizarRelatorioAutorizacao();
     document.getElementById('modal-relatorio-autorizacao').style.display = 'flex';
