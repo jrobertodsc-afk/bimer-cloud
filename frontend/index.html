@@ -1254,33 +1254,45 @@
           </div>
         </div>
 
-        <!-- FILTROS COMPACTOS POR SEGMENTO / TIPO DE TÍTULO -->
-        <div style="margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+        <!-- FILTROS COMPACTOS POR SEGMENTO & ORDENAÇÃO / CLASSIFICAÇÃO -->
+        <div style="margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
           <div style="display: flex; gap: 5px; flex-wrap: wrap; align-items: center;" id="botoes-filtro-titulos">
             <span style="font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-right: 2px;">Filtrar Tipo:</span>
-            <button class="tool-btn" onclick="filtrarTipoTitulos('todos', this)" style="background: var(--alterdata-blue); color: white; font-size: 11px; padding: 3px 8px;">Todos os Tipos</button>
-            <button class="tool-btn" onclick="filtrarTipoTitulos('fornecedor', this)" style="font-size: 11px; padding: 3px 8px;">🏢 Favorecidos / Prestadores</button>
-            <button class="tool-btn" onclick="filtrarTipoTitulos('imposto', this)" style="font-size: 11px; padding: 3px 8px;">🏛️ Tributos Retidos</button>
-            <button class="tool-btn" onclick="filtrarTipoTitulos('folha', this)" style="font-size: 11px; padding: 3px 8px;">👥 Folha & Faccionistas</button>
-            <button class="tool-btn" onclick="filtrarTipoTitulos('domingo_feriado', this)" style="font-size: 11px; padding: 3px 8px;">🛍️ Dom / Feriados</button>
+            <button class="tool-btn" onclick="filtrarTipoTitulos('todos', this)" style="background: var(--alterdata-blue); color: white; font-size: 11px; padding: 4px 10px; font-weight: 600;">Todos os Títulos</button>
+            <button class="tool-btn" onclick="filtrarTipoTitulos('folha_feriados', this)" style="font-size: 11px; padding: 4px 10px; font-weight: 600;">👥 Folha, Domingos & Feriados</button>
+            <button class="tool-btn" onclick="filtrarTipoTitulos('imposto', this)" style="font-size: 11px; padding: 4px 10px; font-weight: 600;">🏛️ Tributos Retidos</button>
           </div>
-          <div id="info-contagem-filtrada" style="font-size: 11px; font-weight: 600; color: #475569;">
-            Exibindo 0 títulos
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <span style="font-size: 10.5px; font-weight: 700; color: #475569;">Classificar:</span>
+              <select id="select-classificar-titulos" onchange="alterarOrdenacaoTitulos(this.value)" style="font-size: 11px; padding: 3px 6px; border: 1px solid #cbd5e1; border-radius: 3px; background: white; font-weight: 600; color: #1e293b;">
+                <option value="vencimento_asc">Vencimento (Mais antigos primeiro)</option>
+                <option value="vencimento_desc">Vencimento (Mais futuros primeiro)</option>
+                <option value="valor_desc">Valor R$ (Maior para menor)</option>
+                <option value="valor_asc">Valor R$ (Menor para maior)</option>
+                <option value="favorecido_asc">Favorecido (A - Z)</option>
+                <option value="documento_asc">Documento (Nº crescente)</option>
+                <option value="id_asc">ID Lançamento</option>
+              </select>
+            </div>
+            <div id="info-contagem-filtrada" style="font-size: 11px; font-weight: 700; color: #0284c7; background: #e0f2fe; padding: 2px 8px; border-radius: 10px; border: 1px solid #bae6fd;">
+              Exibindo 0 títulos
+            </div>
           </div>
         </div>
 
         <table class="alterdata-grid">
           <thead>
             <tr>
-              <th style="width: 85px;">Tipo Título</th>
-              <th style="width: 110px;">ID</th>
-              <th style="width: 90px;">Documento</th>
-              <th style="width: 135px;">CNPJ / CPF</th>
-              <th style="width: 200px;">Favorecido</th>
-              <th>Histórico Completo / Detalhes</th>
-              <th style="width: 95px;">Vencimento</th>
-              <th style="width: 105px; text-align: right;">Valor (R$)</th>
-              <th style="width: 85px; text-align: center;">Situação</th>
+              <th onclick="ordenarPorColuna('tipo')" style="width: 85px; cursor: pointer;" title="Clique para ordenar por Tipo">Tipo Título <span id="sort-icon-tipo" style="font-size: 9px; opacity: 0.6;">↕</span></th>
+              <th onclick="ordenarPorColuna('id')" style="width: 110px; cursor: pointer;" title="Clique para ordenar por ID">ID <span id="sort-icon-id" style="font-size: 9px; opacity: 0.6;">↕</span></th>
+              <th onclick="ordenarPorColuna('documento')" style="width: 90px; cursor: pointer;" title="Clique para ordenar por Documento">Documento <span id="sort-icon-documento" style="font-size: 9px; opacity: 0.6;">↕</span></th>
+              <th onclick="ordenarPorColuna('cnpj')" style="width: 135px; cursor: pointer;" title="Clique para ordenar por CNPJ/CPF">CNPJ / CPF <span id="sort-icon-cnpj" style="font-size: 9px; opacity: 0.6;">↕</span></th>
+              <th onclick="ordenarPorColuna('favorecido')" style="width: 200px; cursor: pointer;" title="Clique para ordenar por Favorecido">Favorecido <span id="sort-icon-favorecido" style="font-size: 9px; opacity: 0.6;">↕</span></th>
+              <th onclick="ordenarPorColuna('historico')" style="cursor: pointer;" title="Clique para ordenar por Detalhes">Histórico Completo / Detalhes <span id="sort-icon-historico" style="font-size: 9px; opacity: 0.6;">↕</span></th>
+              <th onclick="ordenarPorColuna('vencimento')" style="width: 95px; cursor: pointer;" title="Clique para ordenar por Vencimento">Vencimento <span id="sort-icon-vencimento" style="font-size: 9px; opacity: 0.6;">↕</span></th>
+              <th onclick="ordenarPorColuna('valor')" style="width: 105px; text-align: right; cursor: pointer;" title="Clique para ordenar por Valor">Valor (R$) <span id="sort-icon-valor" style="font-size: 9px; opacity: 0.6;">↕</span></th>
+              <th onclick="ordenarPorColuna('situacao')" style="width: 85px; text-align: center; cursor: pointer;" title="Clique para ordenar por Situação">Situação <span id="sort-icon-situacao" style="font-size: 9px; opacity: 0.6;">↕</span></th>
               <th style="width: 115px; text-align: center;">Ações</th>
             </tr>
           </thead>
@@ -6620,8 +6632,10 @@
   }
 
   let subabaStatusAtual = 'pendente'; // 'pendente', 'conciliado', 'todos'
-  let filtroTipoTituloAtual = 'todos'; // 'todos', 'fornecedor', 'imposto', 'folha', 'domingo_feriado'
+  let filtroTipoTituloAtual = 'todos'; // 'todos', 'folha_feriados', 'imposto'
   let termoBuscaTitulos = '';
+  let ordenacaoColunaAtual = 'vencimento';
+  let ordenacaoDirecaoAtual = 'asc'; // 'asc' ou 'desc'
 
   function setSubabaStatus(status, btn) {
     subabaStatusAtual = status;
@@ -6655,6 +6669,59 @@
       btn.style.color = 'white';
     }
     renderizarGridTitulos();
+  }
+
+  function alterarOrdenacaoTitulos(val) {
+    if (!val) return;
+    const [col, dir] = val.split('_');
+    ordenacaoColunaAtual = col;
+    ordenacaoDirecaoAtual = dir || 'asc';
+    atualizarIconesOrdenacao();
+    renderizarGridTitulos();
+  }
+
+  function ordenarPorColuna(coluna) {
+    if (ordenacaoColunaAtual === coluna) {
+      ordenacaoDirecaoAtual = ordenacaoDirecaoAtual === 'asc' ? 'desc' : 'asc';
+    } else {
+      ordenacaoColunaAtual = coluna;
+      ordenacaoDirecaoAtual = (coluna === 'valor' || coluna === 'vencimento') ? 'asc' : 'asc';
+    }
+    
+    // Sincronizar select de classificação
+    const sel = document.getElementById('select-classificar-titulos');
+    if (sel) {
+      const matchVal = `${coluna}_${ordenacaoDirecaoAtual}`;
+      for (let i = 0; i < sel.options.length; i++) {
+        if (sel.options[i].value === matchVal) {
+          sel.selectedIndex = i;
+          break;
+        }
+      }
+    }
+
+    atualizarIconesOrdenacao();
+    renderizarGridTitulos();
+  }
+
+  function atualizarIconesOrdenacao() {
+    const colunas = ['tipo', 'id', 'documento', 'cnpj', 'favorecido', 'historico', 'vencimento', 'valor', 'situacao'];
+    colunas.forEach(col => {
+      const el = document.getElementById(`sort-icon-${col}`);
+      if (el) {
+        if (ordenacaoColunaAtual === col) {
+          el.innerText = ordenacaoDirecaoAtual === 'asc' ? ' ▲' : ' ▼';
+          el.style.opacity = '1';
+          el.style.color = 'var(--alterdata-blue)';
+          el.style.fontWeight = '900';
+        } else {
+          el.innerText = ' ↕';
+          el.style.opacity = '0.4';
+          el.style.color = '';
+          el.style.fontWeight = 'normal';
+        }
+      }
+    });
   }
 
   function filtrarTitulosPorTexto(termo) {
@@ -6742,14 +6809,13 @@
       if (subabaStatusAtual === 'conciliado' && !isPago) return false;
 
       // 2. Filtro pelos Botões de Tipo de Título
-      if (filtroTipoTituloAtual === 'fornecedor') {
-        if (item.tipo !== 'FORNECEDOR' && item.tipo !== 'DESPESA_GERAL') return false;
+      if (filtroTipoTituloAtual === 'folha_feriados') {
+        const isFolhaOuFeriado = item.tipo_doc === 'FOLHA' || 
+                                 item.tipo_doc === 'DOMINGO_FERIADO' || 
+                                 (item.tipo_doc === 'RECIBO' && item.descricao && (item.descricao.toUpperCase().includes('FERIADO') || item.descricao.toUpperCase().includes('DOMINGO') || item.descricao.toUpperCase().includes('SALARIO') || item.descricao.toUpperCase().includes('FOLHA')));
+        if (!isFolhaOuFeriado) return false;
       } else if (filtroTipoTituloAtual === 'imposto') {
         if (!item.tipo || !item.tipo.startsWith('IMPOSTO_')) return false;
-      } else if (filtroTipoTituloAtual === 'folha') {
-        if (item.tipo_doc !== 'FOLHA' && item.tipo_doc !== 'RECIBO' && !(item.descricao && item.descricao.toUpperCase().includes('FACCIONISTA'))) return false;
-      } else if (filtroTipoTituloAtual === 'domingo_feriado') {
-        if (item.tipo_doc !== 'DOMINGO_FERIADO') return false;
       }
 
       // 3. Filtros legados da Agenda Financeira (se ativados diretamente)
@@ -6788,6 +6854,53 @@
       }
 
       return true;
+    });
+
+    // 5. CLASSIFICAÇÃO / ORDENAÇÃO DINÂMICA
+    lista.sort((a, b) => {
+      let vA, vB;
+      const dir = ordenacaoDirecaoAtual === 'desc' ? -1 : 1;
+
+      switch (ordenacaoColunaAtual) {
+        case 'valor':
+          vA = Number(a.valor) || 0;
+          vB = Number(b.valor) || 0;
+          return (vA - vB) * dir;
+        case 'vencimento':
+          vA = parseDataVencimento(a.vencimento)?.getTime() || 0;
+          vB = parseDataVencimento(b.vencimento)?.getTime() || 0;
+          return (vA - vB) * dir;
+        case 'favorecido':
+          vA = String(a.favorecido || '').toLowerCase();
+          vB = String(b.favorecido || '').toLowerCase();
+          return vA.localeCompare(vB) * dir;
+        case 'documento':
+          vA = String(a.numero_doc || '').toLowerCase();
+          vB = String(b.numero_doc || '').toLowerCase();
+          return vA.localeCompare(vB, undefined, { numeric: true }) * dir;
+        case 'cnpj':
+          vA = String(a.cnpj || '').replace(/\D/g, '');
+          vB = String(b.cnpj || '').replace(/\D/g, '');
+          return vA.localeCompare(vB) * dir;
+        case 'id':
+          vA = String(a.numero_id || a.id || '').toLowerCase();
+          vB = String(b.numero_id || b.id || '').toLowerCase();
+          return vA.localeCompare(vB, undefined, { numeric: true }) * dir;
+        case 'tipo':
+          vA = String(a.tipo_doc || a.tipo || '').toLowerCase();
+          vB = String(b.tipo_doc || b.tipo || '').toLowerCase();
+          return vA.localeCompare(vB) * dir;
+        case 'situacao':
+          vA = isTituloBaixadoOuConciliado(a) ? 1 : 0;
+          vB = isTituloBaixadoOuConciliado(b) ? 1 : 0;
+          return (vA - vB) * dir;
+        case 'historico':
+          vA = String(a.descricao || a.historico || '').toLowerCase();
+          vB = String(b.descricao || b.historico || '').toLowerCase();
+          return vA.localeCompare(vB) * dir;
+        default:
+          return 0;
+      }
     });
 
     const lblStatus = document.getElementById('label-status-contas');
