@@ -797,7 +797,42 @@
       }
       .no-print { display: none !important; }
     }
-  </style>
+  
+  /* ==========================================================================
+     ÍCONES VETORIAIS SVG CORPORATIVOS (PADRÃO BIMER / ALTERDATA)
+     ========================================================================== */
+  .bimer-svg {
+    width: 13px;
+    height: 13px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vertical-align: -2px;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+  .bimer-svg-xs { width: 10px; height: 10px; vertical-align: -1px; }
+  .bimer-svg-sm { width: 12px; height: 12px; vertical-align: -1.5px; }
+  .bimer-svg-md { width: 14px; height: 14px; vertical-align: -2px; }
+  .bimer-svg-lg { width: 16px; height: 16px; vertical-align: -3px; }
+  .bimer-svg-green { stroke: #16a34a !important; }
+  .bimer-svg-blue { stroke: #004b87 !important; }
+  .bimer-svg-red { stroke: #dc2626 !important; }
+  .bimer-svg-amber { stroke: #d97706 !important; }
+  .bimer-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #16a34a;
+    display: inline-block;
+    box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.25);
+    margin-right: 4px;
+    vertical-align: 1px;
+  }
+
+</style>
 </head>
 <body>
 
@@ -813,22 +848,22 @@
       </div>
       <div style="display: flex; align-items: center; gap: 6px;">
         <span id="status-conexao-db" ondblclick="configurarServidorNuvem()" title="Servidor Cloud Conectado (duplo clique para gerenciar URL)" style="display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; color: #15803d; background: #dcfce7; padding: 2px 7px; border-radius: 3px; border: 1px solid #86efac; cursor: default;">
-          🟢 Conectado ao Servidor (JR Solutions)
+          <span class="bimer-status-dot"></span> Conectado ao Servidor (JR Solutions)
         </span>
       </div>
     </div>
 
     <div class="toolbar-actions" style="display: flex; align-items: center; gap: 6px;">
       <!-- Ações Principais de Lançamento -->
-      <button class="tool-btn primary" onclick="gravarDocumento()" title="Gravar lançamento atual (F10)">💾 Gravar (F10)</button>
-      <button class="tool-btn" onclick="novoDocumento()" title="Iniciar novo lançamento em branco">➕ Novo Lançamento</button>
-      <button class="tool-btn" onclick="limparCamposFormulario()" title="Limpar campos do formulário atual sem apagar dados gravados">🧹 Limpar Campos</button>
-      <button class="tool-btn" onclick="abrirModalFolhaRostoDiaria()" title="Visualizar / Imprimir Folha de Rosto Resumida do Movimento do Dia (Borderô)">📑 Folha do Dia</button>
-      <button class="tool-btn" onclick="trocarAba('aba-relatorios')" title="Central de Relatórios Oficiais Bimer & BI">📊 Relatórios Bimer</button>
+      <button class="tool-btn primary" onclick="gravarDocumento()" title="Gravar lançamento atual (F10)"><svg class="bimer-svg" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> Gravar (F10)</button>
+      <button class="tool-btn" onclick="novoDocumento()" title="Iniciar novo lançamento em branco"><svg class="bimer-svg" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Novo Lançamento</button>
+      <button class="tool-btn" onclick="limparCamposFormulario()" title="Limpar campos do formulário atual sem apagar dados gravados"><svg class="bimer-svg" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg> Limpar Campos</button>
+      <button class="tool-btn" onclick="abrirModalFolhaRostoDiaria()" title="Visualizar / Imprimir Folha de Rosto Resumida do Movimento do Dia (Borderô)"><svg class="bimer-svg" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg> Folha do Dia</button>
+      <button class="tool-btn" onclick="trocarAba('aba-relatorios')" title="Central de Relatórios Oficiais Bimer & BI"><svg class="bimer-svg" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> Relatórios Bimer</button>
 
       <!-- Seletor Compacto de Escala (Zoom) -->
       <div style="display: inline-flex; align-items: center; gap: 3px; background: #e2e8f0; padding: 1px 6px; border-radius: 3px; border: 1px solid #cbd5e1; margin-left: 4px;">
-        <span style="font-size: 10px; font-weight: 700; color: #475569;">🔍</span>
+        <svg class="bimer-svg bimer-svg-sm" style="color: #475569;" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         <select id="seletor-escala-zoom" onchange="alterarZoom(this.value)" style="border: none; background: transparent; font-size: 10.5px; font-weight: 700; color: #334155; outline: none; cursor: pointer; padding: 1px 2px;">
           <option value="80%">80%</option>
           <option value="85%">85%</option>
@@ -841,22 +876,22 @@
 
       <!-- Perfil do Gestor Roberto & Logout no Extremo Canto Direito -->
       <div id="user-session-bar" style="display: inline-flex; align-items: center; gap: 6px; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 2px 8px; border-radius: 3px; font-size: 10.5px; margin-left: 6px;">
-        <span style="color: #166534; font-weight: 700;">👤 <span id="user-name-display">Roberto</span></span>
-        <button type="button" class="tool-btn" style="padding: 1px 5px; font-size: 9.5px;" onclick="abrirModalSenha()" title="Alterar Senha de Acesso">🔑</button>
-        <button type="button" class="tool-btn" style="padding: 1px 5px; font-size: 9.5px; color: var(--danger);" onclick="fazerLogout()" title="Sair da Sessão">🚪</button>
+        <span style="color: #166534; font-weight: 700;"><svg class="bimer-svg bimer-svg-sm" style="color: #166534;" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> <span id="user-name-display">Roberto</span></span>
+        <button type="button" class="tool-btn" style="padding: 1px 5px; font-size: 9.5px;" onclick="abrirModalSenha()" title="Alterar Senha de Acesso"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><path d="M21 2l-2 2m-1.5 1.5L14 9l-1.5-1.5-3 3L8 9 5 12l2 2-3 3 1.5 1.5 2.5-2.5 1.5 1.5 3-3-1.5-1.5L15 8.5l1.5-1.5L22 3z"></path></svg></button>
+        <button type="button" class="tool-btn" style="padding: 1px 5px; font-size: 9.5px; color: var(--danger);" onclick="fazerLogout()" title="Sair da Sessão"><svg class="bimer-svg bimer-svg-xs" style="color: var(--danger);" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg></button>
       </div>
     </div>
   </div>
 
   <!-- NAVEGAÇÃO POR ABAS -->
   <div class="tabs-bar">
-    <button class="tab-btn active" onclick="trocarAba('aba-geral', this)">📄 1. Documento & Retenções</button>
-    <button class="tab-btn" onclick="trocarAba('aba-detalhes', this)">🔍 2. Detalhes & Origem</button>
-    <button class="tab-btn" onclick="trocarAba('aba-financeiro', this)">💼 3. Títulos a Pagar</button>
-    <button class="tab-btn tab-fixas" onclick="trocarAba('aba-previsoes', this)">📅 4. Despesas Fixas</button>
-    <button class="tab-btn tab-adiantamentos" onclick="trocarAba('aba-adiantamentos', this)">🤝 5. Adiantamentos</button>
-    <button class="tab-btn tab-conciliacao" onclick="trocarAba('aba-conciliacao', this)">🏦 6. Conciliação Bancária</button>
-    <button class="tab-btn tab-relatorios" onclick="trocarAba('aba-relatorios', this)">📊 7. Relatórios & BI</button>
+    <button class="tab-btn active" onclick="trocarAba('aba-geral', this)"><svg class="bimer-svg" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg> 1. Documento & Retenções</button>
+    <button class="tab-btn" onclick="trocarAba('aba-detalhes', this)"><svg class="bimer-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> 2. Detalhes & Origem</button>
+    <button class="tab-btn" onclick="trocarAba('aba-financeiro', this)"><svg class="bimer-svg" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg> 3. Títulos a Pagar</button>
+    <button class="tab-btn tab-fixas" onclick="trocarAba('aba-previsoes', this)"><svg class="bimer-svg" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> 4. Despesas Fixas</button>
+    <button class="tab-btn tab-adiantamentos" onclick="trocarAba('aba-adiantamentos', this)"><svg class="bimer-svg" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> 5. Adiantamentos</button>
+    <button class="tab-btn tab-conciliacao" onclick="trocarAba('aba-conciliacao', this)"><svg class="bimer-svg" viewBox="0 0 24 24"><line x1="3" y1="21" x2="21" y2="21"></line><line x1="3" y1="10" x2="21" y2="10"></line><polyline points="5 10 5 21"></polyline><polyline points="19 10 19 21"></polyline><polygon points="12 2 2 7 22 7 12 2"></polygon></svg> 6. Conciliação Bancária</button>
+    <button class="tab-btn tab-relatorios" onclick="trocarAba('aba-relatorios', this)"><svg class="bimer-svg" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> 7. Relatórios & BI</button>
   </div>
 
   <!-- CONTEÚDO PRINCIPAL -->
@@ -865,7 +900,7 @@
     <!-- ALERTA DE DUPLICIDADE DETALHADO -->
     <div id="duplicity-modal" class="duplicity-modal-card">
       <div class="duplicity-header">
-        <span>⛔ <strong>ALERTA DE DUPLICIDADE (TRAVA DE SEGURANÇA):</strong></span>
+        <span><svg class="bimer-svg bimer-svg-red" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg> <strong>ALERTA DE DUPLICIDADE (TRAVA DE SEGURANÇA):</strong></span>
         <span>Este documento já foi lançado no sistema e está registrado no Contas a Pagar!</span>
       </div>
       <div class="duplicity-details">
@@ -890,8 +925,8 @@
             <select id="tipo_documento" onchange="ajustarTipoDocumento()">
               <option value="NFSE">NFS-e - Nota Fiscal de Serviços Eletrônica</option>
               <option value="NFE">NF-e - Nota Fiscal de Produtos/Mercadorias</option>
-              <option value="DOMINGO_FERIADO">🛍️ Domingo / Feriado Trabalhado (Individual Vendedora)</option>
-              <option value="FOLHA">👥 Folha de Pagamento / Salários (Total Consolidado)</option>
+              <option value="DOMINGO_FERIADO">Domingo / Feriado Trabalhado (Individual Vendedora)</option>
+              <option value="FOLHA">Folha de Pagamento / Salários (Total Consolidado)</option>
               <option value="RECIBO">Recibo / RPA (Sem Documento Fiscal)</option>
               <option value="CONTRATO">Contrato / Locação / Aluguel Mensal</option>
               <option value="FATURA">Fatura de Concessionária (Luz, Água, Internet)</option>
@@ -910,10 +945,10 @@
             <label>Código da Operação (CFOP) *</label>
             <div class="bimer-lookup-group">
               <input type="text" id="cod_operacao" value="1.933 - Aquisição de serviço tributado pelo ISSQN" oninput="autocompletarCFOPLive(this)" onkeydown="onKeyDownLookupInput(event, 'cfop')" ondblclick="abrirBuscaRapida('cfop')" placeholder="Digite o CFOP (ex: 1933, 1556, 1102)..." style="font-weight: 600;" autocomplete="off">
-              <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('cfop')" title="Abrir Lista e Busca Rápida de CFOP (F2 ou duplo clique)">🔍 <span style="font-size: 8px;">▼</span></button>
+              <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('cfop')" title="Abrir Lista e Busca Rápida de CFOP (F2 ou duplo clique)"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> <span style="font-size: 8px;">▼</span></button>
             </div>
             <div id="badge-cfop-info" style="font-size: 10px; color: #0369a1; background: #e0f2fe; padding: 2px 6px; border-radius: 3px; border: 1px solid #bae6fd; margin-top: 3px; display: inline-block;">
-              📌 <strong>Tipo:</strong> Operação Interna (Dentro do Estado) • <strong>Natureza:</strong> Serviço Municipal (ISSQN / Prestadores)
+              <svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><path d="M12 17v5M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.89A2 2 0 0 1 15 10.77V6h1a1 1 0 0 0 0-2H8a1 1 0 0 0 0 2h1v4.77a2 2 0 0 1-1.11 1.79l-1.78.89A2 2 0 0 0 5 15.24z"></path></svg> <strong>Tipo:</strong> Operação Interna (Dentro do Estado) • <strong>Natureza:</strong> Serviço Municipal (ISSQN / Prestadores)
             </div>
           </div>
         </div>
@@ -924,10 +959,10 @@
             <label style="font-size: 11px; font-weight: 700; color: #1e3a8a;">CNAE / Atividade Econômica do Prestador (NFS-e)</label>
             <div class="bimer-lookup-group">
               <input type="text" id="cnae_servico" value="6201-5/01 - Desenvolvimento de programas de computador sob encomenda" oninput="autocompletarCNAELive(this)" onkeydown="onKeyDownLookupInput(event, 'cnae')" ondblclick="abrirBuscaRapida('cnae')" placeholder="Digite o CNAE (ex: 6201, 6920, 8121, 7020) ou serviço..." style="font-weight: 600; width: 100%;" autocomplete="off">
-              <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('cnae')" title="Abrir Lista e Busca Rápida de CNAE (F2 ou duplo clique)">🔍 <span style="font-size: 8px;">▼</span></button>
+              <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('cnae')" title="Abrir Lista e Busca Rápida de CNAE (F2 ou duplo clique)"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> <span style="font-size: 8px;">▼</span></button>
             </div>
             <div id="badge-cnae-info" style="font-size: 10px; color: #065f46; background: #ecfdf5; padding: 2px 6px; border-radius: 3px; border: 1px solid #a7f3d0; margin-top: 3px; display: inline-block;">
-              📌 <strong>Item LC 116:</strong> 01.01 • <strong>Enquadramento:</strong> Serviços de TI (Retenção IRRF 1,5% + PCC 4,65%)
+              <svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><path d="M12 17v5M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.89A2 2 0 0 1 15 10.77V6h1a1 1 0 0 0 0-2H8a1 1 0 0 0 0 2h1v4.77a2 2 0 0 1-1.11 1.79l-1.78.89A2 2 0 0 0 5 15.24z"></path></svg> <strong>Item LC 116:</strong> 01.01 • <strong>Enquadramento:</strong> Serviços de TI (Retenção IRRF 1,5% + PCC 4,65%)
             </div>
           </div>
           <div style="flex: 1; min-width: 180px;">
@@ -942,10 +977,10 @@
             <label style="font-size: 11px; font-weight: 700; color: #004b87;">Categoria / Plano de Contas Oficial (Grupos & Categorias) *</label>
             <div class="bimer-lookup-group">
               <input type="text" id="categoria_rapida_aba1" value="12101 - Tecidos" oninput="autocompletarCategoriaLive(this)" onkeydown="onKeyDownLookupInput(event, 'categoria')" ondblclick="abrirBuscaRapida('categoria')" placeholder="Digite o código (ex: 12101, 21101, 21114) ou nome..." style="font-weight: 600; width: 100%;" autocomplete="off">
-              <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('categoria')" title="Abrir Lista e Busca Rápida de Categorias (F2 ou duplo clique)">🔍 <span style="font-size: 8px;">▼</span></button>
+              <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('categoria')" title="Abrir Lista e Busca Rápida de Categorias (F2 ou duplo clique)"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> <span style="font-size: 8px;">▼</span></button>
             </div>
             <div id="badge-categoria-info" style="font-size: 10px; color: #0369a1; background: #e0f2fe; padding: 2px 6px; border-radius: 3px; border: 1px solid #bae6fd; margin-top: 3px; display: inline-block;">
-              📌 <strong>Macro:</strong> 2 - VARIÁVEIS • <strong>Grupo:</strong> 121 - Custo Variável - Produção • <strong>Resp:</strong> Compras
+              <svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><path d="M12 17v5M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.89A2 2 0 0 1 15 10.77V6h1a1 1 0 0 0 0-2H8a1 1 0 0 0 0 2h1v4.77a2 2 0 0 1-1.11 1.79l-1.78.89A2 2 0 0 0 5 15.24z"></path></svg> <strong>Macro:</strong> 2 - VARIÁVEIS • <strong>Grupo:</strong> 121 - Custo Variável - Produção • <strong>Resp:</strong> Compras
             </div>
           </div>
           <div style="flex: 1; min-width: 180px;">
@@ -958,7 +993,7 @@
       <!-- DECODIFICADOR INTELIGENTE DE BOLETO / LINHA DIGITÁVEL -->
       <fieldset style="background: #f0fdf4; border: 1px solid #86efac; margin-bottom: 7px;">
         <legend style="color: #166534; font-weight: 700; background: #dcfce7; padding: 2px 8px; border-radius: 3px; border: 1px solid #86efac;">
-          💳 Leitura Rápida de Boleto (Código de Barras Febraban & Concessionárias)
+          <svg class="bimer-svg" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> Leitura Rápida de Boleto (Código de Barras Febraban & Concessionárias)
         </legend>
         <div class="form-field" style="margin-top: 2px;">
           <input type="text" id="linha_digitavel" oninput="processarLinhaDigitavelLive()" placeholder="Cole aqui a linha digitável do boleto (47 dígitos) ou conta de consumo (48 dígitos) para preencher banco, vencimento e valor..." style="font-family: monospace; font-size: 12px; font-weight: 600; color: #1e3a8a; padding: 5px 8px;">
@@ -973,14 +1008,14 @@
             <label>CNPJ / CPF do Favorecido *</label>
             <div class="bimer-lookup-group">
               <input type="text" id="cnpj_favorecido" placeholder="00.000.000/0001-00" oninput="onInputCNPJFavorecidoLive(this); checarDuplicidadeLive(); atualizarHistoricoDinamico();" onkeydown="onKeyDownLookupInput(event, 'fornecedor')" ondblclick="abrirBuscaRapida('fornecedor')" autocomplete="off">
-              <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('fornecedor')" title="Abrir Lista e Busca Rápida de Fornecedores/Prestadores (F2 ou duplo clique)">🔍 <span style="font-size: 8px;">▼</span></button>
+              <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('fornecedor')" title="Abrir Lista e Busca Rápida de Fornecedores/Prestadores (F2 ou duplo clique)"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> <span style="font-size: 8px;">▼</span></button>
             </div>
           </div>
           <div class="form-field" style="grid-column: span 2;">
             <label>Razão Social / Nome do Favorecido *</label>
             <div class="bimer-lookup-group">
               <input type="text" id="razao_favorecido" placeholder="Ex: Alfa Prestadora de Serviços e Tecnologia Ltda" oninput="atualizarHistoricoDinamico(); autocompletarFornecedorLive(this);" onkeydown="onKeyDownLookupInput(event, 'fornecedor')" ondblclick="abrirBuscaRapida('fornecedor')" autocomplete="off">
-              <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('fornecedor')" title="Abrir Lista e Busca Rápida de Fornecedores/Prestadores (F2 ou duplo clique)">🔍 <span style="font-size: 8px;">▼</span></button>
+              <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('fornecedor')" title="Abrir Lista e Busca Rápida de Fornecedores/Prestadores (F2 ou duplo clique)"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> <span style="font-size: 8px;">▼</span></button>
             </div>
           </div>
         </div>
@@ -1012,15 +1047,15 @@
       <fieldset id="secao-retencoes-fiscais" style="margin-top: 8px; border: 1px solid #cbd5e1;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
           <legend style="display: flex; align-items: center; gap: 8px; margin-bottom: 0;">
-            <span>🏛️ Retenções Tributárias na Fonte (ISS, IRRF, PIS, COFINS, CSLL)</span>
+            <span><svg class="bimer-svg" viewBox="0 0 24 24"><line x1="3" y1="21" x2="21" y2="21"></line><line x1="3" y1="10" x2="21" y2="10"></line><polyline points="5 10 5 21"></polyline><polyline points="19 10 19 21"></polyline><polygon points="12 2 2 7 22 7 12 2"></polygon></svg> Retenções Tributárias na Fonte (ISS, IRRF, PIS, COFINS, CSLL)</span>
             <span id="badge-retencoes-status" style="font-size: 10px; font-weight: 600; background: #e2e8f0; color: #475569; padding: 2px 8px; border-radius: 10px;">Sem retenções</span>
           </legend>
           <div style="display: flex; gap: 6px; align-items: center;">
             <button type="button" class="tool-btn" id="btn-toggle-retencoes" onclick="alternarVisibilidadeRetencoes()" style="padding: 2px 8px; font-size: 11px;">
-              🔼 Recolher Grade
+              <svg class="bimer-svg" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"></polyline></svg> Recolher Grade
             </button>
             <button type="button" class="tool-btn" style="padding: 2px 8px; font-size: 11px;" onclick="sugerirVencimentosFiscais()">
-              📅 Sugerir Vencimentos
+              <svg class="bimer-svg" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Sugerir Vencimentos
             </button>
           </div>
         </div>
@@ -1096,11 +1131,11 @@
             <span><strong>Total Retenção Municipal (ISS):</strong> <span id="tot-municipal" style="color: var(--alterdata-blue); font-weight: 700;">R$ 0,00</span></span>
           </div>
 
-          <!-- 🏛️ PAINEL DO NOVO PADRÃO TRIBUTÁRIO (REFORMA TRIBUTÁRIA • EC 132/2023 - IVA DUAL: IBS & CBS) -->
+          <!-- PAINEL DO NOVO PADRÃO TRIBUTÁRIO (REFORMA TRIBUTÁRIA • EC 132/2023 - IVA DUAL: IBS & CBS) -->
           <div style="margin-top: 12px; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 6px; padding: 10px 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
               <span style="font-size: 11.5px; font-weight: 800; color: #166534; display: flex; align-items: center; gap: 6px;">
-                🏛️ NOVO PADRÃO TRIBUTÁRIO NACIONAL (REFORMA TRIBUTÁRIA • EC 132/2023)
+                <svg class="bimer-svg" viewBox="0 0 24 24"><line x1="3" y1="21" x2="21" y2="21"></line><line x1="3" y1="10" x2="21" y2="10"></line><polyline points="5 10 5 21"></polyline><polyline points="19 10 19 21"></polyline><polygon points="12 2 2 7 22 7 12 2"></polygon></svg> NOVO PADRÃO TRIBUTÁRIO NACIONAL (REFORMA TRIBUTÁRIA • EC 132/2023)
                 <span style="background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; font-size: 9.5px; padding: 2px 6px; border-radius: 4px; font-weight: 700;">Transição 2026/2027 • IVA Dual</span>
               </span>
               <span style="font-size: 10.5px; color: #15803d; font-weight: 600;">Layout Nacional NFS-e & NF-e</span>
@@ -1166,8 +1201,8 @@
           </div>
           <textarea id="historico_contabil_completo" rows="2" style="font-size: 12px; line-height: 1.45; font-family: inherit;" placeholder="Histórico formal para escrituração e conciliação contábil/bancária (gerado automaticamente com ID e CNPJ)..."></textarea>
           <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 3px; font-size: 10px; color: var(--text-muted);">
-            <span>💡 Padrão Diário/Razão: ID do lançamento, CNPJ em destaque, fornecedor, documento e centro de custo integrados.</span>
-            <a href="javascript:void(0)" onclick="atualizarHistoricoDinamico()" style="color: var(--alterdata-blue); font-weight: 600; text-decoration: underline;">🔄 Regerar Texto</a>
+            <span><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg> Padrão Diário/Razão: ID do lançamento, CNPJ em destaque, fornecedor, documento e centro de custo integrados.</span>
+            <a href="javascript:void(0)" onclick="atualizarHistoricoDinamico()" style="color: var(--alterdata-blue); font-weight: 600; text-decoration: underline;"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg> Regerar Texto</a>
           </div>
         </div>
       </fieldset>
@@ -1200,22 +1235,22 @@
         <!-- REGUA DA AGENDA FINANCEIRA DE VENCIMENTOS -->
         <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 8px;">
           <div onclick="filtrarAgendaVencimento('vencidos')" style="background: #fef2f2; border: 1px solid #fca5a5; padding: 6px 10px; border-radius: 3px; cursor: pointer; transition: all 0.1s;" title="Clique para filtrar vencidos">
-            <div style="font-size: 10px; font-weight: 700; color: #991b1b; text-transform: uppercase;">🚨 Vencidos (Atraso)</div>
+            <div style="font-size: 10px; font-weight: 700; color: #991b1b; text-transform: uppercase;"><svg class="bimer-svg bimer-svg-xs" style="stroke:#dc2626;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg> Vencidos (Atraso)</div>
             <div style="font-size: 13px; font-weight: 800; color: #dc2626;" id="agenda-tot-vencidos">R$ 0,00</div>
             <div style="font-size: 9.5px; color: #7f1d1d;" id="agenda-qtd-vencidos">0 contas</div>
           </div>
           <div onclick="filtrarAgendaVencimento('hoje')" style="background: #fffbeb; border: 1px solid #fcd34d; padding: 6px 10px; border-radius: 3px; cursor: pointer; transition: all 0.1s;" title="Clique para filtrar o que vence hoje">
-            <div style="font-size: 10px; font-weight: 700; color: #92400e; text-transform: uppercase;">📅 Vence Hoje</div>
+            <div style="font-size: 10px; font-weight: 700; color: #92400e; text-transform: uppercase;"><svg class="bimer-svg bimer-svg-xs" style="stroke:#b45309;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Vence Hoje</div>
             <div style="font-size: 13px; font-weight: 800; color: #b45309;" id="agenda-tot-hoje">R$ 0,00</div>
             <div style="font-size: 9.5px; color: #78350f;" id="agenda-qtd-hoje">0 contas</div>
           </div>
           <div onclick="filtrarAgendaVencimento('semana')" style="background: #eff6ff; border: 1px solid #93c5fd; padding: 6px 10px; border-radius: 3px; cursor: pointer; transition: all 0.1s;" title="Clique para filtrar próximos 7 dias">
-            <div style="font-size: 10px; font-weight: 700; color: #1e40af; text-transform: uppercase;">📆 Próximos 7 Dias</div>
+            <div style="font-size: 10px; font-weight: 700; color: #1e40af; text-transform: uppercase;"><svg class="bimer-svg bimer-svg-xs" style="stroke:#1e40af;" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Próximos 7 Dias</div>
             <div style="font-size: 13px; font-weight: 800; color: var(--alterdata-blue);" id="agenda-tot-semana">R$ 0,00</div>
             <div style="font-size: 9.5px; color: #1e3a8a;" id="agenda-qtd-semana">0 contas</div>
           </div>
           <div onclick="filtrarAgendaVencimento('mes')" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 6px 10px; border-radius: 3px; cursor: pointer; transition: all 0.1s;" title="Clique para filtrar restante do mês">
-            <div style="font-size: 10px; font-weight: 700; color: #475569; text-transform: uppercase;">🗓️ Restante do Mês</div>
+            <div style="font-size: 10px; font-weight: 700; color: #475569; text-transform: uppercase;"><svg class="bimer-svg bimer-svg-xs" style="stroke:#475569;" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Restante do Mês</div>
             <div style="font-size: 13px; font-weight: 800; color: #1e293b;" id="agenda-tot-mes">R$ 0,00</div>
             <div style="font-size: 9.5px; color: #64748b;" id="agenda-qtd-mes">0 contas</div>
           </div>
@@ -1226,30 +1261,30 @@
           <!-- 1. SELETOR DE STATUS (SUB-ABAS) -->
           <div style="display: flex; gap: 4px; background: #e2e8f0; padding: 2px; border-radius: 4px;" id="subtabs-status-titulos">
             <button class="tool-btn" id="subtab-btn-abertos" onclick="setSubabaStatus('pendente', this)" style="background: var(--alterdata-blue); color: white; font-weight: 700; border: none; border-radius: 3px; padding: 5px 12px; font-size: 11.5px; display: flex; align-items: center; gap: 6px;">
-              <span>⏳ Em Aberto</span>
+              <span><svg class="bimer-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Em Aberto</span>
               <span id="badge-count-abertos" style="background: rgba(255,255,255,0.25); color: #fff; padding: 1px 6px; border-radius: 10px; font-size: 10px;">0</span>
             </button>
             <button class="tool-btn" id="subtab-btn-baixados" onclick="setSubabaStatus('conciliado', this)" style="background: transparent; color: #475569; font-weight: 700; border: none; border-radius: 3px; padding: 5px 12px; font-size: 11.5px; display: flex; align-items: center; gap: 6px;">
-              <span>✅ Baixados & Conciliados</span>
+              <span><svg class="bimer-svg bimer-svg-green" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Baixados & Conciliados</span>
               <span id="badge-count-baixados" style="background: #cbd5e1; color: #334155; padding: 1px 6px; border-radius: 10px; font-size: 10px;">0</span>
             </button>
             <button class="tool-btn" id="subtab-btn-todos" onclick="setSubabaStatus('todos', this)" style="background: transparent; color: #475569; font-weight: 700; border: none; border-radius: 3px; padding: 5px 12px; font-size: 11.5px; display: flex; align-items: center; gap: 6px;">
-              <span>📋 Todos</span>
+              <span><svg class="bimer-svg" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg> Todos</span>
               <span id="badge-count-todos" style="background: #cbd5e1; color: #334155; padding: 1px 6px; border-radius: 10px; font-size: 10px;">0</span>
             </button>
           </div>
 
           <!-- 2. CAMPO DE BUSCA INSTANTÂNEA -->
           <div style="flex: 1; min-width: 260px; max-width: 480px; position: relative; display: flex; align-items: center;">
-            <span style="position: absolute; left: 8px; font-size: 12px; color: #64748b; pointer-events: none;">🔍</span>
+            <span style="position: absolute; left: 8px; color: #64748b; pointer-events: none; display: flex; align-items: center;"><svg class="bimer-svg bimer-svg-sm" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
             <input type="text" id="campo-busca-titulos" placeholder="Buscar por favorecido, CNPJ/CPF, documento ou ID..." oninput="filtrarTitulosPorTexto(this.value)" style="width: 100%; padding: 5px 26px 5px 28px; font-size: 11.5px; border: 1px solid #94a3b8; border-radius: 3px; outline: none; background: #ffffff;">
-            <button onclick="limparBuscaTitulos()" id="btn-limpar-busca-titulos" style="position: absolute; right: 6px; background: none; border: none; font-size: 11px; color: #94a3b8; cursor: pointer; display: none;" title="Limpar busca">✖</button>
+            <button onclick="limparBuscaTitulos()" id="btn-limpar-busca-titulos" style="position: absolute; right: 6px; background: none; border: none; font-size: 11px; color: #94a3b8; cursor: pointer; display: none;" title="Limpar busca"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
           </div>
 
           <!-- 3. AÇÃO EXECUTIVA DESTACADA -->
           <div style="display: flex; gap: 6px;">
             <button class="tool-btn primary" onclick="abrirModalAutorizacao()" style="background: #004b87; color: white; font-weight: 700; border-color: #003661; padding: 5px 12px;" title="Abrir Lote de Autorização para Diretoria">
-              📑 Autorização Diretoria (Lote)
+              <svg class="bimer-svg" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg> Autorização Diretoria (Lote)
             </button>
           </div>
         </div>
@@ -1259,8 +1294,8 @@
           <div style="display: flex; gap: 5px; flex-wrap: wrap; align-items: center;" id="botoes-filtro-titulos">
             <span style="font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-right: 2px;">Filtrar Tipo:</span>
             <button class="tool-btn" onclick="filtrarTipoTitulos('todos', this)" style="background: var(--alterdata-blue); color: white; font-size: 11px; padding: 4px 10px; font-weight: 600;">Todos os Títulos</button>
-            <button class="tool-btn" onclick="filtrarTipoTitulos('folha_feriados', this)" style="font-size: 11px; padding: 4px 10px; font-weight: 600;">👥 Folha, Domingos & Feriados</button>
-            <button class="tool-btn" onclick="filtrarTipoTitulos('imposto', this)" style="font-size: 11px; padding: 4px 10px; font-weight: 600;">🏛️ Tributos Retidos</button>
+            <button class="tool-btn" onclick="filtrarTipoTitulos('folha_feriados', this)" style="font-size: 11px; padding: 4px 10px; font-weight: 600;"><svg class="bimer-svg" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> Folha, Domingos & Feriados</button>
+            <button class="tool-btn" onclick="filtrarTipoTitulos('imposto', this)" style="font-size: 11px; padding: 4px 10px; font-weight: 600;"><svg class="bimer-svg" viewBox="0 0 24 24"><line x1="3" y1="21" x2="21" y2="21"></line><line x1="3" y1="10" x2="21" y2="10"></line><polyline points="5 10 5 21"></polyline><polyline points="19 10 19 21"></polyline><polygon points="12 2 2 7 22 7 12 2"></polygon></svg> Tributos Retidos</button>
           </div>
           <div style="display: flex; align-items: center; gap: 10px;">
             <div style="display: flex; align-items: center; gap: 4px;">
@@ -1299,7 +1334,7 @@
           <tbody id="grid-titulos-body"></tbody>
         </table>
         <div id="empty-titulos-msg" style="text-align: center; padding: 30px; color: var(--text-muted);">
-          Nenhum título lançado. Preencha as abas e clique em "💾 Gravar (F10)".
+          Nenhum título lançado. Preencha as abas e clique no botão "Gravar (F10)".
         </div>
       </fieldset>
     </div>
@@ -1376,7 +1411,7 @@
           </div>
 
           <button type="button" class="tool-btn primary" style="width: 100%; justify-content: center;" onclick="cadastrarDespesaFixa()">
-            ➕ Gerar Previsões no Fluxo de Caixa
+            <svg class="bimer-svg" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Gerar Previsões no Fluxo de Caixa
           </button>
 
 
@@ -1387,7 +1422,7 @@
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
             <legend style="margin-bottom: 0;">Projeção do Fluxo de Caixa - Despesas Fixas & Recorrências</legend>
             <button class="tool-btn" style="padding: 2px 8px; font-size: 11px; color: var(--danger);" onclick="limparPrevisoes()">
-              🗑️ Limpar Previsões
+              <svg class="bimer-svg" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg> Limpar Previsões
             </button>
           </div>
 
@@ -1429,7 +1464,7 @@
                 </select>
               </div>
               <button type="button" class="tool-btn" onclick="limparFiltrosPrevisao()" style="padding: 2px 6px; font-size: 10.5px;" title="Redefinir filtros para Todos">
-                🔄 Limpar Filtros
+                <svg class="bimer-svg" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg> Limpar Filtros
               </button>
             </div>
           </div>
@@ -1465,7 +1500,7 @@
             <tbody id="grid-previsoes-body"></tbody>
           </table>
           <div id="empty-previsoes-msg" style="text-align: center; padding: 30px; color: var(--text-muted);">
-            Nenhuma previsão cadastrada. Use o formulário ao lado ou clique em "⚡ Carregar Despesas Fixas Típicas".
+            Nenhuma previsão cadastrada. Use o formulário ao lado ou clique em "Carregar Despesas Fixas Típicas".
           </div>
         </fieldset>
 
@@ -1490,12 +1525,12 @@
 
             <div id="alerta-bloqueio-adiantamento" style="display: none; margin-top: 5px; background: #fef2f2; border: 1px solid #f87171; border-radius: 4px; padding: 7px 9px; font-size: 11px; color: #991b1b; line-height: 1.4;">
               <div style="font-weight: 700; display: flex; align-items: center; gap: 4px; margin-bottom: 2px;">
-                <span id="alerta-bloqueio-titulo">⛔ TRAVA DE COMPLIANCE / PENDÊNCIA IDENTIFICADA</span>
+                <span id="alerta-bloqueio-titulo"><svg class="bimer-svg bimer-svg-red" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg> TRAVA DE COMPLIANCE / PENDÊNCIA IDENTIFICADA</span>
               </div>
               <div id="alerta-bloqueio-msg">Este colaborador já possui um adiantamento em aberto.</div>
               <div id="alerta-bloqueio-link" style="margin-top: 4px;">
                 <a href="javascript:void(0)" onclick="abrirAdiantamentoPendenteLocalizado()" style="color: inherit; font-weight: 700; text-decoration: underline;">
-                  🔍 Abrir prestação de contas pendente para concluir
+                  <svg class="bimer-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> Abrir prestação de contas pendente para concluir
                 </a>
               </div>
             </div>
@@ -1538,7 +1573,7 @@
           </div>
 
           <button type="button" id="btn-conceder-ad" class="tool-btn primary" style="width: 100%; justify-content: center;" onclick="concederAdiantamento()">
-            ➕ Conceder Adiantamento
+            <svg class="bimer-svg" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Conceder Adiantamento
           </button>
 
 
@@ -1546,7 +1581,7 @@
 
         <!-- Lista Visual de Todos os Adiantamentos -->
         <fieldset style="margin-top: 8px;">
-          <legend>📋 Adiantamentos Cadastrados (<span id="total-ad-count">0</span>)</legend>
+          <legend><svg class="bimer-svg" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg> Adiantamentos Cadastrados (<span id="total-ad-count">0</span>)</legend>
           <p style="color: var(--text-muted); font-size: 10.5px; margin-bottom: 6px;">
             Clique em qualquer colaborador abaixo para abrir a prestação de contas dele ao lado:
           </p>
@@ -1577,7 +1612,7 @@
               <select id="sel_adiantamento_ativo" onchange="trocarAdiantamentoAtivo()" style="padding: 4px 8px; border: 1px solid #94a3b8; border-radius: 2px; font-weight: 600;">
               </select>
               <button class="tool-btn" style="padding: 2px 8px; font-size: 11px;" onclick="abrirRelatorioPrestacaoContas()">
-                🖨️ Imprimir Fechamento
+                <svg class="bimer-svg" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg> Imprimir Fechamento
               </button>
             </div>
           </div>
@@ -1604,7 +1639,7 @@
           <!-- Formulário Rápido de Lançamento de Comprovante / Gasto -->
           <div id="form-inserir-gasto-container" style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 4px; padding: 10px; margin-bottom: 12px;">
             <div style="font-weight: 700; color: var(--alterdata-blue); font-size: 11px; margin-bottom: 6px;">
-              ➕ Inserir Comprovante / Nota / Recibo de Gasto
+              <svg class="bimer-svg" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Inserir Comprovante / Nota / Recibo de Gasto
             </div>
             <div style="display: grid; grid-template-columns: 100px 140px 1fr 110px 100px; gap: 6px; align-items: end;">
               <div class="form-field">
@@ -1671,7 +1706,7 @@
       
       <!-- CONTROLES SUPERIORES & IMPORTAÇÃO DE EXTRATO -->
       <fieldset style="background: #ffffff; border: 1px solid #cbd5e1; margin-bottom: 10px; padding: 10px 14px;">
-        <legend style="color: #004b87; font-weight: 700; font-size: 11px;">🏦 Configuração da Conta & Importação do Extrato Bancário</legend>
+        <legend style="color: #004b87; font-weight: 700; font-size: 11px;"><svg class="bimer-svg" viewBox="0 0 24 24"><line x1="3" y1="21" x2="21" y2="21"></line><line x1="3" y1="10" x2="21" y2="10"></line><polyline points="5 10 5 21"></polyline><polyline points="19 10 19 21"></polyline><polygon points="12 2 2 7 22 7 12 2"></polygon></svg> Configuração da Conta & Importação do Extrato Bancário</legend>
         
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
           
@@ -1679,9 +1714,9 @@
             <div>
               <label style="font-size: 10px; font-weight: 700; color: #475569; display: block; margin-bottom: 2px;">Conta Corrente / Banco:</label>
               <select id="conc-conta-banco" style="padding: 5px 8px; font-size: 11px; font-weight: 700; border: 1px solid #cbd5e1; border-radius: 4px; color: #004b87; background: #f8fafc;">
-                <option value="ITAU_MATRIZ">🏦 Banco Itaú - C/C Matriz (Ag 0041 / C/C 45910-2)</option>
-                <option value="SANTANDER_FOLHA">🏦 Banco Santander - C/C Fornecedores & Folha (Ag 3310 / C/C 10294-8)</option>
-                <option value="BRADESCO_LOJAS">🏦 Banco Bradesco - C/C Operações Lojas (Ag 1205 / C/C 88210-4)</option>
+                <option value="ITAU_MATRIZ">Banco Itaú - C/C Matriz (Ag 0041 / C/C 45910-2)</option>
+                <option value="SANTANDER_FOLHA">Banco Santander - C/C Fornecedores & Folha (Ag 3310 / C/C 10294-8)</option>
+                <option value="BRADESCO_LOJAS">Banco Bradesco - C/C Operações Lojas (Ag 1205 / C/C 88210-4)</option>
               </select>
             </div>
 
@@ -1699,16 +1734,16 @@
           <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
             <input type="file" id="conc-file-input" accept=".ofx,.txt,.csv" style="display: none;" onchange="processarArquivoExtrato(event)">
             <button class="tool-btn" onclick="document.getElementById('conc-file-input').click()" title="Importar arquivo OFX baixado do Internet Banking">
-              📥 Importar Extrato (.OFX)
+              <svg class="bimer-svg" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Importar Extrato (.OFX)
             </button>
             <button class="tool-btn primary" onclick="carregarExtratoExemploReal()" style="background: #0284c7; color: white; font-weight: 700; border-color: #0369a1;" title="Carregar extrato bancário do Itaú (08/09/2026)">
-              ⚡ Carregar Extrato Itaú (Set/26)
+              <svg class="bimer-svg" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg> Carregar Extrato Itaú (Set/26)
             </button>
             <button class="tool-btn primary" onclick="conciliarAutomaticamente()" style="background: #059669; color: white; font-weight: 700; border-color: #047857;" title="Cruzar valores e datas com o Contas a Pagar">
-              🎯 Conciliar Automaticamente
+              <svg class="bimer-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg> Conciliar Automaticamente
             </button>
             <button class="tool-btn" onclick="limparExtratoConciliacao()" title="Limpar extrato atual">
-              🧹 Limpar
+              <svg class="bimer-svg" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg> Limpar
             </button>
           </div>
 
@@ -1735,7 +1770,7 @@
         <div id="conc-box-diferenca" style="background: #f0fdf4; border: 1px solid #bbf7d0; border-left: 4px solid #10b981; padding: 10px 14px; border-radius: 4px;">
           <div style="font-size: 9.5px; text-transform: uppercase; font-weight: 800; color: #065f46;">4. Diferença de Conciliação</div>
           <div style="font-size: 16px; font-weight: 800; color: #059669;" id="conc-card-diferenca">R$ 0,00</div>
-          <div style="font-size: 9.5px; font-weight: 700; color: #047857; margin-top: 2px;" id="conc-card-status">✓ Aguardando dados</div>
+          <div style="font-size: 9.5px; font-weight: 700; color: #047857; margin-top: 2px;" id="conc-card-status"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> Aguardando dados</div>
         </div>
       </div>
 
@@ -1746,7 +1781,7 @@
         <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 4px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
           <div style="background: #0f172a; color: #ffffff; padding: 7px 12px; display: flex; justify-content: space-between; align-items: center;">
             <div style="font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
-              <span>🏛️</span>
+              <span><svg class="bimer-svg" viewBox="0 0 24 24"><line x1="3" y1="21" x2="21" y2="21"></line><line x1="3" y1="10" x2="21" y2="10"></line><polyline points="5 10 5 21"></polyline><polyline points="19 10 19 21"></polyline><polygon points="12 2 2 7 22 7 12 2"></polygon></svg></span>
               <span>Extrato Bancário Real (Banco Itaú / OFX)</span>
             </div>
             <span style="font-size: 10px; color: #94a3b8;" id="conc-extrato-contador">0 lançamentos</span>
@@ -1767,7 +1802,7 @@
               <tbody id="conc-extrato-body">
                 <tr>
                   <td colspan="6" style="text-align: center; padding: 30px; color: #64748b;">
-                    Nenhum extrato importado. Clique em <strong>"📥 Importar Extrato (.OFX)"</strong> ou <strong>"⚡ Carregar Extrato Real"</strong> acima.
+                    Nenhum extrato importado. Clique em <strong>"<svg class="bimer-svg" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Importar Extrato (.OFX)"</strong> ou <strong>"Carregar Extrato Real"</strong> acima.
                   </td>
                 </tr>
               </tbody>
@@ -1779,7 +1814,7 @@
         <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 4px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
           <div style="background: #004b87; color: #ffffff; padding: 7px 12px; display: flex; justify-content: space-between; align-items: center;">
             <div style="font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
-              <span>💼</span>
+              <span><svg class="bimer-svg" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg></span>
               <span>Títulos Registrados no Contas a Pagar (JR Solutions)</span>
             </div>
             <span style="font-size: 10px; color: #93c5fd;" id="conc-sistema-contador">0 títulos</span>
@@ -1813,21 +1848,21 @@
       
       <!-- CONTROLES SUPERIORES: SELEÇÃO DO RELATÓRIO E FILTROS -->
       <fieldset style="background: #ffffff; border: 1px solid #cbd5e1; margin-bottom: 10px; padding: 10px 14px;">
-        <legend style="color: #4338ca; font-weight: 700; font-size: 11px;">📊 Central de Relatórios Oficiais Bimer & BI (Módulo Contas a Pagar / Gestão Financeira)</legend>
+        <legend style="color: #4338ca; font-weight: 700; font-size: 11px;"><svg class="bimer-svg" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> Central de Relatórios Oficiais Bimer & BI (Módulo Contas a Pagar / Gestão Financeira)</legend>
 
         <!-- SUB-BARRA DE SELEÇÃO DOS 4 RELATÓRIOS OFICIAIS -->
         <div style="display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
           <button class="btn-filtro-rapido active" id="btn-rel-vencimento" onclick="selecionarRelatorioBimer('vencimento')" style="padding: 6px 12px; font-weight: 700; font-size: 11px;">
-            📑 A) Títulos por Vencimento (Posição Analítica)
+            <svg class="bimer-svg" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg> A) Títulos por Vencimento (Posição Analítica)
           </button>
           <button class="btn-filtro-rapido" id="btn-rel-retencoes" onclick="selecionarRelatorioBimer('retencoes')" style="padding: 6px 12px; font-weight: 700; font-size: 11px;">
-            🏛️ B) Retenções Tributárias na Fonte (Fiscal / EFD-Reinf)
+            <svg class="bimer-svg" viewBox="0 0 24 24"><line x1="3" y1="21" x2="21" y2="21"></line><line x1="3" y1="10" x2="21" y2="10"></line><polyline points="5 10 5 21"></polyline><polyline points="19 10 19 21"></polyline><polygon points="12 2 2 7 22 7 12 2"></polygon></svg> B) Retenções Tributárias na Fonte (Fiscal / EFD-Reinf)
           </button>
           <button class="btn-filtro-rapido" id="btn-rel-ccusto" onclick="selecionarRelatorioBimer('ccusto')" style="padding: 6px 12px; font-weight: 700; font-size: 11px;">
-            🏢 C) Realizado por Centro de Custo & Lojas (Gerencial)
+            <svg class="bimer-svg" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="9" y1="22" x2="9" y2="18"></line><line x1="15" y1="22" x2="15" y2="18"></line></svg> C) Realizado por Centro de Custo & Lojas (Gerencial)
           </button>
           <button class="btn-filtro-rapido" id="btn-rel-fluxo" onclick="selecionarRelatorioBimer('fluxo')" style="padding: 6px 12px; font-weight: 700; font-size: 11px;">
-            📈 D) Fluxo de Caixa (Realizado vs. Previsto)
+            <svg class="bimer-svg" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg> D) Fluxo de Caixa (Realizado vs. Previsto)
           </button>
         </div>
 
@@ -1869,13 +1904,13 @@
           <!-- BOTÕES DE IMPRESSÃO & EXPORTAÇÃO -->
           <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
             <button class="tool-btn" onclick="renderizarRelatorioAtual()" title="Recarregar dados do relatório">
-              🔄 Atualizar
+              <svg class="bimer-svg" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg> Atualizar
             </button>
             <button class="tool-btn" onclick="exportarRelatorioCSV()" title="Exportar dados do relatório para arquivo CSV / Excel">
-              📥 Exportar CSV
+              <svg class="bimer-svg" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Exportar CSV
             </button>
             <button class="tool-btn primary" onclick="imprimirRelatorioBimer()" style="background: #4338ca; color: white; font-weight: 700; border-color: #3730a3;" title="Imprimir em folha A4 oficial ou salvar em PDF">
-              🖨️ Imprimir / Salvar PDF
+              <svg class="bimer-svg" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg> Imprimir / Salvar PDF
             </button>
           </div>
         </div>
@@ -1994,7 +2029,7 @@
 
     <div class="no-print" style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 10px;">
       <button class="tool-btn" onclick="fecharFolhaRosto()">Fechar</button>
-      <button class="tool-btn primary" onclick="window.print()">🖨️ Imprimir Folha de Rosto</button>
+      <button class="tool-btn primary" onclick="window.print()"><svg class="bimer-svg" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg> Imprimir Folha de Rosto</button>
     </div>
   </div>
 </div>
@@ -2007,7 +2042,7 @@
     <div class="no-print" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 12px 16px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
       <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
         <div style="display: flex; align-items: center; gap: 6px;">
-          <label style="font-size: 11.5px; font-weight: 700; color: #1e293b;">📅 Data do Movimento:</label>
+          <label style="font-size: 11.5px; font-weight: 700; color: #1e293b;">Data do Movimento:</label>
           <input type="date" id="frd-data-movimento" onchange="renderizarFolhaRostoDiaria()" style="padding: 5px 8px; font-size: 12px; border: 1px solid #cbd5e1; border-radius: 4px; font-weight: 700;">
         </div>
         <div style="display: flex; align-items: center; gap: 6px;">
@@ -2025,9 +2060,9 @@
       </div>
 
       <div style="display: flex; gap: 8px;">
-        <button class="tool-btn" onclick="renderizarFolhaRostoDiaria()">🔄 Atualizar</button>
-        <button class="tool-btn primary" onclick="imprimirFolhaRostoDiaria()" style="background: #004b87; color: white; font-weight: 700;">🖨️ Imprimir Folha do Dia (A4)</button>
-        <button class="tool-btn" onclick="fecharModalFolhaRostoDiaria()">✕ Fechar</button>
+        <button class="tool-btn" onclick="renderizarFolhaRostoDiaria()"><svg class="bimer-svg" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg> Atualizar</button>
+        <button class="tool-btn primary" onclick="imprimirFolhaRostoDiaria()" style="background: #004b87; color: white; font-weight: 700;"><svg class="bimer-svg" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg> Imprimir Folha do Dia (A4)</button>
+        <button class="tool-btn" onclick="fecharModalFolhaRostoDiaria()"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Fechar</button>
       </div>
     </div>
 
@@ -2143,7 +2178,7 @@
 <div id="modal-efetivar-previsao">
   <div class="modal-box">
     <div style="border-bottom: 2px solid var(--alterdata-blue); padding-bottom: 8px; margin-bottom: 12px;">
-      <h3 style="color: var(--alterdata-blue); font-size: 14px; font-weight: 700;">⚡ Efetivar Previsão em Conta Real</h3>
+      <h3 style="color: var(--alterdata-blue); font-size: 14px; font-weight: 700;">Efetivar Previsão em Conta Real</h3>
       <p style="font-size: 11px; color: var(--text-muted);">A conta chegou! Confirme o valor exato para gerar o título no Contas a Pagar.</p>
     </div>
 
@@ -2174,7 +2209,7 @@
 
     <div style="display: flex; justify-content: flex-end; gap: 8px;">
       <button class="tool-btn" onclick="fecharModalEfetivar()">Cancelar</button>
-      <button class="tool-btn primary" onclick="confirmarEfetivacaoConta()">🚀 Enviar para Contas a Pagar</button>
+      <button class="tool-btn primary" onclick="confirmarEfetivacaoConta()"><svg class="bimer-svg" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> Enviar para Contas a Pagar</button>
     </div>
   </div>
 </div>
@@ -2275,7 +2310,7 @@
 
     <div class="no-print" style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 10px;">
       <button class="tool-btn" onclick="fecharRelatorioPrestacaoContas()">Fechar</button>
-      <button class="tool-btn primary" onclick="window.print()">🖨️ Imprimir Relatório / Salvar PDF</button>
+      <button class="tool-btn primary" onclick="window.print()"><svg class="bimer-svg" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg> Imprimir Relatório / Salvar PDF</button>
     </div>
   </div>
 </div>
@@ -2288,7 +2323,7 @@
     <div class="no-print" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 12px 16px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
       <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
         <div style="display: flex; align-items: center; gap: 6px;">
-          <label style="font-size: 11px; font-weight: 700; color: #1e293b;">📅 Data do Lote:</label>
+          <label style="font-size: 11px; font-weight: 700; color: #1e293b;">Data do Lote:</label>
           <input type="date" id="aut-data-lote" onchange="renderizarRelatorioAutorizacao()" style="padding: 4px 8px; font-size: 11.5px; border: 1px solid #cbd5e1; border-radius: 4px; font-weight: 600;">
         </div>
         <div style="display: flex; align-items: center; gap: 6px;">
@@ -2306,9 +2341,9 @@
       </div>
 
       <div style="display: flex; gap: 8px;">
-        <button class="tool-btn" onclick="renderizarRelatorioAutorizacao()">🔄 Atualizar</button>
-        <button class="tool-btn primary" onclick="imprimirRelatorioAutorizacao()" style="background: #004b87; color: white; font-weight: 700;">🖨️ Imprimir / Salvar PDF</button>
-        <button class="tool-btn" onclick="fecharModalAutorizacao()">✕ Fechar</button>
+        <button class="tool-btn" onclick="renderizarRelatorioAutorizacao()"><svg class="bimer-svg" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg> Atualizar</button>
+        <button class="tool-btn primary" onclick="imprimirRelatorioAutorizacao()" style="background: #004b87; color: white; font-weight: 700;"><svg class="bimer-svg" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg> Imprimir / Salvar PDF</button>
+        <button class="tool-btn" onclick="fecharModalAutorizacao()"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Fechar</button>
       </div>
     </div>
 
@@ -2351,7 +2386,7 @@
         <div style="padding: 12px 14px; border-radius: 6px; border: 1px solid #cbd5e1; background: #eff6ff; border-left: 4px solid #004b87;">
           <div style="font-size: 9.5px; text-transform: uppercase; font-weight: 800; color: #1e40af; margin-bottom: 3px;">4. Saldo Projetado (Superávit)</div>
           <div style="font-size: 17px; font-weight: 800; color: #004b87;" id="aut-card-projetado">R$ 34.972,39</div>
-          <div style="font-size: 9.5px; color: #1d4ed8; margin-top: 3px;" id="aut-card-status-cx">✓ Caixa positivo após baixas</div>
+          <div style="font-size: 9.5px; color: #1d4ed8; margin-top: 3px;" id="aut-card-status-cx">Caixa positivo após baixas</div>
         </div>
       </div>
 
@@ -2426,7 +2461,7 @@
     <!-- Barra de Título Windows / JR Solutions -->
     <div style="background: linear-gradient(to right, #064e3b, #047857); color: white; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
       <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 11.5px;">
-        <span>🔒</span>
+        <span><svg class="bimer-svg" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>
         <span>JR Solutions • Acesso Restrito</span>
       </div>
       <span style="font-size: 10px; opacity: 0.85;">Enterprise</span>
@@ -2443,7 +2478,7 @@
       </div>
 
       <div id="login-erro-alerta" style="display: none; background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 8px 10px; border-radius: 4px; font-size: 11px; margin-bottom: 12px;">
-        ⚠️ E-mail ou senha incorretos.
+        E-mail ou senha incorretos.
       </div>
 
       <form id="form-login-bimer" onsubmit="executarLogin(event)">
@@ -2465,7 +2500,7 @@
         </div>
 
         <button type="submit" id="btn-submit-login" class="tool-btn primary" style="width: 100%; justify-content: center; padding: 8px 12px; font-size: 12px; font-weight: 700; cursor: pointer;">
-          🔑 Entrar no Sistema (Enter)
+          <svg class="bimer-svg" viewBox="0 0 24 24"><path d="M21 2l-2 2m-1.5 1.5L14 9l-1.5-1.5-3 3L8 9 5 12l2 2-3 3 1.5 1.5 2.5-2.5 1.5 1.5 3-3-1.5-1.5L15 8.5l1.5-1.5L22 3z"></path></svg> Entrar no Sistema (Enter)
         </button>
       </form>
     </div>
@@ -2482,10 +2517,10 @@
     <!-- Barra de Título Windows / Bimer -->
     <div style="background: #004b87; color: white; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
       <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 11.5px;">
-        <span>✏️</span>
+        <span><svg class="bimer-svg" viewBox="0 0 24 24"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg></span>
         <span id="modal-edit-titulo-header">Editar Lançamento / Título</span>
       </div>
-      <button type="button" onclick="fecharModalEdicaoTitulo()" style="background: transparent; border: none; color: white; font-size: 14px; cursor: pointer; font-weight: bold;">✕</button>
+      <button type="button" onclick="fecharModalEdicaoTitulo()" style="background: transparent; border: none; color: white; font-size: 14px; cursor: pointer; font-weight: bold;"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
     </div>
 
     <!-- Conteúdo do Formulário -->
@@ -2509,7 +2544,7 @@
           <label style="font-size: 11px; font-weight: 700; color: #1e3a8a;">Código da Operação (CFOP) *</label>
           <div class="bimer-lookup-group">
             <input type="text" id="edit-cod-operacao" style="font-weight: 600; width: 100%;" autocomplete="off">
-            <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('cfop', 'edicao')" title="Buscar CFOP (F2)">🔍 <span style="font-size: 8px;">▼</span></button>
+            <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('cfop', 'edicao')" title="Buscar CFOP (F2)"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> <span style="font-size: 8px;">▼</span></button>
           </div>
         </div>
 
@@ -2518,7 +2553,7 @@
             <label style="font-size: 11px; font-weight: 700; color: #1e3a8a;">CNAE do Prestador</label>
             <div class="bimer-lookup-group">
               <input type="text" id="edit-cnae" style="font-weight: 600; width: 100%;" autocomplete="off">
-              <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('cnae', 'edicao')" title="Buscar CNAE (F2)">🔍 <span style="font-size: 8px;">▼</span></button>
+              <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('cnae', 'edicao')" title="Buscar CNAE (F2)"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> <span style="font-size: 8px;">▼</span></button>
             </div>
           </div>
           <div class="form-field">
@@ -2532,7 +2567,7 @@
             <label style="font-size: 11px; font-weight: 700; color: #004b87;">Categoria / Plano de Contas Oficial *</label>
             <div class="bimer-lookup-group">
               <input type="text" id="edit-categoria" style="font-weight: 600; width: 100%;" autocomplete="off">
-              <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('categoria', 'edicao')" title="Buscar Categoria (F2)">🔍 <span style="font-size: 8px;">▼</span></button>
+              <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('categoria', 'edicao')" title="Buscar Categoria (F2)"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> <span style="font-size: 8px;">▼</span></button>
             </div>
           </div>
           <div class="form-field">
@@ -2549,14 +2584,14 @@
             <label style="font-size: 11px; font-weight: 700;">CNPJ / CPF</label>
             <div class="bimer-lookup-group">
               <input type="text" id="edit-cnpj" style="font-family: monospace; width: 100%;" onkeydown="onKeyDownLookupInput(event, 'fornecedor', 'edicao')" ondblclick="abrirBuscaRapida('fornecedor', 'edicao')" autocomplete="off">
-              <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('fornecedor', 'edicao')" title="Buscar Fornecedor (F2)">🔍 <span style="font-size: 8px;">▼</span></button>
+              <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('fornecedor', 'edicao')" title="Buscar Fornecedor (F2)"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> <span style="font-size: 8px;">▼</span></button>
             </div>
           </div>
           <div class="form-field">
             <label style="font-size: 11px; font-weight: 700;">Razão Social / Favorecido *</label>
             <div class="bimer-lookup-group">
               <input type="text" id="edit-favorecido" style="font-weight: 700; width: 100%;" onkeydown="onKeyDownLookupInput(event, 'fornecedor', 'edicao')" ondblclick="abrirBuscaRapida('fornecedor', 'edicao')" autocomplete="off">
-              <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('fornecedor', 'edicao')" title="Buscar Fornecedor (F2)">🔍 <span style="font-size: 8px;">▼</span></button>
+              <button type="button" class="bimer-lookup-btn" onclick="abrirBuscaRapida('fornecedor', 'edicao')" title="Buscar Fornecedor (F2)"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> <span style="font-size: 8px;">▼</span></button>
             </div>
           </div>
         </div>
@@ -2595,10 +2630,10 @@
 
     <!-- Barra de Rodapé / Ações -->
     <div style="background: #e2e8f0; border-top: 1px solid #cbd5e1; padding: 8px 14px; display: flex; justify-content: space-between; align-items: center;">
-      <span style="font-size: 10.5px; color: #64748b;">💡 Pressione <strong>ESC</strong> para cancelar</span>
+      <span style="font-size: 10.5px; color: #64748b;">Pressione <strong>ESC</strong> para cancelar</span>
       <div style="display: flex; gap: 8px;">
         <button type="button" class="tool-btn" onclick="fecharModalEdicaoTitulo()">Cancelar</button>
-        <button type="button" class="tool-btn primary" onclick="salvarEdicaoTitulo()" style="background: #004b87; color: white; font-weight: 700;">💾 Salvar Alterações</button>
+        <button type="button" class="tool-btn primary" onclick="salvarEdicaoTitulo()" style="background: #004b87; color: white; font-weight: 700;"><svg class="bimer-svg" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> Salvar Alterações</button>
       </div>
     </div>
   </div>
@@ -2608,8 +2643,8 @@
 <div id="bimer-senha-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(2px); z-index: 99998; justify-content: center; align-items: center;">
   <div style="background: white; border: 1px solid #004b87; box-shadow: 0 15px 20px -5px rgba(0,0,0,0.3); border-radius: 6px; width: 340px; overflow: hidden;">
     <div style="background: linear-gradient(to right, #004b87, #002d54); color: white; padding: 7px 12px; display: flex; justify-content: space-between; align-items: center;">
-      <span style="font-weight: 700; font-size: 11.5px;">🔑 Alterar Senha de Acesso</span>
-      <button type="button" onclick="fecharModalSenha()" style="background: none; border: none; color: white; cursor: pointer; font-size: 14px;">✕</button>
+      <span style="font-weight: 700; font-size: 11.5px;"><svg class="bimer-svg" viewBox="0 0 24 24"><path d="M21 2l-2 2m-1.5 1.5L14 9l-1.5-1.5-3 3L8 9 5 12l2 2-3 3 1.5 1.5 2.5-2.5 1.5 1.5 3-3-1.5-1.5L15 8.5l1.5-1.5L22 3z"></path></svg> Alterar Senha de Acesso</span>
+      <button type="button" onclick="fecharModalSenha()" style="background: none; border: none; color: white; cursor: pointer; font-size: 14px;"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
     </div>
     <div style="padding: 16px; background: #f8fafc;">
       <div id="senha-msg-alerta" style="display: none; padding: 6px 8px; border-radius: 4px; font-size: 11px; margin-bottom: 10px;"></div>
@@ -2636,6 +2671,49 @@
 </div>
 
 <script>
+
+  /* HELPER GLOBAL DE ÍCONES SVG VETORIAIS PROFISSIONAIS */
+  function bimerIcon(name, extraClass = '', extraStyle = '') {
+    const styleAttr = extraStyle ? ` style="${extraStyle}"` : '';
+    const classAttr = extraClass ? ` ${extraClass}` : '';
+    const icons = {
+      save: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>`,
+      plus: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`,
+      refresh: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>`,
+      sheet: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>`,
+      chart: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>`,
+      search: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>`,
+      user: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>`,
+      users: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`,
+      key: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><path d="M21 2l-2 2m-1.5 1.5L14 9l-1.5-1.5-3 3L8 9 5 12l2 2-3 3 1.5 1.5 2.5-2.5 1.5 1.5 3-3-1.5-1.5L15 8.5l1.5-1.5L22 3z"></path></svg>`,
+      logout: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>`,
+      file: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>`,
+      wallet: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>`,
+      calendar: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`,
+      bank: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><line x1="3" y1="21" x2="21" y2="21"></line><line x1="3" y1="10" x2="21" y2="10"></line><polyline points="5 10 5 21"></polyline><polyline points="19 10 19 21"></polyline><polygon points="12 2 2 7 22 7 12 2"></polygon></svg>`,
+      clock: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`,
+      check: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>`,
+      checkCircle: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`,
+      alert: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`,
+      alertCircle: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`,
+      pencil: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>`,
+      printer: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>`,
+      trash: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`,
+      x: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`,
+      undo: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>`,
+      download: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>`,
+      list: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>`,
+      tag: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>`,
+      pin: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><line x1="12" y1="17" x2="12" y2="22"></line><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.89A2 2 0 0 1 15 10.77V6h1a1 1 0 0 0 0-2H8a1 1 0 0 0 0 2h1v4.77a2 2 0 0 1-1.11 1.79l-1.78.89A2 2 0 0 0 5 15.24z"></path></svg>`,
+      creditCard: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>`,
+      building: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="9" y1="22" x2="9" y2="18"></line><line x1="15" y1="22" x2="15" y2="18"></line><line x1="9" y1="6" x2="9.01" y2="6"></line><line x1="15" y1="6" x2="15.01" y2="6"></line><line x1="9" y1="10" x2="9.01" y2="10"></line><line x1="15" y1="10" x2="15.01" y2="10"></line><line x1="9" y1="14" x2="9.01" y2="14"></line><line x1="15" y1="14" x2="15.01" y2="14"></line></svg>`,
+      zap: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`,
+      shoppingBag: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>`,
+      maximize: `<svg class="bimer-svg${classAttr}"${styleAttr} viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>`
+    };
+    return icons[name] || '';
+  }
+
   const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
   let storedApi = localStorage.getItem('bimer_cloud_api_url');
   let API_BASE = isLocalHost ? 'http://localhost:8000/api/contas-a-pagar' : (storedApi || 'https://bimer-cloud-api.onrender.com/api/contas-a-pagar');
@@ -2718,7 +2796,7 @@
     if (alertBox) alertBox.style.display = 'none';
     if (btnSubmit) {
       btnSubmit.disabled = true;
-      btnSubmit.innerHTML = '⏳ Autenticando...';
+      btnSubmit.innerHTML = 'Autenticando...';
     }
 
     let autenticado = false;
@@ -2742,12 +2820,12 @@
       } else if (resp.status === 401) {
         const data = await resp.json().catch(() => ({}));
         if (alertBox) {
-          alertBox.textContent = `⚠️ ${data.detail || 'E-mail ou senha incorretos.'}`;
+          alertBox.textContent = `${data.detail || 'E-mail ou senha incorretos.'}`;
           alertBox.style.display = 'block';
         }
         if (btnSubmit) {
           btnSubmit.disabled = false;
-          btnSubmit.innerHTML = '🔑 Entrar no Sistema (Enter)';
+          btnSubmit.innerHTML = '<svg class="bimer-svg" viewBox="0 0 24 24"><path d="M21 2l-2 2m-1.5 1.5L14 9l-1.5-1.5-3 3L8 9 5 12l2 2-3 3 1.5 1.5 2.5-2.5 1.5 1.5 3-3-1.5-1.5L15 8.5l1.5-1.5L22 3z"></path></svg> Entrar no Sistema (Enter)';
         }
         return;
       } else {
@@ -2773,14 +2851,14 @@
       await carregarDadosIniciais();
     } else {
       if (alertBox) {
-        alertBox.textContent = '⚠️ E-mail ou senha incorretos.';
+        alertBox.textContent = 'E-mail ou senha incorretos.';
         alertBox.style.display = 'block';
       }
     }
 
     if (btnSubmit) {
       btnSubmit.disabled = false;
-      btnSubmit.innerHTML = '🔑 Entrar no Sistema (Enter)';
+      btnSubmit.innerHTML = '<svg class="bimer-svg" viewBox="0 0 24 24"><path d="M21 2l-2 2m-1.5 1.5L14 9l-1.5-1.5-3 3L8 9 5 12l2 2-3 3 1.5 1.5 2.5-2.5 1.5 1.5 3-3-1.5-1.5L15 8.5l1.5-1.5L22 3z"></path></svg> Entrar no Sistema (Enter)';
     }
   }
 
@@ -2815,7 +2893,7 @@
       msg.style.display = 'block';
       msg.style.background = '#fef2f2';
       msg.style.color = '#991b1b';
-      msg.textContent = '⚠️ A confirmação da nova senha não coincide.';
+      msg.textContent = 'A confirmação da nova senha não coincide.';
       return;
     }
 
@@ -2830,19 +2908,19 @@
         msg.style.display = 'block';
         msg.style.background = '#f0fdf4';
         msg.style.color = '#166534';
-        msg.textContent = '✅ Senha alterada com sucesso!';
+        msg.textContent = 'Senha alterada com sucesso!';
         setTimeout(() => fecharModalSenha(), 1500);
       } else {
         msg.style.display = 'block';
         msg.style.background = '#fef2f2';
         msg.style.color = '#991b1b';
-        msg.textContent = `⚠️ ${data.detail || 'Erro ao alterar senha.'}`;
+        msg.textContent = `${data.detail || 'Erro ao alterar senha.'}`;
       }
     } catch (err) {
       msg.style.display = 'block';
       msg.style.background = '#fef2f2';
       msg.style.color = '#991b1b';
-      msg.textContent = '⚠️ Erro ao comunicar com o servidor.';
+      msg.textContent = 'Erro ao comunicar com o servidor.';
     }
   }
 
@@ -3038,9 +3116,9 @@
       if (badge) {
         badge.style.display = 'inline-block';
         if (match.espelhoEntrada) {
-          badge.innerHTML = `📌 <strong>Código Oficial SEFAZ:</strong> ${match.cfop} (${match.desc}) • <span style="color:#b45309;">⚠️ Nota emitida pelo Fornecedor</span><br>💡 <strong>Espelho de Entrada no Pagar:</strong> <strong>${match.espelhoEntrada}</strong>`;
+          badge.innerHTML = `<strong>Código Oficial SEFAZ:</strong> ${match.cfop} (${match.desc}) • <span style="color:#b45309;">Nota emitida pelo Fornecedor</span><br><strong>Espelho de Entrada no Pagar:</strong> <strong>${match.espelhoEntrada}</strong>`;
         } else {
-          badge.innerHTML = `📌 <strong>Tipo:</strong> ${match.tipo} • <strong>Natureza:</strong> ${match.nat}`;
+          badge.innerHTML = `<svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><path d="M12 17v5M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.89A2 2 0 0 1 15 10.77V6h1a1 1 0 0 0 0-2H8a1 1 0 0 0 0 2h1v4.77a2 2 0 0 1-1.11 1.79l-1.78.89A2 2 0 0 0 5 15.24z"></path></svg> <strong>Tipo:</strong> ${match.tipo} • <strong>Natureza:</strong> ${match.nat}`;
         }
       }
       return;
@@ -3054,9 +3132,9 @@
         if (badge) {
           badge.style.display = 'inline-block';
           if (match.espelhoEntrada) {
-            badge.innerHTML = `📌 <strong>Código Oficial SEFAZ:</strong> ${match.cfop} (${match.desc}) • <span style="color:#b45309;">⚠️ Nota do Fornecedor</span><br>💡 <strong>Espelho de Entrada:</strong> <strong>${match.espelhoEntrada}</strong>`;
+            badge.innerHTML = `<strong>Código Oficial SEFAZ:</strong> ${match.cfop} (${match.desc}) • <span style="color:#b45309;">Nota do Fornecedor</span><br><strong>Espelho de Entrada:</strong> <strong>${match.espelhoEntrada}</strong>`;
           } else {
-            badge.innerHTML = `📌 <strong>Tipo:</strong> ${match.tipo} • <strong>Natureza:</strong> ${match.nat}`;
+            badge.innerHTML = `<svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><path d="M12 17v5M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.89A2 2 0 0 1 15 10.77V6h1a1 1 0 0 0 0-2H8a1 1 0 0 0 0 2h1v4.77a2 2 0 0 1-1.11 1.79l-1.78.89A2 2 0 0 0 5 15.24z"></path></svg> <strong>Tipo:</strong> ${match.tipo} • <strong>Natureza:</strong> ${match.nat}`;
           }
         }
         return;
@@ -3069,7 +3147,7 @@
       const match = Object.values(TABELA_CFOPS).find(c => c.desc.toLowerCase().includes(termo) || c.nat.toLowerCase().includes(termo));
       if (match && badge) {
         badge.style.display = 'inline-block';
-        badge.innerHTML = `💡 Sugestão: <strong>${match.cfop}</strong> (${match.desc}) • <em>Pressione Enter ou selecione na lista</em>`;
+        badge.innerHTML = `Sugestão: <strong>${match.cfop}</strong> (${match.desc}) • <em>Pressione Enter ou selecione na lista</em>`;
       }
     }
   }
@@ -3083,7 +3161,7 @@
       input.value = `${match.cfop} - ${match.desc}`;
       if (badge) {
         badge.style.display = 'inline-block';
-        badge.innerHTML = `📌 <strong>Tipo:</strong> ${match.tipo} • <strong>Natureza:</strong> ${match.nat}`;
+        badge.innerHTML = `<svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><path d="M12 17v5M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.89A2 2 0 0 1 15 10.77V6h1a1 1 0 0 0 0-2H8a1 1 0 0 0 0 2h1v4.77a2 2 0 0 1-1.11 1.79l-1.78.89A2 2 0 0 0 5 15.24z"></path></svg> <strong>Tipo:</strong> ${match.tipo} • <strong>Natureza:</strong> ${match.nat}`;
       }
     }
   }
@@ -3197,7 +3275,7 @@
         if (inputCtn) inputCtn.value = match.ctn || match.lc116;
         if (badge) {
           badge.style.display = 'inline-block';
-          badge.innerHTML = `📌 <strong>Item LC 116:</strong> ${match.lc116} • <strong>CTN:</strong> ${match.ctn || match.lc116} • <strong>Enquadramento:</strong> ${match.obs}`;
+          badge.innerHTML = `<svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><path d="M12 17v5M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.89A2 2 0 0 1 15 10.77V6h1a1 1 0 0 0 0-2H8a1 1 0 0 0 0 2h1v4.77a2 2 0 0 1-1.11 1.79l-1.78.89A2 2 0 0 0 5 15.24z"></path></svg> <strong>Item LC 116:</strong> ${match.lc116} • <strong>CTN:</strong> ${match.ctn || match.lc116} • <strong>Enquadramento:</strong> ${match.obs}`;
         }
         aplicarSugestaoRetencoesCNAE(match);
         return;
@@ -3213,7 +3291,7 @@
         if (inputCtn && !inputCtn.value) inputCtn.value = match.ctn || match.lc116;
         if (badge) {
           badge.style.display = 'inline-block';
-          badge.innerHTML = `📌 <strong>Item LC 116:</strong> ${match.lc116} • <strong>CTN:</strong> ${match.ctn || match.lc116} • <strong>Enquadramento:</strong> ${match.obs}`;
+          badge.innerHTML = `<svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><path d="M12 17v5M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.89A2 2 0 0 1 15 10.77V6h1a1 1 0 0 0 0-2H8a1 1 0 0 0 0 2h1v4.77a2 2 0 0 1-1.11 1.79l-1.78.89A2 2 0 0 0 5 15.24z"></path></svg> <strong>Item LC 116:</strong> ${match.lc116} • <strong>CTN:</strong> ${match.ctn || match.lc116} • <strong>Enquadramento:</strong> ${match.obs}`;
         }
         aplicarSugestaoRetencoesCNAE(match);
         return;
@@ -3230,7 +3308,7 @@
       );
       if (match && badge) {
         badge.style.display = 'inline-block';
-        badge.innerHTML = `💡 Sugestão CNAE: <strong>${match.cnae}</strong> (${match.desc}) • LC 116: <strong>${match.lc116}</strong>`;
+        badge.innerHTML = `Sugestão CNAE: <strong>${match.cnae}</strong> (${match.desc}) • LC 116: <strong>${match.lc116}</strong>`;
       }
     }
   }
@@ -4369,7 +4447,7 @@
         const itensMacro = TABELA_GRUPOS_CATEGORIAS.filter(c => c.macro === m);
         if (itensMacro.length > 0) {
           const optgrp = document.createElement('optgroup');
-          optgrp.label = `📁 ${m}`;
+          optgrp.label = `${m}`;
           itensMacro.forEach(c => {
             const opt = document.createElement('option');
             opt.value = c.rotulo;
@@ -4419,7 +4497,7 @@
 
     if (match) {
       if (badge) {
-        badge.innerHTML = `📌 <strong>Macro:</strong> ${match.macro} • <strong>Grupo:</strong> ${match.grupo} • <strong>Resp:</strong> ${match.responsavel}`;
+        badge.innerHTML = `<svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><path d="M12 17v5M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.89A2 2 0 0 1 15 10.77V6h1a1 1 0 0 0 0-2H8a1 1 0 0 0 0 2h1v4.77a2 2 0 0 1-1.11 1.79l-1.78.89A2 2 0 0 0 5 15.24z"></path></svg> <strong>Macro:</strong> ${match.macro} • <strong>Grupo:</strong> ${match.grupo} • <strong>Resp:</strong> ${match.responsavel}`;
         badge.style.display = 'inline-block';
       }
       const inputResp = document.getElementById('solicitante_despesa_aba1');
@@ -4551,7 +4629,7 @@
     const thead = document.getElementById('bimer-busca-thead');
 
     if (tipo === 'categoria') {
-      titulo.innerHTML = '📁 <strong>Busca Rápida:</strong> Categorias & Plano de Contas Oficial';
+      titulo.innerHTML = '<strong>Busca Rápida:</strong> Categorias & Plano de Contas Oficial';
       inputBusca.placeholder = 'Digite código (ex: 12101, 21101), nome, grupo ou responsável...';
       thead.innerHTML = `
         <tr>
@@ -4570,7 +4648,7 @@
         <span class="bimer-chip" onclick="selecionarChipBuscaRapida('5 - RETIRADA SOCIO', this)">5 - SÓCIOS</span>
       `;
     } else if (tipo === 'cnae') {
-      titulo.innerHTML = '🏢 <strong>Busca Rápida:</strong> CNAE / Atividade Econômica (NFS-e)';
+      titulo.innerHTML = '<strong>Busca Rápida:</strong> CNAE / Atividade Econômica (NFS-e)';
       inputBusca.placeholder = 'Digite código CNAE (ex: 6201, 4322), serviço (TI, limpeza, hidráulica) ou item LC 116...';
       thead.innerHTML = `
         <tr>
@@ -4590,7 +4668,7 @@
         <span class="bimer-chip" onclick="selecionarChipBuscaRapida('RETENCAO', this)">Com Retenção</span>
       `;
     } else if (tipo === 'cfop') {
-      titulo.innerHTML = '📑 <strong>Busca Rápida:</strong> Código Fiscal de Operações (CFOP)';
+      titulo.innerHTML = '<strong>Busca Rápida:</strong> Código Fiscal de Operações (CFOP)';
       inputBusca.placeholder = 'Digite CFOP (ex: 1933, 1102, 1556) ou descrição (serviço, compra, frete)...';
       thead.innerHTML = `
         <tr>
@@ -4608,7 +4686,7 @@
         <span class="bimer-chip" onclick="selecionarChipBuscaRapida('5.', this)">5.xxx - Saídas Fornecedor</span>
       `;
     } else if (tipo === 'fornecedor') {
-      titulo.innerHTML = '👥 <strong>Busca Rápida:</strong> Cadastro de Fornecedores & Prestadores';
+      titulo.innerHTML = '<strong>Busca Rápida:</strong> Cadastro de Fornecedores & Prestadores';
       inputBusca.placeholder = 'Digite Razão Social, Nome Fantasia, CNPJ ou ID...';
       thead.innerHTML = `
         <tr>
@@ -4677,7 +4755,7 @@
   function alternarModoModalBuscaRapida() {
     buscaRapidaModoModal = !buscaRapidaModoModal;
     const btn = document.getElementById('bimer-busca-btn-expandir');
-    if (btn) btn.innerText = buscaRapidaModoModal ? '🗗 Restaurar' : '⛶ Expandir';
+    if (btn) btn.innerHTML = buscaRapidaModoModal ? 'Restaurar' : bimerIcon('maximize') + ' Expandir';
     if (buscaRapidaTipoAtual) {
       abrirBuscaRapida(buscaRapidaTipoAtual, buscaRapidaContexto);
     }
@@ -4864,7 +4942,7 @@
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td colspan="${colunasTotal}" style="text-align: center; padding: 18px; color: #94a3b8; font-style: italic;">
-          🔍 Nenhum registro encontrado para "${termoRaw}". Tente outro código, CNPJ ou nome.
+          Nenhum registro encontrado para "${termoRaw}". Tente outro código, CNPJ ou nome.
         </td>
       `;
       tbody.appendChild(tr);
@@ -5302,7 +5380,7 @@
     if (typeof atualizarAgendaFinanceira === 'function') atualizarAgendaFinanceira();
 
     fecharModalEdicaoTitulo();
-    mostrarToastSucesso('✅ Lançamento e CFOP atualizados com sucesso!');
+    mostrarToastSucesso('Lançamento e CFOP atualizados com sucesso!');
   }
 
   function mostrarToastSucesso(msg) {
@@ -5464,7 +5542,7 @@
         badge.style.background = '#dbeafe';
         badge.style.color = '#1e40af';
         badge.style.border = '1px solid #93c5fd';
-        badge.innerHTML = `🏦 <strong>${res.bancoNome}</strong> | Vencimento: <strong>${formatarData(res.vencimento)}</strong> | Valor: <strong>${formatarMoeda(res.valor)}</strong>`;
+        badge.innerHTML = `<strong>${res.bancoNome}</strong> | Vencimento: <strong>${formatarData(res.vencimento)}</strong> | Valor: <strong>${formatarMoeda(res.valor)}</strong>`;
 
         if (res.valor > 0) {
           const inputBruto = document.getElementById('valor_bruto');
@@ -5481,7 +5559,7 @@
         badge.style.background = '#fef3c7';
         badge.style.color = '#92400e';
         badge.style.border = '1px solid #fcd34d';
-        badge.innerHTML = `⚡ <strong>${res.segmentoNome}</strong> | Valor: <strong>${formatarMoeda(res.valor)}</strong>`;
+        badge.innerHTML = `<strong>${res.segmentoNome}</strong> | Valor: <strong>${formatarMoeda(res.valor)}</strong>`;
 
         if (res.valor > 0) {
           const inputBruto = document.getElementById('valor_bruto');
@@ -5770,13 +5848,13 @@
         </div>
         <div class="total-box ${temDuplicidade ? 'danger' : 'conciliado'}">
           <span class="title">Anti-Duplicidade</span>
-          <span class="val" style="font-size: 11.5px;">${temDuplicidade ? '⛔ DUPLICIDADE DETECTADA' : '✅ LIBERADO P/ GRAVAÇÃO'}</span>
+          <span class="val" style="font-size: 11.5px;">${temDuplicidade ? 'DUPLICIDADE DETECTADA' : 'LIBERADO P/ GRAVAÇÃO'}</span>
         </div>
       `;
 
       acoes.innerHTML = `
         <span style="color: var(--text-muted); font-weight: 600;">${titulos.length} títulos no Contas a Pagar</span>
-        <button class="tool-btn primary" onclick="gravarDocumento()">💾 Gravar (F10)</button>
+        <button class="tool-btn primary" onclick="gravarDocumento()"><svg class="bimer-svg" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> Gravar (F10)</button>
       `;
     }
     else if (abaAtivaAtual === 'aba-financeiro') {
@@ -5808,7 +5886,7 @@
           <span class="val">${formatarMoeda(totAberto)}</span>
         </div>
         <div class="total-box retencoes">
-          <span class="title">🏛️ Impostos Retidos a Recolher</span>
+          <span class="title"><svg class="bimer-svg" viewBox="0 0 24 24"><line x1="3" y1="21" x2="21" y2="21"></line><line x1="3" y1="10" x2="21" y2="10"></line><polyline points="5 10 5 21"></polyline><polyline points="19 10 19 21"></polyline><polygon points="12 2 2 7 22 7 12 2"></polygon></svg> Impostos Retidos a Recolher</span>
           <span class="val">${formatarMoeda(totImpostos)}</span>
         </div>
         <div class="total-box conciliado">
@@ -5823,7 +5901,7 @@
 
       acoes.innerHTML = `
         <span style="color: var(--text-muted); font-weight: 600;">${qtdPend} pendentes | ${qtdBaix} quitados</span>
-        <button class="tool-btn primary" onclick="abrirFolhaRostoUltimo()">🖨️ Folha de Rosto</button>
+        <button class="tool-btn primary" onclick="abrirFolhaRostoUltimo()"><svg class="bimer-svg" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg> Folha de Rosto</button>
       `;
     }
     else if (abaAtivaAtual === 'aba-previsoes') {
@@ -5875,7 +5953,7 @@
 
       acoes.innerHTML = `
         <span style="color: var(--text-muted); font-weight: 600;">${previsoes.length} parcelas registradas</span>
-        <button class="tool-btn primary" onclick="document.getElementById('prev_nome')?.focus()">➕ Nova Despesa Fixa</button>
+        <button class="tool-btn primary" onclick="document.getElementById('prev_nome')?.focus()"><svg class="bimer-svg" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Nova Despesa Fixa</button>
       `;
     }
     else if (abaAtivaAtual === 'aba-adiantamentos') {
@@ -5917,13 +5995,13 @@
           </div>
           <div class="total-box ${isAberto ? 'orange' : 'conciliado'}">
             <span class="title">Situação do Acerto</span>
-            <span class="val" style="font-size: 11.5px;">${isAberto ? '⏳ EM ANDAMENTO' : '✅ QUITADO & ARQUIVADO'}</span>
+            <span class="val" style="font-size: 11.5px;">${isAberto ? 'EM ANDAMENTO' : 'QUITADO & ARQUIVADO'}</span>
           </div>
         `;
 
         acoes.innerHTML = `
           <span style="color: var(--text-muted); font-weight: 600;">${ativo.solicitante} (${ativo.gastos.length} comprovantes)</span>
-          <button class="tool-btn primary" onclick="abrirRelatorioPrestacaoContas()">🖨️ Imprimir Fechamento</button>
+          <button class="tool-btn primary" onclick="abrirRelatorioPrestacaoContas()"><svg class="bimer-svg" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg> Imprimir Fechamento</button>
         `;
       } else {
         const totAdiantado = adiantamentos.reduce((acc, a) => acc + a.valor, 0);
@@ -5951,7 +6029,7 @@
 
         acoes.innerHTML = `
           <span style="color: var(--text-muted); font-weight: 600;">Selecione um colaborador ao lado</span>
-          <button class="tool-btn primary" onclick="document.getElementById('ad_solicitante')?.focus()">➕ Novo Adiantamento</button>
+          <button class="tool-btn primary" onclick="document.getElementById('ad_solicitante')?.focus()"><svg class="bimer-svg" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Novo Adiantamento</button>
         `;
       }
     }
@@ -5976,13 +6054,13 @@
         </div>
         <div class="total-box ${zerado ? 'conciliado' : 'retencoes'}">
           <span class="title">Status Auditoria</span>
-          <span class="val" style="font-size: 11px;">${zerado ? '✓ FECHADA (R$ 0,00)' : '⚠️ PENDÊNCIAS EM ABERTO'}</span>
+          <span class="val" style="font-size: 11px;">${zerado ? 'FECHADA (R$ 0,00)' : 'PENDÊNCIAS EM ABERTO'}</span>
         </div>
       `;
 
       acoes.innerHTML = `
         <span style="color: var(--text-muted); font-weight: 600;">${(extratoBancario || []).length} lançamentos no extrato</span>
-        <button class="tool-btn primary" onclick="conciliarAutomaticamente()" style="background: #059669; color: white; font-weight: 700; border-color: #047857;">🎯 Conciliar Tudo</button>
+        <button class="tool-btn primary" onclick="conciliarAutomaticamente()" style="background: #059669; color: white; font-weight: 700; border-color: #047857;"><svg class="bimer-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg> Conciliar Tudo</button>
       `;
     }
     else if (abaAtivaAtual === 'aba-relatorios') {
@@ -6011,8 +6089,8 @@
       `;
 
       acoes.innerHTML = `
-        <button class="tool-btn" onclick="exportarRelatorioCSV()">📥 Exportar CSV</button>
-        <button class="tool-btn primary" onclick="imprimirRelatorioBimer()" style="background: #4338ca; color: white; font-weight: 700; border-color: #3730a3;">🖨️ Imprimir A4 / PDF</button>
+        <button class="tool-btn" onclick="exportarRelatorioCSV()"><svg class="bimer-svg" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Exportar CSV</button>
+        <button class="tool-btn primary" onclick="imprimirRelatorioBimer()" style="background: #4338ca; color: white; font-weight: 700; border-color: #3730a3;"><svg class="bimer-svg" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg> Imprimir A4 / PDF</button>
       `;
     }
   }
@@ -6027,10 +6105,10 @@
 
     if (novoEstado) {
       corpo.style.display = 'block';
-      btn.innerHTML = '🔼 Recolher Grade';
+      btn.innerHTML = '<svg class="bimer-svg" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"></polyline></svg> Recolher Grade';
     } else {
       corpo.style.display = 'none';
-      btn.innerHTML = '🔽 Expandir Grade de Retenções';
+      btn.innerHTML = '<svg class="bimer-svg" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg> Expandir Grade de Retenções';
     }
   }
 
@@ -6273,10 +6351,10 @@
       const stEl = document.getElementById('dup-info-status');
       if (anterior.status === 'CONCILIADO') {
         stEl.className = 'status-badge status-pago';
-        stEl.innerText = '✅ JÁ FOI PAGO / CONCILIADO';
+        stEl.innerText = 'JÁ FOI PAGO / CONCILIADO';
       } else {
         stEl.className = 'status-badge status-pendente';
-        stEl.innerText = '⏳ CONTA EM ABERTO NO CONTAS A PAGAR';
+        stEl.innerText = 'CONTA EM ABERTO NO CONTAS A PAGAR';
       }
 
       cardModal.style.display = 'block';
@@ -6340,7 +6418,7 @@
             badgeStatus.style.background = '#dcfce7';
             badgeStatus.style.color = '#15803d';
             badgeStatus.style.border = '1px solid #86efac';
-            badgeStatus.innerHTML = `🟢 Conectado ao Backend (${API_BASE.includes('render') ? 'Render Cloud' : 'SQLite Local'}) • ${titulos.length} títulos`;
+            badgeStatus.innerHTML = `<span class="bimer-status-dot"></span> Conectado ao Backend (${API_BASE.includes('render') ? 'Render Cloud' : 'SQLite Local'}) • ${titulos.length} títulos`;
           }
         }
       }
@@ -6382,7 +6460,7 @@
         badgeStatus.style.background = '#fef3c7';
         badgeStatus.style.color = '#92400e';
         badgeStatus.style.border = '1px solid #fcd34d';
-        badgeStatus.innerHTML = `🟡 Modo Offline (localStorage) • ${titulos.length} títulos`;
+        badgeStatus.innerHTML = `<span class="bimer-status-dot" style="background:#f59e0b; box-shadow:0 0 0 2px rgba(245,158,11,0.25);"></span> Modo Offline (localStorage) • ${titulos.length} títulos`;
       }
     }
 
@@ -6507,7 +6585,7 @@
 
         const resData = await resp.json();
         ultimoLoteGravado = resData.lote_tx;
-        alert(`✅ GRAVAÇÃO REALIZADA COM SUCESSO NO SQLITE!\nDocumento ${numero_doc} e ${resData.impostos_gravados} guias fiscais gravados em robo_boah.db.`);
+        alert(`[SUCESSO] GRAVAÇÃO REALIZADA NO SQLITE!\nDocumento ${numero_doc} e ${resData.impostos_gravados} guias fiscais gravados em robo_boah.db.`);
         await carregarDadosIniciais();
         trocarAba('aba-financeiro');
         return;
@@ -6582,7 +6660,7 @@
     atualizarTotaisGerais();
     atualizarAgendaFinanceira();
 
-    alert('✅ GRAVAÇÃO REALIZADA COM SUCESSO!\nTítulos desmembrados e disponíveis no Contas a Pagar.');
+    alert('[SUCESSO] GRAVAÇÃO REALIZADA!\nTítulos desmembrados e disponíveis no Contas a Pagar.');
     trocarAba('aba-financeiro');
   }
 
@@ -6949,24 +7027,24 @@
       if (!isPago && item.vencimento) {
         const dVenc = parseDataVencimento(item.vencimento);
         if (dVenc && dVenc < hojeData) {
-          vencDestaque = `<span style="display: block; font-size: 9.5px; font-weight: 700; color: #dc2626;">🚨 ATRASADO</span>`;
+          vencDestaque = `<span style="display: inline-flex; align-items: center; gap: 3px; font-size: 9.5px; font-weight: 700; color: #dc2626;">${bimerIcon('alertCircle', 'bimer-svg-xs', 'stroke:#dc2626;')} ATRASADO</span>`;
         } else if (dVenc && dVenc.getTime() === hojeData.getTime()) {
-          vencDestaque = `<span style="display: block; font-size: 9.5px; font-weight: 700; color: #b45309;">📅 VENCE HOJE</span>`;
+          vencDestaque = `<span style="display: inline-flex; align-items: center; gap: 3px; font-size: 9.5px; font-weight: 700; color: #b45309;">${bimerIcon('clock', 'bimer-svg-xs', 'stroke:#b45309;')} VENCE HOJE</span>`;
         }
       } else if (isPago) {
-        vencDestaque = `<span style="display: block; font-size: 9.5px; font-weight: 700; color: #166534;">💰 PAGO NO BANCO</span>`;
+        vencDestaque = `<span style="display: inline-flex; align-items: center; gap: 3px; font-size: 9.5px; font-weight: 700; color: #166534;">${bimerIcon('checkCircle', 'bimer-svg-xs', 'stroke:#166534;')} PAGO NO BANCO</span>`;
       }
 
       tr.innerHTML = `
         <!-- 1. Tipo Título -->
         <td>
           ${(item.tipo_doc === 'DOMINGO_FERIADO' || (item.tipo_doc && item.tipo_doc.includes('21412')) || (item.numero_doc && String(item.numero_doc).startsWith('DOM-')) || (item.descricao && item.descricao.toUpperCase().includes('DOMINGO')) || (item.descricao && item.descricao.toUpperCase().includes('FERIADO'))) ? `
-            <span class="tag-tipo" style="background: #fef3c7; color: #b45309; border: 1px solid #fde68a;">🛍️ DOM / FER</span>
+            <span class="tag-tipo" style="background: #fef3c7; color: #b45309; border: 1px solid #fde68a;">${bimerIcon('shoppingBag', 'bimer-svg-xs')} DOM / FER</span>
           ` : (item.tipo_doc === 'FOLHA' ? `
-            <span class="tag-tipo" style="background: #ede9fe; color: #5b21b6; border: 1px solid #ddd6fe;">👥 FOLHA</span>
+            <span class="tag-tipo" style="background: #ede9fe; color: #5b21b6; border: 1px solid #ddd6fe;">${bimerIcon('users', 'bimer-svg-xs')} FOLHA</span>
           ` : `
             <span class="tag-tipo ${isForn ? (item.tipo_doc === 'NFSE' ? 'tag-fornecedor' : 'tag-sem-nf') : 'tag-imposto'}">
-              ${isForn ? (item.tipo_doc === 'NFSE' ? '🏢 PRESTADOR' : '📋 ' + (item.tipo_doc || 'DESPESA')) : '🏛️ ' + (item.tipo || '').replace('IMPOSTO_', '')}
+              ${isForn ? (item.tipo_doc === 'NFSE' ? bimerIcon('building', 'bimer-svg-xs') + ' PRESTADOR' : bimerIcon('file', 'bimer-svg-xs') + ' ' + (item.tipo_doc || 'DESPESA')) : bimerIcon('bank', 'bimer-svg-xs') + ' ' + (item.tipo || '').replace('IMPOSTO_', '')}
             </span>
           `)}
         </td>
@@ -7004,9 +7082,9 @@
             ${limparHistoricoRedundante(item.descricao || item.historico)}
           </div>
           <div style="display: flex; gap: 5px; flex-wrap: wrap;">
-            ${item.solicitante ? `<span style="font-size: 10px; background: #e0f2fe; color: #0369a1; padding: 1.5px 6px; border-radius: 3px; border: 1px solid #bae6fd;">👤 Resp: ${item.solicitante}</span>` : ''}
-            ${item.ccusto ? `<span style="font-size: 10px; background: #f8fafc; color: #475569; padding: 1.5px 6px; border-radius: 3px; border: 1px solid #e2e8f0;">🏷️ C.Custo: ${item.ccusto}</span>` : ''}
-            ${item.linha_dig ? `<span style="font-size: 9.5px; background: #fef3c7; color: #92400e; padding: 1.5px 5px; border-radius: 3px; border: 1px solid #fde68a;" title="${item.linha_dig}">💳 Boleto Cadastrado</span>` : ''}
+            ${item.solicitante ? `<span style="font-size: 10px; background: #e0f2fe; color: #0369a1; padding: 1.5px 6px; border-radius: 3px; border: 1px solid #bae6fd;">${bimerIcon('user', 'bimer-svg-xs')} Resp: ${item.solicitante}</span>` : ''}
+            ${item.ccusto ? `<span style="font-size: 10px; background: #f8fafc; color: #475569; padding: 1.5px 6px; border-radius: 3px; border: 1px solid #e2e8f0;">${bimerIcon('tag', 'bimer-svg-xs')} C.Custo: ${item.ccusto}</span>` : ''}
+            ${item.linha_dig ? `<span style="font-size: 9.5px; background: #fef3c7; color: #92400e; padding: 1.5px 5px; border-radius: 3px; border: 1px solid #fde68a;" title="${item.linha_dig}">${bimerIcon('creditCard', 'bimer-svg-xs')} Boleto Cadastrado</span>` : ''}
           </div>
         </td>
 
@@ -7024,24 +7102,24 @@
         <!-- 9. Situação -->
         <td style="text-align: center;">
           <span class="status-badge ${isPago ? 'status-pago' : 'status-pendente'}">
-            ${isPago ? (item.conciliado_com_extrato ? '✅ BAIXADO (CONCILIADO)' : '✅ BAIXADO') : '⏳ ABERTO'}
+            ${isPago ? (item.conciliado_com_extrato ? bimerIcon('checkCircle', 'bimer-svg-xs', 'stroke:#166534;') + ' BAIXADO (CONCILIADO)' : bimerIcon('checkCircle', 'bimer-svg-xs', 'stroke:#166534;') + ' BAIXADO') : bimerIcon('clock', 'bimer-svg-xs') + ' ABERTO'}
           </span>
           ${item.data_baixa ? `<div style="font-size: 9px; color: #166534; font-weight: 700; margin-top: 2px;">Pago: ${formatarData(item.data_baixa)}</div>` : ''}
         </td>
 
         <!-- 10. Ações -->
         <td style="text-align: center; white-space: nowrap;">
-          <button class="tool-btn" style="display: inline-flex; padding: 3px 6px; font-size: 10.5px; color: var(--alterdata-blue);" onclick="abrirModalEdicaoTitulo('${item.id}')" title="Editar Lançamento (CFOP, Categoria, Valores...)">
-            ✏️
+          <button class="tool-btn" style="display: inline-flex; align-items: center; justify-content: center; padding: 3px 6px; font-size: 10.5px; color: var(--alterdata-blue);" onclick="abrirModalEdicaoTitulo('${item.id}')" title="Editar Lançamento (CFOP, Categoria, Valores...)">
+            ${bimerIcon('pencil', 'bimer-svg-xs')}
           </button>
-          <button class="tool-btn" style="display: inline-flex; padding: 3px 6px; font-size: 10.5px;" onclick="alternarBaixa('${item.id}')" title="${isPago ? 'Reabrir título' : 'Baixar / Liquidar'}">
-            ${isPago ? '↩️' : '✔️'}
+          <button class="tool-btn" style="display: inline-flex; align-items: center; justify-content: center; padding: 3px 6px; font-size: 10.5px;" onclick="alternarBaixa('${item.id}')" title="${isPago ? 'Reabrir título' : 'Baixar / Liquidar'}">
+            ${isPago ? bimerIcon('undo', 'bimer-svg-xs') : bimerIcon('check', 'bimer-svg-xs')}
           </button>
           <button class="tool-btn" style="display: inline-flex; align-items: center; gap: 3px; padding: 3px 6px; font-size: 10.5px; font-weight: 600;" onclick="abrirFolhaRostoTitulo('${item.id}')" title="Imprimir Folha de Rosto deste Documento">
-            🖨️ Folha
+            ${bimerIcon('printer', 'bimer-svg-xs')} Folha
           </button>
-          <button class="tool-btn" style="display: inline-flex; padding: 3px 6px; font-size: 10.5px; color: var(--danger);" onclick="excluirTitulo('${item.id}')" title="Excluir">
-            ✖
+          <button class="tool-btn" style="display: inline-flex; align-items: center; justify-content: center; padding: 3px 6px; font-size: 10.5px; color: var(--danger);" onclick="excluirTitulo('${item.id}')" title="Excluir">
+            ${bimerIcon('trash', 'bimer-svg-xs', 'stroke:#dc2626;')}
           </button>
         </td>
       `;
@@ -7065,7 +7143,7 @@
       ultimoLoteGravado = titulos[titulos.length - 1].id || titulos[titulos.length - 1].loteId;
     }
     if (!ultimoLoteGravado) {
-      alert('Nenhum documento disponível para imprimir a folha de rosto. Lance uma nota primeiro ou clique no botão 🖨️ Folha em um título da tabela!');
+      alert('Nenhum documento disponível para imprimir a folha de rosto. Lance uma nota primeiro ou clique no botão Folha em um título da tabela!');
       return;
     }
     abrirFolhaRostoTitulo(ultimoLoteGravado);
@@ -7165,17 +7243,17 @@
         badgeStatus.style.background = isConciliado ? '#dcfce7' : '#e0f2fe';
         badgeStatus.style.color = isConciliado ? '#15803d' : '#0369a1';
         badgeStatus.style.border = isConciliado ? '1px solid #86efac' : '1px solid #bae6fd';
-        badgeStatus.innerText = isConciliado ? '🟢 PAGO & CONCILIADO' : '✅ PAGO / BAIXADO';
+        badgeStatus.innerText = isConciliado ? 'PAGO & CONCILIADO' : 'PAGO / BAIXADO';
       }
       if (subtextoStatus) {
         subtextoStatus.style.color = '#15803d';
         subtextoStatus.innerText = `Débito em C/C ${bancoFmt} • Data: ${dtBaixaFmt}`;
       }
       if (sitDetalhe) {
-        sitDetalhe.innerHTML = `<span style="background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 3px; font-weight: 800; font-size: 11px; border: 1px solid #86efac;">${isConciliado ? '🟢 LIQUIDADO E CONCILIADO' : '✅ LIQUIDADO / BAIXADO'}</span> &nbsp; Débito confirmado em <strong>${dtBaixaFmt}</strong> via <strong>${bancoFmt}</strong> ${principal.conciliado_com_extrato ? `(Vínculo Extrato: ${principal.conciliado_com_extrato})` : ''}`;
+        sitDetalhe.innerHTML = `<span style="background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 3px; font-weight: 800; font-size: 11px; border: 1px solid #86efac;">${isConciliado ? 'LIQUIDADO E CONCILIADO' : 'LIQUIDADO / BAIXADO'}</span> &nbsp; Débito confirmado em <strong>${dtBaixaFmt}</strong> via <strong>${bancoFmt}</strong> ${principal.conciliado_com_extrato ? `(Vínculo Extrato: ${principal.conciliado_com_extrato})` : ''}`;
       }
       if (carimboBaixa) {
-        carimboBaixa.innerHTML = `<strong style="color: #166534; font-size: 11px;">✓ QUITADO & CONCILIADO</strong><br>Pago em: ${dtBaixaFmt} (${bancoFmt})`;
+        carimboBaixa.innerHTML = `<strong style="color: #166534; font-size: 11px;">QUITADO & CONCILIADO</strong><br>Pago em: ${dtBaixaFmt} (${bancoFmt})`;
       }
     } else {
       const dtVencFmt = formatarData(principal.vencimento);
@@ -7183,14 +7261,14 @@
         badgeStatus.style.background = '#fef3c7';
         badgeStatus.style.color = '#92400e';
         badgeStatus.style.border = '1px solid #fde68a';
-        badgeStatus.innerText = '⏳ EM ABERTO';
+        badgeStatus.innerText = 'EM ABERTO';
       }
       if (subtextoStatus) {
         subtextoStatus.style.color = '#b45309';
         subtextoStatus.innerText = `Previsão Vencimento: ${dtVencFmt}`;
       }
       if (sitDetalhe) {
-        sitDetalhe.innerHTML = `<span style="background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 3px; font-weight: 800; font-size: 11px; border: 1px solid #fde68a;">⏳ EM ABERTO</span> &nbsp; Título a pagar com vencimento previsto para <strong>${dtVencFmt}</strong> (Aguardando autorização / liquidação)`;
+        sitDetalhe.innerHTML = `<span style="background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 3px; font-weight: 800; font-size: 11px; border: 1px solid #fde68a;">EM ABERTO</span> &nbsp; Título a pagar com vencimento previsto para <strong>${dtVencFmt}</strong> (Aguardando autorização / liquidação)`;
       }
       if (carimboBaixa) {
         carimboBaixa.innerHTML = `Data da Baixa: ___/___/______<br><span style="color: #94a3b8; font-size: 10px;">Aguardando Quitação</span>`;
@@ -7412,9 +7490,9 @@
         const isConciliado = Boolean(item.conciliada || item.conciliado || item.conciliado_com_extrato);
         const statusBadge = isPago
           ? (isConciliado 
-              ? `<span style="background: #dcfce7; color: #166534; padding: 2px 6px; border-radius: 3px; font-weight: 800; font-size: 10px; border: 1px solid #86efac; display: block; white-space: nowrap;">🟢 CONCILIADO</span><span style="font-size: 9.5px; color: #15803d; font-weight: 600;">Pago: ${formatarData(item.data_baixa || item.vencimento)}</span>`
-              : `<span style="background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 3px; font-weight: 800; font-size: 10px; border: 1px solid #bae6fd; display: block; white-space: nowrap;">✅ BAIXADO</span><span style="font-size: 9.5px; color: #0369a1; font-weight: 600;">Pago: ${formatarData(item.data_baixa || item.vencimento)}</span>`)
-          : `<span style="background: #fef3c7; color: #92400e; padding: 2px 6px; border-radius: 3px; font-weight: 800; font-size: 10px; border: 1px solid #fde68a; display: block; white-space: nowrap;">⏳ EM ABERTO</span><span style="font-size: 9.5px; color: #92400e; font-weight: 600;">Venc: ${formatarData(item.vencimento)}</span>`;
+              ? `<span style="background: #dcfce7; color: #166534; padding: 2px 6px; border-radius: 3px; font-weight: 800; font-size: 10px; border: 1px solid #86efac; display: block; white-space: nowrap;">CONCILIADO</span><span style="font-size: 9.5px; color: #15803d; font-weight: 600;">Pago: ${formatarData(item.data_baixa || item.vencimento)}</span>`
+              : `<span style="background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 3px; font-weight: 800; font-size: 10px; border: 1px solid #bae6fd; display: block; white-space: nowrap;">BAIXADO</span><span style="font-size: 9.5px; color: #0369a1; font-weight: 600;">Pago: ${formatarData(item.data_baixa || item.vencimento)}</span>`)
+          : `<span style="background: #fef3c7; color: #92400e; padding: 2px 6px; border-radius: 3px; font-weight: 800; font-size: 10px; border: 1px solid #fde68a; display: block; white-space: nowrap;">EM ABERTO</span><span style="font-size: 9.5px; color: #92400e; font-weight: 600;">Venc: ${formatarData(item.vencimento)}</span>`;
 
         const tr = document.createElement('tr');
         tr.style.background = idx % 2 === 0 ? '#ffffff' : '#f8fafc';
@@ -7501,13 +7579,13 @@
       if (saldoProjetado >= 0) {
         elProj.style.color = '#004b87';
         if (elStatus) {
-          elStatus.innerText = '✓ Caixa positivo após baixas';
+          elStatus.innerText = 'Caixa positivo após baixas';
           elStatus.style.color = '#1d4ed8';
         }
       } else {
         elProj.style.color = '#dc2626';
         if (elStatus) {
-          elStatus.innerText = '⚠️ Déficit projetado de caixa';
+          elStatus.innerText = 'Déficit projetado de caixa';
           elStatus.style.color = '#dc2626';
         }
       }
@@ -7692,7 +7770,7 @@
 
     const grupos = [
       {
-        titulo: '📄 1. Boletos Bancários (Itaú & Outros Bancos)',
+        titulo: '1. Boletos Bancários (Itaú & Outros Bancos)',
         badgeBg: '#0f172a',
         badgeColor: '#93c5fd',
         subtotalColor: '#004b87',
@@ -7700,7 +7778,7 @@
         itens: boletos
       },
       {
-        titulo: '⚡ 2. PIX & Transferências (Serviços Operacionais & MEI)',
+        titulo: '2. PIX & Transferências (Serviços Operacionais & MEI)',
         badgeBg: '#14532d',
         badgeColor: '#bbf7d0',
         subtotalColor: '#166534',
@@ -7708,7 +7786,7 @@
         itens: pixTransf
       },
       {
-        titulo: '🏛️ 3. Tributos, Retenções & Guias de Recolhimento',
+        titulo: '3. Tributos, Retenções & Guias de Recolhimento',
         badgeBg: '#78350f',
         badgeColor: '#fde68a',
         subtotalColor: '#92400e',
@@ -7719,7 +7797,7 @@
 
     if (outros.length > 0) {
       grupos.push({
-        titulo: '📋 4. Outras Obrigações & Pagamentos',
+        titulo: '4. Outras Obrigações & Pagamentos',
         badgeBg: '#334155',
         badgeColor: '#cbd5e1',
         subtotalColor: '#334155',
@@ -7800,7 +7878,7 @@
               ${valFmt}
             </td>
             <td class="no-print" style="padding: 6px 4px; border: 1px solid #cbd5e1; text-align: center; vertical-align: middle;">
-              <button type="button" class="tool-btn" style="display: inline-flex; align-items: center; justify-content: center; padding: 3px 6px; font-size: 11px; color: #004b87; border: 1px solid #94a3b8; background: #ffffff; border-radius: 3px; cursor: pointer;" onclick="abrirModalEdicaoTitulo('${item.id || item.numero_doc || item.numero_id}')" title="Editar Lançamento (CFOP, Categoria, Valores...)">✏️</button>
+              <button type="button" class="tool-btn" style="display: inline-flex; align-items: center; justify-content: center; padding: 3px 6px; font-size: 11px; color: #004b87; border: 1px solid #94a3b8; background: #ffffff; border-radius: 3px; cursor: pointer;" onclick="abrirModalEdicaoTitulo('${item.id || item.numero_doc || item.numero_id}')" title="Editar Lançamento (CFOP, Categoria, Valores...)">${bimerIcon('pencil', 'bimer-svg-xs')}</button>
             </td>
           </tr>
         `;
@@ -7985,7 +8063,7 @@
     ];
 
     salvarExtratoConciliacao();
-    alert('✅ Extrato Real de Setembro/2026 carregado com sucesso!\n10 lançamentos disponíveis para conciliação.');
+    alert('[SUCESSO] Extrato Real de Setembro/2026 carregado com sucesso!\n10 lançamentos disponíveis para conciliação.');
   }
 
   function processarArquivoExtrato(event) {
@@ -8046,9 +8124,9 @@
 
     if (transacoes.length > 0) {
       extratoBancario = transacoes;
-      alert(`✅ Sucesso!\nForam importados ${transacoes.length} lançamentos de débito do arquivo OFX.`);
+      alert(`[SUCESSO]\nForam importados ${transacoes.length} lançamentos de débito do arquivo OFX.`);
     } else {
-      alert('⚠️ Nenhum lançamento de débito encontrado no arquivo OFX informado.');
+      alert('[AVISO] Nenhum lançamento de débito encontrado no arquivo OFX informado.');
     }
   }
 
@@ -8082,7 +8160,7 @@
 
     if (transacoes.length > 0) {
       extratoBancario = transacoes;
-      alert(`✅ Sucesso!\nForam importados ${transacoes.length} lançamentos do arquivo.`);
+      alert(`[SUCESSO]\nForam importados ${transacoes.length} lançamentos do arquivo.`);
     }
   }
 
@@ -8127,7 +8205,7 @@
         if (isBackendOnline && idParaBaixa) {
           try {
             await fetch(`${API_BASE}/titulos/${idParaBaixa}/baixa?forcar_baixa=true`, { method: 'POST' });
-            console.log('✅ Baixa persistida com sucesso no backend para:', idParaBaixa);
+            console.log('[OK] Baixa persistida com sucesso no backend para:', idParaBaixa);
           } catch (e) {
             console.warn('Erro ao persistir baixa no backend:', e);
           }
@@ -8151,9 +8229,9 @@
     atualizarTotaisGerais();
 
     if (conciliadosCont > 0) {
-      alert(`🎯 Conciliação Automática Concluída!\nForam identificados, conciliados e BAIXADOS ${conciliadosCont} títulos com sucesso no Contas a Pagar.`);
+      alert(`[SUCESSO] Conciliação Automática Concluída!\nForam identificados, conciliados e BAIXADOS ${conciliadosCont} títulos com sucesso no Contas a Pagar.`);
     } else {
-      alert('ℹ️ Nenhum novo par coincidente foi identificado automaticamente. Você pode conciliar tarifas clicando no botão "⚡ Criar" ao lado de cada item.');
+      alert('[INFO] Nenhum novo par coincidente foi identificado automaticamente. Você pode conciliar tarifas clicando no botão "Criar" ao lado de cada item.');
     }
   }
 
@@ -8228,7 +8306,7 @@
     salvarExtratoConciliacao();
     renderizarGridTitulos();
     atualizarTotaisGerais();
-    alert(`✅ Tarifa bancária lançada e conciliada!\nTítulo gerado com ID ${idLanc}.`);
+    alert(`[SUCESSO] Tarifa bancária lançada e conciliada!\nTítulo gerado com ID ${idLanc}.`);
   }
 
   function limparExtratoConciliacao() {
@@ -8248,7 +8326,7 @@
       tbodyExt.innerHTML = `
         <tr>
           <td colspan="6" style="text-align: center; padding: 30px; color: #64748b;">
-            Nenhum extrato importado. Clique em <strong>"📥 Importar Extrato (.OFX)"</strong> ou <strong>"⚡ Carregar Extrato Real"</strong> acima.
+            Nenhum extrato importado. Clique em <strong>"<svg class="bimer-svg" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Importar Extrato (.OFX)"</strong> ou <strong>"Carregar Extrato Real"</strong> acima.
           </td>
         </tr>
       `;
@@ -8256,16 +8334,16 @@
       let htmlExt = '';
       extratoBancario.forEach(item => {
         const statusBadge = item.conciliado 
-          ? `<span style="background: #dcfce7; color: #166534; padding: 2px 6px; border-radius: 3px; font-weight: 700; font-size: 10px; border: 1px solid #86efac;">🟢 Conciliado</span><div style="font-size: 9px; font-family: monospace; color: #15803d; margin-top: 2px;">${item.titulo_numero_id || 'ID VINCULADO'}</div>`
+          ? `<span style="background: #dcfce7; color: #166534; padding: 2px 6px; border-radius: 3px; font-weight: 700; font-size: 10px; border: 1px solid #86efac;"><svg class="bimer-svg bimer-svg-green bimer-svg-xs" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> Conciliado</span><div style="font-size: 9px; font-family: monospace; color: #15803d; margin-top: 2px;">${item.titulo_numero_id || 'ID VINCULADO'}</div>`
           : (item.tipo === 'TARIFA' 
-            ? `<span style="background: #fef3c7; color: #92400e; padding: 2px 6px; border-radius: 3px; font-weight: 700; font-size: 10px; border: 1px solid #fde68a;">🟡 Tarifa Bancária</span>`
-            : `<span style="background: #fee2e2; color: #991b1b; padding: 2px 6px; border-radius: 3px; font-weight: 700; font-size: 10px; border: 1px solid #fca5a5;">🔴 Pendente</span>`);
+            ? `<span style="background: #fef3c7; color: #92400e; padding: 2px 6px; border-radius: 3px; font-weight: 700; font-size: 10px; border: 1px solid #fde68a;">Tarifa Bancária</span>`
+            : `<span style="background: #fee2e2; color: #991b1b; padding: 2px 6px; border-radius: 3px; font-weight: 700; font-size: 10px; border: 1px solid #fca5a5;">Pendente</span>`);
 
         let acaoBtn = '';
         if (item.conciliado) {
-          acaoBtn = `<button class="tool-btn" onclick="desvincularConciliacao('${item.id}')" style="padding: 2px 6px; font-size: 10px;" title="Desfazer conciliação deste item">✖ Desvincular</button>`;
+          acaoBtn = `<button class="tool-btn" onclick="desvincularConciliacao('${item.id}')" style="padding: 2px 6px; font-size: 10px;" title="Desfazer conciliação deste item"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Desvincular</button>`;
         } else if (item.tipo === 'TARIFA') {
-          acaoBtn = `<button class="tool-btn primary" onclick="lancarTarifaRapida('${item.id}')" style="padding: 2px 6px; font-size: 10px; background: #004b87;" title="Criar título no Contas a Pagar e conciliar na hora">⚡ Criar</button>`;
+          acaoBtn = `<button class="tool-btn primary" onclick="lancarTarifaRapida('${item.id}')" style="padding: 2px 6px; font-size: 10px; background: #004b87;" title="Criar título no Contas a Pagar e conciliar na hora"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Criar</button>`;
         } else {
           acaoBtn = `<span style="font-size: 10px; color: #94a3b8;">Aguardando</span>`;
         }
@@ -8299,8 +8377,8 @@
       titulosSistema.forEach(item => {
         const isConc = item.situacao === 'CONCILIADO' || item.status === 'CONCILIADO';
         const sitBadge = isConc
-          ? `<span style="background: #dcfce7; color: #166534; padding: 2px 6px; border-radius: 3px; font-weight: 700; font-size: 10px; border: 1px solid #86efac;">✅ Conciliado</span>`
-          : `<span style="background: #fef3c7; color: #92400e; padding: 2px 6px; border-radius: 3px; font-weight: 700; font-size: 10px; border: 1px solid #fde68a;">⏳ Aberto</span>`;
+          ? `<span style="background: #dcfce7; color: #166534; padding: 2px 6px; border-radius: 3px; font-weight: 700; font-size: 10px; border: 1px solid #86efac;"><svg class="bimer-svg bimer-svg-green bimer-svg-xs" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> Conciliado</span>`
+          : `<span style="background: #fef3c7; color: #92400e; padding: 2px 6px; border-radius: 3px; font-weight: 700; font-size: 10px; border: 1px solid #fde68a;"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Aberto</span>`;
 
         htmlSis += `
           <tr style="${isConc ? 'background: #f0fdf4;' : ''}">
@@ -8313,7 +8391,7 @@
             <td style="text-align: right; font-weight: 700; color: #0f172a; white-space: nowrap;">${formatarMoeda(item.valor)}</td>
             <td style="text-align: center;">${sitBadge}</td>
             <td style="text-align: center;">
-              ${isConc ? `<span style="color: #15803d; font-size: 11px; font-weight: 800;">✓ Ok</span>` : `<span style="color: #94a3b8; font-size: 10px;">-</span>`}
+              ${isConc ? `<span style="color: #15803d; font-size: 11px; font-weight: 800;"><svg class="bimer-svg bimer-svg-green bimer-svg-xs" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> Ok</span>` : `<span style="color: #94a3b8; font-size: 10px;">-</span>`}
             </td>
           </tr>
         `;
@@ -8350,7 +8428,7 @@
       if (zerado) {
         boxDif.style.background = '#f0fdf4';
         boxDif.style.borderLeft = '4px solid #10b981';
-        elStat.innerText = '✓ CONCILIAÇÃO FECHADA & VALIDADA (R$ 0,00)';
+        elStat.innerText = 'CONCILIAÇÃO FECHADA & VALIDADA (R$ 0,00)';
         elStat.style.color = '#047857';
       } else if (totDebitos === 0) {
         boxDif.style.background = '#f8fafc';
@@ -8360,7 +8438,7 @@
       } else {
         boxDif.style.background = '#fef2f2';
         boxDif.style.borderLeft = '4px solid #ef4444';
-        elStat.innerText = `⚠️ Pendência de R$ ${formatarMoeda(diferenca)}`;
+        elStat.innerText = `Pendência de R$ ${formatarMoeda(diferenca)}`;
         elStat.style.color = '#dc2626';
       }
     }
@@ -8532,7 +8610,7 @@
       html += `
         <tr style="background: #e2e8f0; font-weight: 700; color: #004b87; border-top: 2px solid #cbd5e1;">
           <td colspan="5" style="padding: 6px 8px;">
-            📅 VENCIMENTO: <strong>${formatarData(dia)}</strong> (${listaDia.length} ${listaDia.length === 1 ? 'título' : 'títulos'})
+            VENCIMENTO: <strong>${formatarData(dia)}</strong> (${listaDia.length} ${listaDia.length === 1 ? 'título' : 'títulos'})
           </td>
           <td style="padding: 6px 8px; text-align: right;">${formatarMoeda(subTotBruto)}</td>
           <td style="padding: 6px 8px; text-align: right; color: #991b1b;">- ${formatarMoeda(subTotBruto - subTotLiq)}</td>
@@ -8547,8 +8625,8 @@
         const vB = Number(item.valor_bruto || item.valor || 0);
         const vR = Math.max(0, vB - vL);
         const sitBadge = isConc
-          ? `<span style="background: #dcfce7; color: #166534; padding: 2px 5px; border-radius: 3px; font-weight: 700; font-size: 9.5px; border: 1px solid #86efac;">✅ Baixado</span>`
-          : `<span style="background: #fef3c7; color: #92400e; padding: 2px 5px; border-radius: 3px; font-weight: 700; font-size: 9.5px; border: 1px solid #fde68a;">⏳ Em Aberto</span>`;
+          ? `<span style="background: #dcfce7; color: #166534; padding: 2px 5px; border-radius: 3px; font-weight: 700; font-size: 9.5px; border: 1px solid #86efac;"><svg class="bimer-svg bimer-svg-green bimer-svg-xs" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> Baixado</span>`
+          : `<span style="background: #fef3c7; color: #92400e; padding: 2px 5px; border-radius: 3px; font-weight: 700; font-size: 9.5px; border: 1px solid #fde68a;"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Em Aberto</span>`;
 
         html += `
           <tr style="${idx % 2 === 1 ? 'background: #f8fafc;' : 'background: #ffffff;'}">
@@ -8685,8 +8763,8 @@
     listaImpostos.forEach((imp, idx) => {
       const isPago = imp.status === 'RECOLHIDO';
       const badge = isPago
-        ? `<span style="background: #dcfce7; color: #166534; padding: 2px 5px; border-radius: 3px; font-weight: 700; font-size: 9.5px; border: 1px solid #86efac;">✅ Recolhido</span>`
-        : `<span style="background: #fef3c7; color: #92400e; padding: 2px 5px; border-radius: 3px; font-weight: 700; font-size: 9.5px; border: 1px solid #fde68a;">⏳ A Recolher</span>`;
+        ? `<span style="background: #dcfce7; color: #166534; padding: 2px 5px; border-radius: 3px; font-weight: 700; font-size: 9.5px; border: 1px solid #86efac;">Recolhido</span>`
+        : `<span style="background: #fef3c7; color: #92400e; padding: 2px 5px; border-radius: 3px; font-weight: 700; font-size: 9.5px; border: 1px solid #fde68a;">A Recolher</span>`;
 
       html += `
         <tr style="${idx % 2 === 1 ? 'background: #f8fafc;' : 'background: #ffffff;'}">
@@ -8718,7 +8796,7 @@
       </table>
 
       <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 10px 14px; font-size: 10px; color: #475569; line-height: 1.5;">
-        <strong>📌 Nota de Auditoria Contábil & Fiscal (JR Solutions):</strong><br>
+        <strong>Nota de Auditoria Contábil & Fiscal (JR Solutions):</strong><br>
         Os valores retidos acima devem ser transmitidos à Receita Federal através da <strong>EFD-Reinf (Série R-4000)</strong> e consolidados na <strong>DCTFWeb</strong> mensal. As retenções municipais de ISSQN alimentam a <strong>DMS / NFS-e Salvador</strong> para emissão da guia DAM unificada.
       </div>
     `;
@@ -8785,7 +8863,7 @@
 
     html += `
       <div style="font-weight: 800; font-size: 11px; color: #004b87; text-transform: uppercase; margin-bottom: 6px;">
-        📊 Síntese de Absorção Orçamentária por Centro de Custo / Loja
+        Síntese de Absorção Orçamentária por Centro de Custo / Loja
       </div>
       <table class="alterdata-grid" style="width: 100%; border-collapse: collapse; font-size: 10.5px; margin-bottom: 20px;">
         <thead>
@@ -8833,7 +8911,7 @@
       </table>
 
       <div style="font-weight: 800; font-size: 11px; color: #004b87; text-transform: uppercase; margin-bottom: 8px;">
-        📑 Detalhamento Analítico dos Títulos por Centro de Custo
+        Detalhamento Analítico dos Títulos por Centro de Custo
       </div>
     `;
 
@@ -8841,7 +8919,7 @@
       html += `
         <div style="border: 1px solid #cbd5e1; border-radius: 4px; margin-bottom: 12px; overflow: hidden;">
           <div style="background: #f1f5f9; padding: 6px 10px; font-weight: 700; color: #004b87; font-size: 11px; display: flex; justify-content: space-between; align-items: center;">
-            <span>🏢 ${g.nome}</span>
+            <span>${g.nome}</span>
             <span>Total: <strong>${formatarMoeda(g.total)}</strong> (${g.titulos.length} itens)</span>
           </div>
           <table style="width: 100%; border-collapse: collapse; font-size: 10px;">
@@ -8866,7 +8944,7 @@
             <td style="padding: 4px 6px; font-weight: 600;">${t.favorecido || '-'}</td>
             <td style="padding: 4px 6px; color: #475569;">${limparHistoricoRedundante(t.descricao || t.historico || '-')}</td>
             <td style="padding: 4px 6px; text-align: right; font-weight: 700;">${formatarMoeda(t.valor)}</td>
-            <td style="padding: 4px 6px; text-align: center;">${isConc ? '✅ Conciliado' : '⏳ Aberto'}</td>
+            <td style="padding: 4px 6px; text-align: center;">${isConc ? 'Conciliado' : 'Aberto'}</td>
           </tr>
         `;
       });
@@ -8902,11 +8980,11 @@
 
       let statusStr = '';
       if (!match) {
-        statusStr = `<span style="background: #fef3c7; color: #92400e; padding: 2px 5px; border-radius: 3px; font-weight: 700; font-size: 9.5px; border: 1px solid #fde68a;">🟡 Pendente Lançamento</span>`;
+        statusStr = `<span style="background: #fef3c7; color: #92400e; padding: 2px 5px; border-radius: 3px; font-weight: 700; font-size: 9.5px; border: 1px solid #fde68a;">Pendente Lançamento</span>`;
       } else if (desvio <= 0.05) {
-        statusStr = `<span style="background: #dcfce7; color: #166534; padding: 2px 5px; border-radius: 3px; font-weight: 700; font-size: 9.5px; border: 1px solid #86efac;">🟢 No Orçamento</span>`;
+        statusStr = `<span style="background: #dcfce7; color: #166534; padding: 2px 5px; border-radius: 3px; font-weight: 700; font-size: 9.5px; border: 1px solid #86efac;">No Orçamento</span>`;
       } else {
-        statusStr = `<span style="background: #fee2e2; color: #991b1b; padding: 2px 5px; border-radius: 3px; font-weight: 700; font-size: 9.5px; border: 1px solid #fca5a5;">🔴 Estourou (+ ${formatarMoeda(desvio)})</span>`;
+        statusStr = `<span style="background: #fee2e2; color: #991b1b; padding: 2px 5px; border-radius: 3px; font-weight: 700; font-size: 9.5px; border: 1px solid #fca5a5;">Estourou (+ ${formatarMoeda(desvio)})</span>`;
       }
 
       return {
@@ -9125,7 +9203,7 @@
     document.getElementById('fixa_valor').value = '';
     document.getElementById('fixa_obs').value = '';
 
-    alert(`✅ Sucesso!\nForam geradas ${meses} previsões futuras no fluxo de caixa.`);
+    alert(`[SUCESSO]\nForam geradas ${meses} previsões futuras no fluxo de caixa.`);
   }
 
   function carregarExemplosDespesasFixas() {
@@ -9174,7 +9252,7 @@
     localStorage.setItem(STORAGE_PREV_KEY, JSON.stringify(previsoes));
     atualizarFiltrosMeses();
     renderizarGridPrevisoes();
-    alert('⚡ Despesas fixas carregadas com sucesso! (Aluguel, Luz, Internet, ERP e Contabilidade para os próximos 6 meses).');
+    alert('[SUCESSO] Despesas fixas carregadas com sucesso! (Aluguel, Luz, Internet, ERP e Contabilidade para os próximos 6 meses).');
   }
 
   let filtroPrevisaoAtivo = {
@@ -9330,7 +9408,7 @@
         <td>
           <div style="font-weight: 700; color: #0f172a;">${p.nome || p.descricao || p.favorecido || 'Despesa Recorrente'}</div>
           <div style="color: var(--text-muted); font-size: 10.5px;">${p.favorecido || ''}${p.cnpj ? ' • CNPJ: ' + p.cnpj : ''}</div>
-          ${p.obs ? `<div style="color: #64748b; font-size: 10px; font-style: italic;">📝 ${p.obs}</div>` : ''}
+          ${p.obs ? `<div style="color: #64748b; font-size: 10px; font-style: italic;">${p.obs}</div>` : ''}
         </td>
         <td><span style="font-size: 10px; background: #f1f5f9; padding: 2px 5px; border-radius: 2px;">${p.ccusto}</span></td>
         <td>
@@ -9341,19 +9419,19 @@
         </td>
         <td>
           <span class="tag-tipo ${isEfetivada ? 'tag-efetivada' : 'tag-previsao'}">
-            ${isEfetivada ? '🚀 EFETIVADA' : '📅 PREVISÃO'}
+            ${isEfetivada ? 'EFETIVADA' : 'PREVISÃO'}
           </span>
         </td>
         <td style="text-align: center;">
           ${!isEfetivada ? `
             <button class="tool-btn primary" style="display: inline-flex; padding: 2px 6px; font-size: 10.5px;" onclick="abrirModalEfetivar('${p.id}')">
-              ⚡ Efetivar
+              Efetivar
             </button>
           ` : `
             <span style="color: var(--success); font-weight: 700; font-size: 10.5px;">No Contas a Pagar</span>
           `}
-          <button class="tool-btn" style="display: inline-flex; padding: 2px 6px; font-size: 10.5px; color: var(--danger); margin-left: 4px;" onclick="excluirPrevisao('${p.id}')">
-            ✖
+          <button class="tool-btn" style="display: inline-flex; align-items: center; justify-content: center; padding: 2px 6px; font-size: 10.5px; color: var(--danger); margin-left: 4px;" onclick="excluirPrevisao('${p.id}')" title="Excluir Previsão">
+            ${bimerIcon('trash', 'bimer-svg-xs', 'stroke:#dc2626;')}
           </button>
         </td>
       `;
@@ -9427,7 +9505,7 @@
     renderizarGridTitulos();
     atualizarTotaisGerais();
 
-    alert(`🎉 CONTA EFETIVADA COM SUCESSO!\nA despesa "${prev.nome}" de ${formatarMoeda(valorReal)} foi enviada para o Contas a Pagar (Aba 4) pronta para pagamento.`);
+    alert(`[SUCESSO] CONTA EFETIVADA COM SUCESSO!\nA despesa "${prev.nome}" de ${formatarMoeda(valorReal)} foi enviada para o Contas a Pagar (Aba 4) pronta para pagamento.`);
   }
 
   function excluirPrevisao(id) {
@@ -9600,7 +9678,7 @@
       alerta.style.background = '#fef2f2';
       alerta.style.border = '1px solid #f87171';
       alerta.style.color = '#991b1b';
-      if (tituloAlerta) tituloAlerta.innerHTML = '⛔ TRAVA DE COMPLIANCE / PENDÊNCIA IDENTIFICADA';
+      if (tituloAlerta) tituloAlerta.innerHTML = '<svg class="bimer-svg bimer-svg-red" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg> TRAVA DE COMPLIANCE / PENDÊNCIA IDENTIFICADA';
       if (linkPend) linkPend.style.display = 'inline-block';
       msg.innerHTML = `O colaborador <strong>${pendenteExato.solicitante}</strong> possui o adiantamento <strong style="color:#004b87;">${pendenteExato.numero_id || pendenteExato.id}</strong> (Concedido em ${formatarData(pendenteExato.dataLib)} no valor de ${formatarMoeda(pendenteExato.valor)}) com <strong>prestação de contas em aberto</strong> (Saldo restante: ${formatarMoeda(saldoRestante)}).<br>Conforme política financeira da JR Solutions, é obrigatório concluir a prestação anterior antes de conceder novos recursos.`;
       btn.disabled = true;
@@ -9624,7 +9702,7 @@
         alerta.style.background = '#fffbeb';
         alerta.style.border = '1px solid #fde68a';
         alerta.style.color = '#92400e';
-        if (tituloAlerta) tituloAlerta.innerHTML = '⚠️ ATENÇÃO: POSSÍVEL HOMÔNIMO IDENTIFICADO';
+        if (tituloAlerta) tituloAlerta.innerHTML = 'ATENÇÃO: POSSÍVEL HOMÔNIMO IDENTIFICADO';
         if (linkPend) linkPend.style.display = 'inline-block';
         msg.innerHTML = `Existe adiantamento em aberto para <strong>${possivelPendente.solicitante}</strong> (${possivelPendente.numero_id || possivelPendente.id}).<br>• Se for para <strong>${possivelPendente.solicitante}</strong>, complete o nome para acionar a trava de segurança.<br>• Se for outro(a) colaborador(a) com mesmo primeiro nome (ex: Maria Silva, Maria Santos), <strong>continue digitando o nome completo</strong> que o cadastro estará liberado!`;
         btn.disabled = false;
@@ -9693,7 +9771,7 @@
           ${a.numero_id || a.id.slice(-6)}
         </td>
         <td>
-          <strong style="color: ${isAtivo ? 'var(--alterdata-blue)' : '#1e293b'};">${isAtivo ? '👉 ' : ''}${a.solicitante}</strong>
+          <strong style="color: ${isAtivo ? 'var(--alterdata-blue)' : '#1e293b'};">${a.solicitante}</strong>
           <div style="font-size: 9.5px; color: var(--text-muted);">${a.ccusto}</div>
         </td>
         <td style="text-align: right; font-weight: 600;">${formatarMoeda(a.valor)}</td>
@@ -9741,7 +9819,7 @@
     });
 
     if (pendente) {
-      alert(`⛔ BLOQUEIO DE POLÍTICA FINANCEIRA:\n\nO colaborador "${solicitante}" já possui o adiantamento [${pendente.numero_id || pendente.id}] concedido em ${formatarData(pendente.dataLib)} no valor de ${formatarMoeda(pendente.valor)} com prestação de contas PENDENTE.\n\nRegra da JR Solutions: Não é permitida a concessão de novo adiantamento enquanto houver pendência de prestação anterior.`);
+      alert(`[BLOQUEIO DE POLÍTICA FINANCEIRA]:\n\nO colaborador "${solicitante}" já possui o adiantamento [${pendente.numero_id || pendente.id}] concedido em ${formatarData(pendente.dataLib)} no valor de ${formatarMoeda(pendente.valor)} com prestação de contas PENDENTE.\n\nRegra da JR Solutions: Não é permitida a concessão de novo adiantamento enquanto houver pendência de prestação anterior.`);
       return;
     }
 
@@ -9770,7 +9848,7 @@
     document.getElementById('ad_motivo').value = '';
     checarPendenciaAdiantamentoLive();
 
-    alert(`✅ ADIANTAMENTO [${numero_id}] CONCEDIDO COM SUCESSO!\nValor de ${formatarMoeda(valor)} liberado para ${solicitante}.\nIdentificador gerado: ${numero_id}`);
+    alert(`[SUCESSO] ADIANTAMENTO [${numero_id}] CONCEDIDO COM SUCESSO!\nValor de ${formatarMoeda(valor)} liberado para ${solicitante}.\nIdentificador gerado: ${numero_id}`);
   }
 
   function carregarExemploMultiplosAdiantamentos() {
@@ -9826,7 +9904,7 @@
 
     adiantamentoAtivoId = 'AD_LUIZA';
     salvarAdiantamentos();
-    alert('📋 3 Adiantamentos corporativos carregados com IDs sequenciais (ADT-2026-0001 a 0003).\nClique em qualquer um na tabela à esquerda para alternar!');
+    alert('[INFO] 3 Adiantamentos corporativos carregados com IDs sequenciais (ADT-2026-0001 a 0003).\nClique em qualquer um na tabela à esquerda para alternar!');
   }
 
   function carregarExemploLuizaMarketing() {
@@ -9850,7 +9928,7 @@
     adiantamentos.forEach(a => {
       const opt = document.createElement('option');
       opt.value = a.id;
-      const statusIcon = a.status === 'ABERTO' ? '⏳' : '✅';
+      const statusIcon = a.status === 'ABERTO' ? '' : '';
       const numId = a.numero_id || a.id.slice(-6);
       opt.innerText = `${statusIcon} [${numId}] ${a.solicitante} (${formatarMoeda(a.valor)})`;
       if (a.id === adiantamentoAtivoId) opt.selected = true;
@@ -9917,21 +9995,21 @@
       elSaldo.innerText = formatarMoeda(saldo);
       elMsg.style.background = '#e0f2fe';
       elMsg.style.color = '#0369a1';
-      elMsg.innerText = `💡 [${numId}] ${ativo.solicitante} ainda tem ${formatarMoeda(saldo)} a prestar contas ou devolver para a empresa.`;
+      elMsg.innerText = `[${numId}] ${ativo.solicitante} ainda tem ${formatarMoeda(saldo)} a prestar contas ou devolver para a empresa.`;
     } else if (saldo < 0) {
       elLblSaldo.innerText = '3. Saldo a Reembolsar à ' + ativo.solicitante.split(' ')[0];
       elSaldo.style.color = 'var(--danger)';
       elSaldo.innerText = formatarMoeda(Math.abs(saldo));
       elMsg.style.background = '#fee2e2';
       elMsg.style.color = '#991b1b';
-      elMsg.innerText = `⚠️ [${numId}] Os gastos ultrapassaram o adiantamento em ${formatarMoeda(Math.abs(saldo))}. A empresa deve reembolsar ${ativo.solicitante.split(' ')[0]}.`;
+      elMsg.innerText = `[${numId}] Os gastos ultrapassaram o adiantamento em ${formatarMoeda(Math.abs(saldo))}. A empresa deve reembolsar ${ativo.solicitante.split(' ')[0]}.`;
     } else {
       elLblSaldo.innerText = '3. Saldo da Prestação de Contas';
       elSaldo.style.color = 'var(--success)';
       elSaldo.innerText = 'R$ 0,00 (Exato)';
       elMsg.style.background = '#dcfce7';
       elMsg.style.color = '#15803d';
-      elMsg.innerText = `🎯 [${numId}] Prestação de contas fechou exatamente em 100% do valor concedido!`;
+      elMsg.innerText = `[${numId}] Prestação de contas fechou exatamente em 100% do valor concedido!`;
     }
 
     if (!ativo.gastos || ativo.gastos.length === 0) {
@@ -9948,7 +10026,7 @@
           <td style="text-align: right;"><strong style="color: var(--alterdata-blue);">${formatarMoeda(g.valor)}</strong></td>
           <td style="text-align: center;">
             ${ativo.status === 'ABERTO' ? `
-              <button class="tool-btn" style="display:inline-flex; padding: 2px 6px; font-size: 10px; color: var(--danger);" onclick="excluirComprovanteGasto('${g.id}')">✖</button>
+              <button class="tool-btn" style="display:inline-flex; padding: 2px 6px; font-size: 10px; color: var(--danger);" onclick="excluirComprovanteGasto('${g.id}')"><svg class="bimer-svg bimer-svg-xs" style="stroke:#dc2626;" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
             ` : '-'}
           </td>
         `;
@@ -9962,7 +10040,7 @@
         textoAcao.innerHTML = `Sobrou <strong>${formatarMoeda(saldo)}</strong> não utilizado no adiantamento [${numId}].`;
         botoesAcao.innerHTML = `
           <button class="tool-btn primary" onclick="fecharAdiantamentoDevolucao('${ativo.id}')">
-            💰 Registrar Devolução de ${formatarMoeda(saldo)} e Quitar
+            <svg class="bimer-svg" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg> Registrar Devolução de ${formatarMoeda(saldo)} e Quitar
           </button>
         `;
       } else if (saldo < 0) {
@@ -9970,20 +10048,20 @@
         textoAcao.innerHTML = `Gastou a mais no adiantamento [${numId}]: reembolsar <strong>${formatarMoeda(dif)}</strong> para ${ativo.solicitante}.`;
         botoesAcao.innerHTML = `
           <button class="tool-btn primary" onclick="fecharAdiantamentoReembolso('${ativo.id}')">
-            💳 Gerar Reembolso no Contas a Pagar e Quitar
+            <svg class="bimer-svg" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> Gerar Reembolso no Contas a Pagar e Quitar
           </button>
         `;
       } else {
         textoAcao.innerHTML = `Total comprovado do [${numId}] bateu perfeitamente com os ${formatarMoeda(ativo.valor)}.`;
         botoesAcao.innerHTML = `
           <button class="tool-btn primary" onclick="fecharAdiantamentoExato('${ativo.id}')">
-            ✅ Quitar Prestação de Contas (Sem Pendências)
+            <svg class="bimer-svg bimer-svg-green" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> Quitar Prestação de Contas (Sem Pendências)
           </button>
         `;
       }
     } else {
       if (formGastoContainer) formGastoContainer.style.display = 'none';
-      textoAcao.innerHTML = `✅ Este adiantamento [${numId}] já foi <strong>FINALIZADO E QUITADO</strong> em ${formatarData(ativo.dataFechamento)}.`;
+      textoAcao.innerHTML = `Este adiantamento [${numId}] já foi <strong>FINALIZADO E QUITADO</strong> em ${formatarData(ativo.dataFechamento)}.`;
       botoesAcao.innerHTML = `
         <button class="tool-btn" onclick="reabrirAdiantamento('${ativo.id}')">
           ↩️ Reabrir para Ajustes
@@ -10048,7 +10126,7 @@
       ativo.dataFechamento = hoje;
       salvarAdiantamentos();
       checarPendenciaAdiantamentoLive();
-      alert(`✅ Prestação de contas concluída!\nO adiantamento [${numId}] de ${ativo.solicitante} foi liquidado com a devolução de ${formatarMoeda(sobra)}.`);
+      alert(`[SUCESSO] Prestação de contas concluída!\nO adiantamento [${numId}] de ${ativo.solicitante} foi liquidado com a devolução de ${formatarMoeda(sobra)}.`);
     }
   }
 
@@ -10094,7 +10172,7 @@
       atualizarTotaisGerais();
       checarPendenciaAdiantamentoLive();
 
-      alert(`🎉 REEMBOLSO GERADO COM SUCESSO!\nFoi criado um título no Contas a Pagar (Aba 3) no valor de ${formatarMoeda(dif)} em nome de ${ativo.solicitante} [Ref. ${numDocReemb}].`);
+      alert(`[SUCESSO] REEMBOLSO GERADO COM SUCESSO!\nFoi criado um título no Contas a Pagar (Aba 3) no valor de ${formatarMoeda(dif)} em nome de ${ativo.solicitante} [Ref. ${numDocReemb}].`);
     }
   }
 
@@ -10106,7 +10184,7 @@
     ativo.dataFechamento = hoje;
     salvarAdiantamentos();
     checarPendenciaAdiantamentoLive();
-    alert(`✅ Prestação de contas [${numId}] encerrada perfeitamente com 100% de comprovação!`);
+    alert(`[SUCESSO] Prestação de contas [${numId}] encerrada perfeitamente com 100% de comprovação!`);
   }
 
   function reabrirAdiantamento(id) {
@@ -10268,17 +10346,17 @@
 <div id="bimer-busca-modal-backdrop" class="bimer-busca-modal-backdrop" onclick="fecharBuscaRapida()"></div>
 <div id="bimer-busca-rapida-painel" class="bimer-busca-rapida-painel" role="dialog" aria-modal="true">
   <div class="bimer-busca-header">
-    <span id="bimer-busca-titulo">🔍 Busca Rápida</span>
+    <span id="bimer-busca-titulo"><svg class="bimer-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> Busca Rápida</span>
     <div class="bimer-busca-header-actions">
-      <button type="button" class="bimer-busca-header-btn" id="bimer-busca-btn-expandir" onclick="alternarModoModalBuscaRapida()" title="Alternar entre lista ancorada e janela maximizada">⛶ Expandir</button>
-      <button type="button" class="bimer-busca-header-btn" onclick="fecharBuscaRapida()" title="Fechar (Esc)">✕</button>
+      <button type="button" class="bimer-busca-header-btn" id="bimer-busca-btn-expandir" onclick="alternarModoModalBuscaRapida()" title="Alternar entre lista ancorada e janela maximizada"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg> Expandir</button>
+      <button type="button" class="bimer-busca-header-btn" onclick="fecharBuscaRapida()" title="Fechar (Esc)"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
     </div>
   </div>
   <div class="bimer-busca-filtro-bar">
     <div class="bimer-busca-input-box">
-      <span style="color: #004b87; font-size: 13px; font-weight: bold;">🔎</span>
+      <svg class="bimer-svg" style="color: #004b87;" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
       <input type="text" id="bimer-busca-input" placeholder="Digite para filtrar..." oninput="filtrarBuscaRapidaLive(this.value)" autocomplete="off">
-      <button type="button" id="bimer-busca-limpar-btn" onclick="limparInputBuscaRapida()" style="border: none; background: #e2e8f0; border-radius: 50%; width: 18px; height: 18px; cursor: pointer; font-size: 10px; font-weight: bold; color: #475569; display: none;">✕</button>
+      <button type="button" id="bimer-busca-limpar-btn" onclick="limparInputBuscaRapida()" style="border: none; background: #e2e8f0; border-radius: 50%; width: 18px; height: 18px; cursor: pointer; font-size: 10px; font-weight: bold; color: #475569; display: none;"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
     </div>
     <div id="bimer-busca-chips-container" class="bimer-busca-chips"></div>
   </div>
@@ -10289,7 +10367,7 @@
     </table>
   </div>
   <div class="bimer-busca-footer">
-    <span id="bimer-busca-dica">💡 Clique na linha para selecionar • [ESC] para fechar</span>
+    <span id="bimer-busca-dica">Dica: Clique na linha para selecionar • [ESC] para fechar</span>
     <span id="bimer-busca-contador" style="font-weight: 600;">0 registros</span>
   </div>
 </div>
