@@ -1095,6 +1095,38 @@
             <span><strong>Total Retenções Federais (IRRF + PIS + COFINS + CSLL):</strong> <span id="tot-federais" style="color: var(--tax-purple); font-weight: 700;">R$ 0,00</span></span>
             <span><strong>Total Retenção Municipal (ISS):</strong> <span id="tot-municipal" style="color: var(--alterdata-blue); font-weight: 700;">R$ 0,00</span></span>
           </div>
+
+          <!-- 🏛️ PAINEL DO NOVO PADRÃO TRIBUTÁRIO (REFORMA TRIBUTÁRIA • EC 132/2023 - IVA DUAL: IBS & CBS) -->
+          <div style="margin-top: 12px; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 6px; padding: 10px 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+              <span style="font-size: 11.5px; font-weight: 800; color: #166534; display: flex; align-items: center; gap: 6px;">
+                🏛️ NOVO PADRÃO TRIBUTÁRIO NACIONAL (REFORMA TRIBUTÁRIA • EC 132/2023)
+                <span style="background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; font-size: 9.5px; padding: 2px 6px; border-radius: 4px; font-weight: 700;">Transição 2026/2027 • IVA Dual</span>
+              </span>
+              <span style="font-size: 10.5px; color: #15803d; font-weight: 600;">Layout Nacional NFS-e & NF-e</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; font-size: 11px;">
+              <div style="background: #ffffff; padding: 6px 10px; border-radius: 4px; border: 1px solid #bbf7d0;">
+                <div style="color: #475569; font-size: 10px; font-weight: 600;">CBS (Federal • Alíquota Teste 0,90%):</div>
+                <strong id="nt-valor-cbs" style="font-size: 12.5px; color: #047857;">R$ 0,00</strong>
+                <span style="font-size: 9.5px; color: #64748b; display: block;">Compensável com PIS/COFINS</span>
+              </div>
+              <div style="background: #ffffff; padding: 6px 10px; border-radius: 4px; border: 1px solid #bbf7d0;">
+                <div style="color: #475569; font-size: 10px; font-weight: 600;">IBS (Estados/Municípios • 0,10%):</div>
+                <strong id="nt-valor-ibs" style="font-size: 12.5px; color: #047857;">R$ 0,00</strong>
+                <span style="font-size: 9.5px; color: #64748b; display: block;">Compensável com ISS/ICMS</span>
+              </div>
+              <div style="background: #ffffff; padding: 6px 10px; border-radius: 4px; border: 1px solid #bbf7d0;">
+                <div style="color: #475569; font-size: 10px; font-weight: 600;">Total IVA Dual Estimado (1,00%):</div>
+                <strong id="nt-valor-iva-dual" style="font-size: 12.5px; color: #166534;">R$ 0,00</strong>
+                <span style="font-size: 9.5px; color: #64748b; display: block;">Impacto Neutro na Transição</span>
+              </div>
+              <div style="background: #ffffff; padding: 6px 10px; border-radius: 4px; border: 1px solid #bbf7d0;">
+                <div style="color: #475569; font-size: 10px; font-weight: 600;">Cód. Tributação Nacional (CTN):</div>
+                <input type="text" id="ctn_nacional" placeholder="Ex: 14.05.01 (Portal Nacional)" style="width: 100%; font-size: 11px; padding: 4px 6px; border: 1px solid #cbd5e1; border-radius: 3px; font-weight: 700; color: #004b87; margin-top: 3px;" autocomplete="off">
+              </div>
+            </div>
+          </div>
         </div>
       </fieldset>
     </div>
@@ -3020,25 +3052,70 @@
      ========================================================================== */
 
   const TABELA_CNAES = {
-    "6201": { cnae: "6201-5/01", desc: "Desenvolvimento de programas de computador sob encomenda", lc116: "01.01", retFederal: true, issRetido: false, obs: "Serviços de TI (Retenção IRRF 1,5% + PCC 4,65%)" },
-    "6202": { cnae: "6202-3/00", desc: "Desenvolvimento e licenciamento de softwares customizáveis", lc116: "01.05", retFederal: true, issRetido: false, obs: "Licenciamento de Software (Retenção IRRF 1,5% + PCC 4,65%)" },
-    "6203": { cnae: "6203-1/00", desc: "Desenvolvimento e licenciamento de programas não-customizáveis", lc116: "01.05", retFederal: false, issRetido: false, obs: "Software de Prateleira (Venda/Licença)" },
-    "6204": { cnae: "6204-0/00", desc: "Consultoria em tecnologia da informação", lc116: "01.06", retFederal: true, issRetido: false, obs: "Consultoria de TI (Retenção IRRF 1,5% + PCC 4,65%)" },
-    "6209": { cnae: "6209-1/00", desc: "Suporte técnico, manutenção e outros serviços em TI", lc116: "01.07", retFederal: true, issRetido: false, obs: "Suporte e Manutenção TI (Retenção Federal)" },
-    "6920": { cnae: "6920-6/01", desc: "Atividades de contabilidade, auditoria e assessoria contábil", lc116: "17.19", retFederal: true, issRetido: false, obs: "Serviços Contábeis e Auditoria (IRRF 1,5% + PCC 4,65%)" },
-    "6911": { cnae: "6911-7/01", desc: "Serviços advocatícios e assessoria jurídica", lc116: "17.14", retFederal: true, issRetido: false, obs: "Honorários Advocatícios (IRRF 1,5% + PCC 4,65%)" },
-    "7020": { cnae: "7020-4/00", desc: "Atividades de consultoria em gestão empresarial", lc116: "17.01", retFederal: true, issRetido: false, obs: "Consultoria Empresarial (IRRF 1,5% + PCC 4,65%)" },
-    "7311": { cnae: "7311-4/00", desc: "Agências de publicidade e propaganda", lc116: "17.06", retFederal: true, issRetido: false, obs: "Publicidade e Propaganda (IRRF 1,5% Agência)" },
-    "7319": { cnae: "7319-0/02", desc: "Promoção de vendas e publicidade no local de venda (PDV)", lc116: "17.06", retFederal: true, issRetido: false, obs: "Promoção de Vendas (Retenção Federal)" },
-    "7490": { cnae: "7490-1/04", desc: "Atividades de intermediação e agenciamento de serviços", lc116: "10.05", retFederal: true, issRetido: false, obs: "Intermediação de Negócios" },
-    "7739": { cnae: "7739-0/99", desc: "Locação de máquinas e equipamentos sem operador", lc116: "03.01", retFederal: false, issRetido: false, obs: "Locação de Bens Móveis (Súmula Vinculante 31 STF - Isento de ISS)" },
-    "7820": { cnae: "7820-5/00", desc: "Locação de mão-de-obra temporária / Terceirização", lc116: "17.05", retFederal: true, issRetido: true, obs: "Cessão de Mão de Obra (ISS Retido no Tomador + IRRF + PCC)" },
-    "8011": { cnae: "8011-1/01", desc: "Atividades de vigilância e segurança privada", lc116: "11.02", retFederal: true, issRetido: true, obs: "Segurança Privada (ISS Retido no Local + IRRF + PCC)" },
-    "8121": { cnae: "8121-4/00", desc: "Limpeza geral e conservação de edifícios e lojas", lc116: "07.10", retFederal: true, issRetido: true, obs: "Limpeza e Conservação (ISS Retido no Local + IRRF + PCC)" },
-    "4321": { cnae: "4321-5/00", desc: "Instalação e manutenção elétrica e ar condicionado", lc116: "14.01", retFederal: true, issRetido: true, obs: "Manutenção e Ar Condicionado (ISS Retido no Tomador)" },
-    "4322": { cnae: "4322-3/01", desc: "Instalações hidráulicas, sanitárias e de gás", lc116: "14.01", retFederal: false, issRetido: true, obs: "Instalações Hidráulicas (ISS Retido)" },
-    "8230": { cnae: "8230-0/01", desc: "Serviços de organização de feiras, congressos e eventos", lc116: "12.01", retFederal: true, issRetido: false, obs: "Organização de Eventos (Retenção Federal)" },
-    "5320": { cnae: "5320-2/02", desc: "Serviços de entrega rápida e motoboy", lc116: "26.01", retFederal: false, issRetido: false, obs: "Entrega Rápida / Logística Expressa" }
+    // ── 1. CONFECÇÃO, FACÇÃO, ATELIÊ, ESTAMPARIA & DESIGN TÊXTIL ──
+    "1412_1": { cnae: "1412-6/01", desc: "Confecção de peças do vestuário, exceto roupas íntimas", lc116: "14.05", ctn: "14.05.01", retFederal: false, issRetido: false, obs: "Confecção / Facção de Vestuário (Mão de Obra / Faccionistas)" },
+    "1412_3": { cnae: "1412-6/03", desc: "Facção de peças do vestuário (Costura e Montagem)", lc116: "14.05", ctn: "14.05.01", retFederal: false, issRetido: false, obs: "Facção e Costura sob Encomenda (Faccionistas / Ateliê)" },
+    "1413_1": { cnae: "1413-4/01", desc: "Confecção de roupas profissionais e uniformes", lc116: "14.05", ctn: "14.05.01", retFederal: false, issRetido: false, obs: "Uniformes e Roupas Profissionais" },
+    "1413_2": { cnae: "1413-4/02", desc: "Facção e acabamento de roupas profissionais", lc116: "14.05", ctn: "14.05.01", retFederal: false, issRetido: false, obs: "Acabamento de Vestuário (Caseado, Botão, Passadoria)" },
+    "1340_1": { cnae: "1340-5/01", desc: "Estamparia e tinturaria em tecidos e peças do vestuário", lc116: "14.05", ctn: "14.05.02", retFederal: false, issRetido: false, obs: "Estamparia Digital, Sublimação e Tinturaria Têxtil" },
+    "1351_1": { cnae: "1351-1/00", desc: "Fabricação de artefatos têxteis e aviamentos decorativos", lc116: "14.05", ctn: "14.05.01", retFederal: false, issRetido: false, obs: "Artefatos Têxteis e Detalhes de Moda" },
+    "7410_2": { cnae: "7410-2/02", desc: "Design de produto, modelagem técnica e estilistas de moda", lc116: "33.01", ctn: "33.01.01", retFederal: true, issRetido: false, obs: "Estilistas, Modelistas e Criação de Coleções (IRRF 1,5% + PCC)" },
+    "7410_1": { cnae: "7410-2/01", desc: "Design de interiores, vitrinismo e visual merchandising", lc116: "33.01", ctn: "33.01.01", retFederal: true, issRetido: false, obs: "Visual Merchandising e Vitrines de Lojas (IRRF 1,5% + PCC)" },
+
+    // ── 2. MARKETING, FOTOGRAFIA, LOOKBOOK, REDES SOCIAIS & MODELOS ──
+    "7420_1": { cnae: "7420-0/01", desc: "Atividades de produção de fotografias (Lookbook / Editorial)", lc116: "13.03", ctn: "13.03.01", retFederal: true, issRetido: false, obs: "Fotografia de Moda, Lookbook e Editoriais (Retenção Federal)" },
+    "7420_2": { cnae: "7420-0/02", desc: "Filmagem de festas, campanhas e eventos de moda", lc116: "13.03", ctn: "13.03.01", retFederal: true, issRetido: false, obs: "Filmagem e Captação de Vídeo para Campanhas" },
+    "7490_5": { cnae: "7490-1/05", desc: "Agenciamento de modelos e profissionais artísticos", lc116: "10.05", ctn: "10.05.01", retFederal: true, issRetido: false, obs: "Casting de Modelos para Desfiles e Fotos (IRRF 1,5% + PCC)" },
+    "5911_9": { cnae: "5911-1/99", desc: "Produção de vídeos publicitários, reels e conteúdo digital", lc116: "13.01", ctn: "13.01.01", retFederal: true, issRetido: false, obs: "Produção Audiovisual e Reels para Instagram / TikTok" },
+    "7311_4": { cnae: "7311-4/00", desc: "Agências de publicidade e propaganda", lc116: "17.06", ctn: "17.06.01", retFederal: true, issRetido: false, obs: "Publicidade e Propaganda (IRRF 1,5% Agência)" },
+    "7319_2": { cnae: "7319-0/02", desc: "Promoção de vendas e publicidade no PDV (Lojas)", lc116: "17.06", ctn: "17.06.01", retFederal: true, issRetido: false, obs: "Promoção de Vendas em Lojas de Shopping (Retenção Federal)" },
+    "7319_3": { cnae: "7319-0/03", desc: "Marketing direto, tráfego pago e gestão de redes sociais", lc116: "17.06", ctn: "17.06.01", retFederal: true, issRetido: false, obs: "Gestão de Tráfego Pago, Meta Ads e Google Ads" },
+    "7319_4": { cnae: "7319-0/04", desc: "Consultoria em publicidade e mídia online", lc116: "17.06", ctn: "17.06.01", retFederal: true, issRetido: false, obs: "Consultoria de Mídia e Performance Digital" },
+
+    // ── 3. TECNOLOGIA DA INFORMAÇÃO, SOFTWARE & E-COMMERCE ──
+    "6201": { cnae: "6201-5/01", desc: "Desenvolvimento de programas de computador sob encomenda", lc116: "01.01", ctn: "01.01.01", retFederal: true, issRetido: false, obs: "Serviços de TI (Retenção IRRF 1,5% + PCC 4,65%)" },
+    "6202": { cnae: "6202-3/00", desc: "Desenvolvimento e licenciamento de softwares customizáveis", lc116: "01.05", ctn: "01.05.01", retFederal: true, issRetido: false, obs: "Licenciamento de Software ERP / Bimer (IRRF 1,5% + PCC)" },
+    "6203": { cnae: "6203-1/00", desc: "Desenvolvimento e licenciamento de programas não-customizáveis", lc116: "01.05", ctn: "01.05.01", retFederal: false, issRetido: false, obs: "Software de Prateleira (Venda/Licença Padrão)" },
+    "6204": { cnae: "6204-0/00", desc: "Consultoria em tecnologia da informação e sistemas", lc116: "01.06", ctn: "01.06.01", retFederal: true, issRetido: false, obs: "Consultoria de TI e Infraestrutura (IRRF 1,5% + PCC)" },
+    "6209": { cnae: "6209-1/00", desc: "Suporte técnico, manutenção e outros serviços em TI", lc116: "01.07", ctn: "01.07.01", retFederal: true, issRetido: false, obs: "Suporte e Manutenção de TI / Helpdesk" },
+    "6311": { cnae: "6311-9/00", desc: "Tratamento de dados, provedores de hospedagem na internet", lc116: "01.03", ctn: "01.03.01", retFederal: true, issRetido: false, obs: "Hospedagem Cloud, Servidores e Plataformas E-commerce" },
+    "6319": { cnae: "6319-4/00", desc: "Portais, provedores de conteúdo e serviços de internet", lc116: "01.03", ctn: "01.03.01", retFederal: true, issRetido: false, obs: "Plataformas Web e E-commerce de Moda" },
+
+    // ── 4. LOGÍSTICA, FRETES & TRANSPORTES ──
+    "4930_1": { cnae: "4930-2/01", desc: "Transporte rodoviário de carga municipal (Fretes e Coletas)", lc116: "16.01", ctn: "16.01.01", retFederal: false, issRetido: false, obs: "Fretes Locais / Transferências entre Lojas e Ateliê" },
+    "4930_2": { cnae: "4930-2/02", desc: "Transporte rodoviário de carga intermunicipal e interestadual", lc116: "00.00", ctn: "00.00.00", retFederal: false, issRetido: false, obs: "Fretes Interestaduais (ICMS Frete / CTE)" },
+    "5320_2": { cnae: "5320-2/02", desc: "Serviços de entrega rápida e motoboy", lc116: "26.01", ctn: "26.01.01", retFederal: false, issRetido: false, obs: "Entregas Expressas / Motoboy / Logística Delivery" },
+    "5211_7": { cnae: "5211-7/99", desc: "Depósitos e armazenagem de mercadorias para terceiros", lc116: "11.04", ctn: "11.04.01", retFederal: false, issRetido: false, obs: "Armazenagem e Estoque de Tecidos e Roupas" },
+    "5229_0": { cnae: "5229-0/99", desc: "Logística e atividades auxiliares dos transportes", lc116: "11.04", ctn: "11.04.01", retFederal: false, issRetido: false, obs: "Operações Logísticas e Despacho de Mercadorias" },
+
+    // ── 5. MANUTENÇÃO, MÁQUINAS, OBRAS & SHOPPING CENTERS ──
+    "3314_7": { cnae: "3314-7/05", desc: "Manutenção e reparação de máquinas para a indústria têxtil e vestuário", lc116: "14.01", ctn: "14.01.01", retFederal: true, issRetido: true, obs: "Mecânica de Máquinas de Costura, Galoneiras e Reta (ISS Retido)" },
+    "4321_5": { cnae: "4321-5/00", desc: "Instalação e manutenção elétrica e ar condicionado", lc116: "14.01", ctn: "14.01.01", retFederal: true, issRetido: true, obs: "Manutenção Elétrica e Ar Condicionado (ISS Retido Tomador)" },
+    "4322_3": { cnae: "4322-3/01", desc: "Instalações hidráulicas, sanitárias e de gás", lc116: "14.01", ctn: "14.01.01", retFederal: false, issRetido: true, obs: "Instalações Hidráulicas (ISS Retido Tomador)" },
+    "4330_4": { cnae: "4330-4/04", desc: "Serviços de pintura de edifícios e lojas comerciais", lc116: "07.05", ctn: "07.05.01", retFederal: true, issRetido: true, obs: "Pintura de Lojas e Ateliê (ISS Retido Tomador + IRRF)" },
+    "4330_2": { cnae: "4330-4/02", desc: "Instalação de portas, janelas, tetos, divisórias e marcenaria", lc116: "07.05", ctn: "07.05.01", retFederal: true, issRetido: true, obs: "Marcenaria, Divisórias e Balcões de Lojas (ISS Retido)" },
+    "4330_9": { cnae: "4330-4/99", desc: "Outras obras de acabamento da construção / reformas comerciais", lc116: "07.02", ctn: "07.02.01", retFederal: true, issRetido: true, obs: "Reformas de Lojas em Shopping Center (ISS Retido)" },
+    "6822_6": { cnae: "6822-6/00", desc: "Gestão e administração da propriedade imobiliária (Shoppings)", lc116: "17.12", ctn: "17.12.01", retFederal: true, issRetido: false, obs: "Condomínios de Shopping (Barra, SDB, Paseo) e Locação" },
+    "8121_4": { cnae: "8121-4/00", desc: "Limpeza geral e conservação de edifícios e lojas", lc116: "07.10", ctn: "07.10.01", retFederal: true, issRetido: true, obs: "Limpeza e Conservação de Lojas (ISS Retido + IRRF + PCC)" },
+    "8129_0": { cnae: "8129-0/00", desc: "Limpeza especializada de vitrines e fachadas", lc116: "07.10", ctn: "07.10.01", retFederal: true, issRetido: true, obs: "Limpeza de Vitrines e Fachadas em Shopping" },
+    "8011_1": { cnae: "8011-1/01", desc: "Atividades de vigilância e segurança privada", lc116: "11.02", ctn: "11.02.01", retFederal: true, issRetido: true, obs: "Segurança Privada (ISS Retido no Local + IRRF + PCC)" },
+
+    // ── 6. CONSULTORIAS, CONTABILIDADE, JURÍDICO & APOIO ADMINISTRATIVO ──
+    "6920_6": { cnae: "6920-6/01", desc: "Atividades de contabilidade, auditoria e assessoria contábil", lc116: "17.19", ctn: "17.19.01", retFederal: true, issRetido: false, obs: "Serviços Contábeis e Auditoria (IRRF 1,5% + PCC 4,65%)" },
+    "6911_7": { cnae: "6911-7/01", desc: "Serviços advocatícios e assessoria jurídica", lc116: "17.14", ctn: "17.14.01", retFederal: true, issRetido: false, obs: "Honorários Advocatícios (IRRF 1,5% + PCC 4,65%)" },
+    "7020_4": { cnae: "7020-4/00", desc: "Atividades de consultoria em gestão empresarial", lc116: "17.01", ctn: "17.01.01", retFederal: true, issRetido: false, obs: "Consultoria Empresarial e Estratégia (IRRF 1,5% + PCC)" },
+    "8211_3": { cnae: "8211-3/00", desc: "Serviços combinados de escritório e apoio administrativo", lc116: "17.02", ctn: "17.02.01", retFederal: true, issRetido: false, obs: "Apoio Administrativo / Backoffice Operacional" },
+    "8291_1": { cnae: "8291-1/00", desc: "Atividades de cobrança e informações cadastrais", lc116: "17.22", ctn: "17.22.01", retFederal: true, issRetido: false, obs: "Serviços de Cobrança e Análise de Crédito" },
+    "6619_3": { cnae: "6619-3/02", desc: "Correspondentes de instituições financeiras e pagamentos", lc116: "15.01", ctn: "15.01.01", retFederal: true, issRetido: false, obs: "Intermediação de Pagamentos e Gateway" },
+    "7739_0": { cnae: "7739-0/99", desc: "Locação de máquinas e equipamentos sem operador", lc116: "03.01", ctn: "03.01.01", retFederal: false, issRetido: false, obs: "Locação de Bens Móveis (Súmula Vinculante 31 STF - Isento de ISS)" },
+    "7820_5": { cnae: "7820-5/00", desc: "Locação de mão-de-obra temporária / Terceirização", lc116: "17.05", ctn: "17.05.01", retFederal: true, issRetido: true, obs: "Cessão de Mão de Obra (ISS Retido Tomador + IRRF + PCC)" },
+    "7490_1": { cnae: "7490-1/04", desc: "Atividades de intermediação e agenciamento de serviços", lc116: "10.05", ctn: "10.05.01", retFederal: true, issRetido: false, obs: "Intermediação de Negócios e Parcerias" },
+
+    // ── 7. SAÚDE OCUPACIONAL, SEGURANÇA DO TRABALHO & TREINAMENTO ──
+    "8630_5": { cnae: "8630-5/03", desc: "Medicina ocupacional e exames admissionais/demissionais (ASO/PCMSO)", lc116: "04.03", ctn: "04.03.01", retFederal: true, issRetido: false, obs: "Medicina do Trabalho (Riomed / SST / ASO) - Retenção Federal" },
+    "7119_7": { cnae: "7119-7/04", desc: "Perícia técnica e laudos de segurança do trabalho (PGR, LTCAT)", lc116: "07.03", ctn: "07.03.01", retFederal: true, issRetido: false, obs: "Engenharia de Segurança do Trabalho e Laudos" },
+    "8599_6": { cnae: "8599-6/04", desc: "Treinamento em desenvolvimento profissional e gerencial", lc116: "08.02", ctn: "08.02.01", retFederal: true, issRetido: false, obs: "Treinamento e Capacitação de Equipes de Loja" },
+    "8230_0": { cnae: "8230-0/01", desc: "Serviços de organização de feiras, congressos e eventos", lc116: "12.01", ctn: "12.01.01", retFederal: true, issRetido: false, obs: "Organização de Desfiles, Bazares e Eventos de Moda" }
   };
 
   function popularDatalistCNAEs() {
@@ -3058,43 +3135,54 @@
     const raw = input.value.trim();
     const badge = document.getElementById('badge-cnae-info');
     const inputLc116 = document.getElementById('item_lc116');
+    const inputCtn = document.getElementById('ctn_nacional');
 
-    // 1. Busca por prefixo numérico (ex: 6201, 6920, 8121, 7020)
     const digitos = raw.replace(/\D/g, '');
     const prefixo4 = digitos.substring(0, 4);
 
-    if (prefixo4.length === 4 && TABELA_CNAES[prefixo4]) {
-      const match = TABELA_CNAES[prefixo4];
-      input.value = `${match.cnae} - ${match.desc}`;
-      if (inputLc116) inputLc116.value = match.lc116;
-      if (badge) {
-        badge.style.display = 'inline-block';
-        badge.innerHTML = `📌 <strong>Item LC 116:</strong> ${match.lc116} • <strong>Enquadramento:</strong> ${match.obs}`;
-      }
-      aplicarSugestaoRetencoesCNAE(match);
-      return;
-    }
-
-    // 2. Se selecionado da lista com traço
-    if (raw.includes('-')) {
-      const codCnae = raw.split('-')[0].trim().replace(/\D/g, '');
-      const prefixo = codCnae.substring(0, 4);
-      if (TABELA_CNAES[prefixo]) {
-        const match = TABELA_CNAES[prefixo];
-        if (inputLc116 && !inputLc116.value) inputLc116.value = match.lc116;
+    // 1. Busca por código (4 ou mais dígitos)
+    if (digitos.length >= 4) {
+      const match = Object.values(TABELA_CNAES).find(c => {
+        const cDigits = c.cnae.replace(/\D/g, '');
+        return cDigits.startsWith(digitos) || cDigits.startsWith(prefixo4);
+      });
+      if (match) {
+        input.value = `${match.cnae} - ${match.desc}`;
+        if (inputLc116) inputLc116.value = match.lc116;
+        if (inputCtn) inputCtn.value = match.ctn || match.lc116;
         if (badge) {
           badge.style.display = 'inline-block';
-          badge.innerHTML = `📌 <strong>Item LC 116:</strong> ${match.lc116} • <strong>Enquadramento:</strong> ${match.obs}`;
+          badge.innerHTML = `📌 <strong>Item LC 116:</strong> ${match.lc116} • <strong>CTN:</strong> ${match.ctn || match.lc116} • <strong>Enquadramento:</strong> ${match.obs}`;
         }
         aplicarSugestaoRetencoesCNAE(match);
         return;
       }
     }
 
-    // 3. Busca por texto (ex: 'limpeza', 'software', 'contabilidade', 'advocacia', 'consultoria')
+    // 2. Se selecionado da lista com traço
+    if (raw.includes('-')) {
+      const codCnae = raw.split('-')[0].trim().replace(/\D/g, '');
+      const match = Object.values(TABELA_CNAES).find(c => c.cnae.replace(/\D/g, '').startsWith(codCnae.substring(0, 4)));
+      if (match) {
+        if (inputLc116 && !inputLc116.value) inputLc116.value = match.lc116;
+        if (inputCtn && !inputCtn.value) inputCtn.value = match.ctn || match.lc116;
+        if (badge) {
+          badge.style.display = 'inline-block';
+          badge.innerHTML = `📌 <strong>Item LC 116:</strong> ${match.lc116} • <strong>CTN:</strong> ${match.ctn || match.lc116} • <strong>Enquadramento:</strong> ${match.obs}`;
+        }
+        aplicarSugestaoRetencoesCNAE(match);
+        return;
+      }
+    }
+
+    // 3. Busca por texto (ex: 'facção', 'costura', 'tecido', 'lookbook', 'marketing', 'elétrica')
     if (raw.length >= 3 && isNaN(raw)) {
       const termo = raw.toLowerCase();
-      const match = Object.values(TABELA_CNAES).find(c => c.desc.toLowerCase().includes(termo) || c.obs.toLowerCase().includes(termo));
+      const match = Object.values(TABELA_CNAES).find(c => 
+        c.desc.toLowerCase().includes(termo) || 
+        c.obs.toLowerCase().includes(termo) ||
+        (c.cnae && c.cnae.includes(termo))
+      );
       if (match && badge) {
         badge.style.display = 'inline-block';
         badge.innerHTML = `💡 Sugestão CNAE: <strong>${match.cnae}</strong> (${match.desc}) • LC 116: <strong>${match.lc116}</strong>`;
@@ -4448,10 +4536,13 @@
         </tr>
       `;
       chipsCont.innerHTML = `
-        <span class="bimer-chip ativo" onclick="selecionarChipBuscaRapida('TODOS', this)">Todos os CNAEs (19)</span>
+        <span class="bimer-chip ativo" onclick="selecionarChipBuscaRapida('TODOS', this)">Todos os CNAEs (${Object.values(TABELA_CNAES).length})</span>
+        <span class="bimer-chip" onclick="selecionarChipBuscaRapida('CONFECCAO', this)">Confecção & Moda</span>
+        <span class="bimer-chip" onclick="selecionarChipBuscaRapida('MKT', this)">Marketing & Foto</span>
+        <span class="bimer-chip" onclick="selecionarChipBuscaRapida('OBRAS', this)">Manutenção & Obras</span>
+        <span class="bimer-chip" onclick="selecionarChipBuscaRapida('LOGISTICA', this)">Logística & Fretes</span>
         <span class="bimer-chip" onclick="selecionarChipBuscaRapida('TI', this)">TI & Software</span>
-        <span class="bimer-chip" onclick="selecionarChipBuscaRapida('RETENCAO', this)">Com Retenção Federal</span>
-        <span class="bimer-chip" onclick="selecionarChipBuscaRapida('OBRAS', this)">Instalações & Manutenção</span>
+        <span class="bimer-chip" onclick="selecionarChipBuscaRapida('RETENCAO', this)">Com Retenção</span>
       `;
     } else if (tipo === 'cfop') {
       titulo.innerHTML = '📑 <strong>Busca Rápida:</strong> Código Fiscal de Operações (CFOP)';
@@ -4618,9 +4709,12 @@
     } else if (buscaRapidaTipoAtual === 'cnae') {
       const listaCnaes = Object.values(TABELA_CNAES);
       itens = listaCnaes.filter(c => {
-        if (buscaRapidaFiltroChip === 'TI' && !c.cnae.startsWith('620')) return false;
-        if (buscaRapidaFiltroChip === 'RETENCAO' && !c.retFederal) return false;
-        if (buscaRapidaFiltroChip === 'OBRAS' && !['4321', '4322', '8121'].some(k => c.cnae.startsWith(k))) return false;
+        if (buscaRapidaFiltroChip === 'CONFECCAO' && !(c.cnae.startsWith('14') || c.cnae.startsWith('13') || c.cnae.startsWith('7410') || c.desc.toLowerCase().includes('vestuário') || c.desc.toLowerCase().includes('facção') || c.desc.toLowerCase().includes('tecido') || c.desc.toLowerCase().includes('costura'))) return false;
+        if (buscaRapidaFiltroChip === 'MKT' && !(c.cnae.startsWith('73') || c.cnae.startsWith('7420') || c.cnae.startsWith('7490') || c.cnae.startsWith('5911') || c.desc.toLowerCase().includes('foto') || c.desc.toLowerCase().includes('publicidade') || c.desc.toLowerCase().includes('vídeo') || c.desc.toLowerCase().includes('marketing'))) return false;
+        if (buscaRapidaFiltroChip === 'OBRAS' && !(c.cnae.startsWith('43') || c.cnae.startsWith('33') || c.cnae.startsWith('81') || c.desc.toLowerCase().includes('elétrica') || c.desc.toLowerCase().includes('manutenção') || c.desc.toLowerCase().includes('limpeza') || c.desc.toLowerCase().includes('ar condicionado'))) return false;
+        if (buscaRapidaFiltroChip === 'LOGISTICA' && !(c.cnae.startsWith('49') || c.cnae.startsWith('53') || c.cnae.startsWith('52') || c.desc.toLowerCase().includes('transporte') || c.desc.toLowerCase().includes('frete') || c.desc.toLowerCase().includes('motoboy'))) return false;
+        if (buscaRapidaFiltroChip === 'TI' && !(c.cnae.startsWith('62') || c.cnae.startsWith('63') || c.desc.toLowerCase().includes('software') || c.desc.toLowerCase().includes('computador'))) return false;
+        if (buscaRapidaFiltroChip === 'RETENCAO' && !c.retFederal && !c.issRetido) return false;
         if (!termo) return true;
         return normalizarTextoBusca(c.cnae).includes(termo) ||
                normalizarTextoBusca(c.desc).includes(termo) ||
@@ -6022,6 +6116,17 @@
     if (elFed) elFed.innerText = formatarMoeda(totFederais);
     const elMun = document.getElementById('tot-municipal');
     if (elMun) elMun.innerText = formatarMoeda(iss);
+
+    // Cálculos do Novo Padrão Tributário (Reforma Tributária - EC 132/2023: CBS 0,90% + IBS 0,10%)
+    const vlrCbs = bruto * 0.009;
+    const vlrIbs = bruto * 0.001;
+    const vlrIvaDual = vlrCbs + vlrIbs;
+    const elCbs = document.getElementById('nt-valor-cbs');
+    const elIbs = document.getElementById('nt-valor-ibs');
+    const elIva = document.getElementById('nt-valor-iva-dual');
+    if (elCbs) elCbs.innerText = formatarMoeda(vlrCbs);
+    if (elIbs) elIbs.innerText = formatarMoeda(vlrIbs);
+    if (elIva) elIva.innerText = formatarMoeda(vlrIvaDual);
 
     const cardBruto = document.getElementById('card-espelho-bruto');
     if (cardBruto) cardBruto.innerText = formatarMoeda(bruto);
