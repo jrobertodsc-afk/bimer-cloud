@@ -1221,22 +1221,51 @@
           </div>
         </div>
 
-        <div style="margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
-          <div style="display: flex; gap: 5px; flex-wrap: wrap;" id="botoes-filtro-titulos">
-            <button class="tool-btn" onclick="filtrarTitulos('todos', this)" style="background: var(--alterdata-blue); color: white;">Todos</button>
-            <button class="tool-btn" onclick="filtrarTitulos('fornecedor', this)">Favorecidos / Prestadores</button>
-            <button class="tool-btn" onclick="filtrarTitulos('imposto', this)">Guias de Tributos Retidos</button>
-            <button class="tool-btn" onclick="filtrarTitulos('pendente', this)">Em Aberto</button>
-            <button class="tool-btn" onclick="filtrarTitulos('conciliado', this)">Baixados & Conciliados</button>
-            <button class="tool-btn" onclick="filtrarAgendaVencimento('vencidos', this)" style="color: #b91c1c;">🚨 Vencidos</button>
-            <button class="tool-btn" onclick="filtrarAgendaVencimento('hoje', this)" style="color: #b45309;">📅 Vence Hoje</button>
-            <button class="tool-btn" onclick="filtrarAgendaVencimento('semana', this)" style="color: #1e40af;">📆 Esta Semana</button>
+        <!-- SUB-ABAS DE STATUS & BUSCA INTELIGENTE (EM ABERTO / BAIXADOS / TODOS) -->
+        <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 6px 10px; margin-bottom: 8px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px;">
+          <!-- 1. SELETOR DE STATUS (SUB-ABAS) -->
+          <div style="display: flex; gap: 4px; background: #e2e8f0; padding: 2px; border-radius: 4px;" id="subtabs-status-titulos">
+            <button class="tool-btn" id="subtab-btn-abertos" onclick="setSubabaStatus('pendente', this)" style="background: var(--alterdata-blue); color: white; font-weight: 700; border: none; border-radius: 3px; padding: 5px 12px; font-size: 11.5px; display: flex; align-items: center; gap: 6px;">
+              <span>⏳ Em Aberto</span>
+              <span id="badge-count-abertos" style="background: rgba(255,255,255,0.25); color: #fff; padding: 1px 6px; border-radius: 10px; font-size: 10px;">0</span>
+            </button>
+            <button class="tool-btn" id="subtab-btn-baixados" onclick="setSubabaStatus('conciliado', this)" style="background: transparent; color: #475569; font-weight: 700; border: none; border-radius: 3px; padding: 5px 12px; font-size: 11.5px; display: flex; align-items: center; gap: 6px;">
+              <span>✅ Baixados & Conciliados</span>
+              <span id="badge-count-baixados" style="background: #cbd5e1; color: #334155; padding: 1px 6px; border-radius: 10px; font-size: 10px;">0</span>
+            </button>
+            <button class="tool-btn" id="subtab-btn-todos" onclick="setSubabaStatus('todos', this)" style="background: transparent; color: #475569; font-weight: 700; border: none; border-radius: 3px; padding: 5px 12px; font-size: 11.5px; display: flex; align-items: center; gap: 6px;">
+              <span>📋 Todos</span>
+              <span id="badge-count-todos" style="background: #cbd5e1; color: #334155; padding: 1px 6px; border-radius: 10px; font-size: 10px;">0</span>
+            </button>
           </div>
-          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-            <button class="tool-btn" onclick="carregarDadosIniciais()">🔄 Sincronizar SQLite</button>
-            <button class="tool-btn" onclick="abrirFolhaRostoUltimo()">🖨️ Espelho Selecionado</button>
-            <button class="tool-btn" onclick="abrirModalFolhaRostoDiaria()" style="background: #f0fdf4; color: #166534; font-weight: 700; border-color: #86efac;" title="Gerar Folha de Rosto Consolidada do Movimento do Dia (Borderô)">📋 Folha do Dia (Movimento)</button>
-            <button class="tool-btn primary" onclick="abrirModalAutorizacao()" style="background: #004b87; color: white; font-weight: 700; border-color: #003661;">📑 Autorização Diretoria (Lote)</button>
+
+          <!-- 2. CAMPO DE BUSCA INSTANTÂNEA -->
+          <div style="flex: 1; min-width: 260px; max-width: 480px; position: relative; display: flex; align-items: center;">
+            <span style="position: absolute; left: 8px; font-size: 12px; color: #64748b; pointer-events: none;">🔍</span>
+            <input type="text" id="campo-busca-titulos" placeholder="Buscar por favorecido, CNPJ/CPF, documento ou ID..." oninput="filtrarTitulosPorTexto(this.value)" style="width: 100%; padding: 5px 26px 5px 28px; font-size: 11.5px; border: 1px solid #94a3b8; border-radius: 3px; outline: none; background: #ffffff;">
+            <button onclick="limparBuscaTitulos()" id="btn-limpar-busca-titulos" style="position: absolute; right: 6px; background: none; border: none; font-size: 11px; color: #94a3b8; cursor: pointer; display: none;" title="Limpar busca">✖</button>
+          </div>
+
+          <!-- 3. AÇÃO EXECUTIVA DESTACADA -->
+          <div style="display: flex; gap: 6px;">
+            <button class="tool-btn primary" onclick="abrirModalAutorizacao()" style="background: #004b87; color: white; font-weight: 700; border-color: #003661; padding: 5px 12px;" title="Abrir Lote de Autorização para Diretoria">
+              📑 Autorização Diretoria (Lote)
+            </button>
+          </div>
+        </div>
+
+        <!-- FILTROS COMPACTOS POR SEGMENTO / TIPO DE TÍTULO -->
+        <div style="margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+          <div style="display: flex; gap: 5px; flex-wrap: wrap; align-items: center;" id="botoes-filtro-titulos">
+            <span style="font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-right: 2px;">Filtrar Tipo:</span>
+            <button class="tool-btn" onclick="filtrarTipoTitulos('todos', this)" style="background: var(--alterdata-blue); color: white; font-size: 11px; padding: 3px 8px;">Todos os Tipos</button>
+            <button class="tool-btn" onclick="filtrarTipoTitulos('fornecedor', this)" style="font-size: 11px; padding: 3px 8px;">🏢 Favorecidos / Prestadores</button>
+            <button class="tool-btn" onclick="filtrarTipoTitulos('imposto', this)" style="font-size: 11px; padding: 3px 8px;">🏛️ Tributos Retidos</button>
+            <button class="tool-btn" onclick="filtrarTipoTitulos('folha', this)" style="font-size: 11px; padding: 3px 8px;">👥 Folha & Faccionistas</button>
+            <button class="tool-btn" onclick="filtrarTipoTitulos('domingo_feriado', this)" style="font-size: 11px; padding: 3px 8px;">🛍️ Dom / Feriados</button>
+          </div>
+          <div id="info-contagem-filtrada" style="font-size: 11px; font-weight: 600; color: #475569;">
+            Exibindo 0 títulos
           </div>
         </div>
 
@@ -6590,16 +6619,70 @@
     atualizarAgendaFinanceira();
   }
 
-  function filtrarTitulos(tipo, btn) {
-    filtroAtual = tipo;
-    const parent = btn.parentElement;
-    parent.querySelectorAll('button').forEach(b => {
-      b.style.background = 'var(--btn-bg)';
-      b.style.color = 'var(--text-main)';
-    });
-    btn.style.background = 'var(--alterdata-blue)';
-    btn.style.color = 'white';
+  let subabaStatusAtual = 'pendente'; // 'pendente', 'conciliado', 'todos'
+  let filtroTipoTituloAtual = 'todos'; // 'todos', 'fornecedor', 'imposto', 'folha', 'domingo_feriado'
+  let termoBuscaTitulos = '';
+
+  function setSubabaStatus(status, btn) {
+    subabaStatusAtual = status;
+    filtroAtual = status;
+
+    const container = document.getElementById('subtabs-status-titulos');
+    if (container) {
+      container.querySelectorAll('button').forEach(b => {
+        b.style.background = 'transparent';
+        b.style.color = '#475569';
+      });
+    }
+    if (btn) {
+      btn.style.background = 'var(--alterdata-blue)';
+      btn.style.color = 'white';
+    }
     renderizarGridTitulos();
+  }
+
+  function filtrarTipoTitulos(tipo, btn) {
+    filtroTipoTituloAtual = tipo;
+    const container = document.getElementById('botoes-filtro-titulos');
+    if (container) {
+      container.querySelectorAll('button').forEach(b => {
+        b.style.background = 'var(--btn-bg)';
+        b.style.color = 'var(--text-main)';
+      });
+    }
+    if (btn) {
+      btn.style.background = 'var(--alterdata-blue)';
+      btn.style.color = 'white';
+    }
+    renderizarGridTitulos();
+  }
+
+  function filtrarTitulosPorTexto(termo) {
+    termoBuscaTitulos = String(termo || '').trim().toLowerCase();
+    const btnLimpar = document.getElementById('btn-limpar-busca-titulos');
+    if (btnLimpar) {
+      btnLimpar.style.display = termoBuscaTitulos ? 'block' : 'none';
+    }
+    renderizarGridTitulos();
+  }
+
+  function limparBuscaTitulos() {
+    const inputBusca = document.getElementById('campo-busca-titulos');
+    if (inputBusca) {
+      inputBusca.value = '';
+      inputBusca.focus();
+    }
+    filtrarTitulosPorTexto('');
+  }
+
+  function filtrarTitulos(tipo, btn) {
+    if (tipo === 'pendente' || tipo === 'conciliado' || tipo === 'todos') {
+      const btnAlvo = document.getElementById(tipo === 'pendente' ? 'subtab-btn-abertos' : (tipo === 'conciliado' ? 'subtab-btn-baixados' : 'subtab-btn-todos'));
+      setSubabaStatus(tipo, btnAlvo);
+    } else {
+      filtroAtual = tipo;
+      renderizarGridTitulos();
+    }
   }
 
   function parseDataVencimento(vStr) {
@@ -6616,10 +6699,30 @@
     return null;
   }
 
+  function atualizarBadgesSubabas() {
+    let qtdAbertos = 0;
+    let qtdBaixados = 0;
+    titulos.forEach(t => {
+      if (isTituloBaixadoOuConciliado(t)) {
+        qtdBaixados++;
+      } else {
+        qtdAbertos++;
+      }
+    });
+    const elAbertos = document.getElementById('badge-count-abertos');
+    const elBaixados = document.getElementById('badge-count-baixados');
+    const elTodos = document.getElementById('badge-count-todos');
+    if (elAbertos) elAbertos.innerText = qtdAbertos;
+    if (elBaixados) elBaixados.innerText = qtdBaixados;
+    if (elTodos) elTodos.innerText = titulos.length;
+  }
+
   function renderizarGridTitulos() {
     const tbody = document.getElementById('grid-titulos-body');
     const emptyMsg = document.getElementById('empty-titulos-msg');
     tbody.innerHTML = '';
+
+    atualizarBadgesSubabas();
 
     const hojeData = new Date();
     hojeData.setHours(0, 0, 0, 0);
@@ -6634,31 +6737,54 @@
     let lista = titulos.filter(item => {
       const isPago = isTituloBaixadoOuConciliado(item);
 
-      if (filtroAtual === 'fornecedor') return item.tipo === 'FORNECEDOR' || item.tipo === 'DESPESA_GERAL';
-      if (filtroAtual === 'imposto') return item.tipo && item.tipo.startsWith('IMPOSTO_');
-      if (filtroAtual === 'pendente') return !isPago;
-      if (filtroAtual === 'conciliado') return isPago;
+      // 1. Filtro pela Sub-aba de Status (Aberto vs Baixado)
+      if (subabaStatusAtual === 'pendente' && isPago) return false;
+      if (subabaStatusAtual === 'conciliado' && !isPago) return false;
 
-      // Filtros da Agenda Financeira (apenas para títulos que ainda estão EM ABERTO)
+      // 2. Filtro pelos Botões de Tipo de Título
+      if (filtroTipoTituloAtual === 'fornecedor') {
+        if (item.tipo !== 'FORNECEDOR' && item.tipo !== 'DESPESA_GERAL') return false;
+      } else if (filtroTipoTituloAtual === 'imposto') {
+        if (!item.tipo || !item.tipo.startsWith('IMPOSTO_')) return false;
+      } else if (filtroTipoTituloAtual === 'folha') {
+        if (item.tipo_doc !== 'FOLHA' && item.tipo_doc !== 'RECIBO' && !(item.descricao && item.descricao.toUpperCase().includes('FACCIONISTA'))) return false;
+      } else if (filtroTipoTituloAtual === 'domingo_feriado') {
+        if (item.tipo_doc !== 'DOMINGO_FERIADO') return false;
+      }
+
+      // 3. Filtros legados da Agenda Financeira (se ativados diretamente)
       if (filtroAtual === 'agenda_vencidos') {
         if (isPago || !item.vencimento) return false;
         const dVenc = parseDataVencimento(item.vencimento);
-        return dVenc && dVenc < hojeData;
-      }
-      if (filtroAtual === 'agenda_hoje') {
+        if (!dVenc || dVenc >= hojeData) return false;
+      } else if (filtroAtual === 'agenda_hoje') {
         if (isPago || !item.vencimento) return false;
         const dVenc = parseDataVencimento(item.vencimento);
-        return dVenc && dVenc.getTime() === hojeData.getTime();
-      }
-      if (filtroAtual === 'agenda_semana') {
+        if (!dVenc || dVenc.getTime() !== hojeData.getTime()) return false;
+      } else if (filtroAtual === 'agenda_semana') {
         if (isPago || !item.vencimento) return false;
         const dVenc = parseDataVencimento(item.vencimento);
-        return dVenc && dVenc >= hojeData && dVenc <= semanaLimite;
-      }
-      if (filtroAtual === 'agenda_mes') {
+        if (!dVenc || dVenc < hojeData || dVenc > semanaLimite) return false;
+      } else if (filtroAtual === 'agenda_mes') {
         if (isPago || !item.vencimento) return false;
         const dVenc = parseDataVencimento(item.vencimento);
-        return dVenc && dVenc.getFullYear() === anoAtual && dVenc.getMonth() === mesAtual;
+        if (!dVenc || dVenc.getFullYear() !== anoAtual || dVenc.getMonth() !== mesAtual) return false;
+      }
+
+      // 4. Filtro por Busca de Texto Instantânea
+      if (termoBuscaTitulos) {
+        const textoBusca = [
+          item.favorecido || '',
+          item.cnpj || '',
+          item.numero_doc || '',
+          item.numero_id || '',
+          item.id || '',
+          item.descricao || '',
+          item.historico || '',
+          item.solicitante || '',
+          item.ccusto || ''
+        ].join(' ').toLowerCase();
+        if (!textoBusca.includes(termoBuscaTitulos)) return false;
       }
 
       return true;
@@ -6666,10 +6792,15 @@
 
     const lblStatus = document.getElementById('label-status-contas');
     if (lblStatus) lblStatus.innerText = `${titulos.length} títulos cadastrados (${lista.length} exibidos)`;
+    const elInfoContagem = document.getElementById('info-contagem-filtrada');
+    if (elInfoContagem) elInfoContagem.innerText = `Exibindo ${lista.length} de ${titulos.length} títulos`;
     atualizarBarraRodape();
 
     if (lista.length === 0) {
       emptyMsg.style.display = 'block';
+      emptyMsg.innerHTML = termoBuscaTitulos ? 
+        `Nenhum título encontrado para o termo "<strong>${termoBuscaTitulos}</strong>".` : 
+        `Nenhum título encontrado com os filtros selecionados.`;
       return;
     }
     emptyMsg.style.display = 'none';
