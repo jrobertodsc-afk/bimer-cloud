@@ -1,4 +1,4 @@
-﻿import os
+import os
 import time
 import json
 import base64
@@ -7,8 +7,10 @@ import hashlib
 from typing import Optional
 from fastapi import HTTPException, Security, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-
-SECRET_KEY = os.getenv("JWT_SECRET_KEY", "bimer-cloud-secret-master-key-2026-roberto")
+SECRET_KEY = os.getenv("JWT_SECRET_KEY", "")
+if not SECRET_KEY:
+    import secrets as _secrets
+    SECRET_KEY = _secrets.token_hex(32)
 security_bearer = HTTPBearer(auto_error=False)
 
 def gerar_hash_senha(senha: str) -> str:

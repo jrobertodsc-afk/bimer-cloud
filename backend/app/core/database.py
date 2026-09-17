@@ -216,6 +216,14 @@ def init_db():
         conciliada INTEGER DEFAULT 0
     )
     ''')
+
+    # Garantir colunas adicionais nas tabelas existentes
+    for col, table in [("cod_operacao", "notas"), ("cnae", "notas"), ("item_lc116", "notas")]:
+        try:
+            cur.execute(f"ALTER TABLE {table} ADD COLUMN {col} TEXT")
+            conn.commit()
+        except Exception:
+            pass
     
     cur.execute('''
     CREATE TABLE IF NOT EXISTS nota_impostos (
@@ -307,6 +315,23 @@ def init_db():
         atualizado_em TEXT DEFAULT CURRENT_TIMESTAMP
     )
     ''')
+
+    # Índices para performance
+    for idx_sql in [
+        "CREATE INDEX IF NOT EXISTS idx_notas_vencimento ON notas(dt_vencimento)",
+        "CREATE INDEX IF NOT EXISTS idx_notas_status ON notas(status)",
+        "CREATE INDEX IF NOT EXISTS idx_notas_fornecedor ON notas(fornecedor)",
+        "CREATE INDEX IF NOT EXISTS idx_notas_cnpj ON notas(cnpj)",
+        "CREATE INDEX IF NOT EXISTS idx_notas_is_previsao ON notas(is_previsao)",
+        "CREATE INDEX IF NOT EXISTS idx_fornecedores_cnpj ON fornecedores(cnpj_cpf)",
+        "CREATE INDEX IF NOT EXISTS idx_fornecedores_razao ON fornecedores(razao_social)",
+        "CREATE INDEX IF NOT EXISTS idx_impostos_nota ON nota_impostos(nota_id)",
+        "CREATE INDEX IF NOT EXISTS idx_audit_created ON audit_log(created_at)",
+    ]:
+        try:
+            cur.execute(idx_sql)
+        except Exception:
+            pass
     
     conn.commit()
     conn.close()

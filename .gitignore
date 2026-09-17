@@ -10,7 +10,10 @@ venv/
 ENV/
 
 # Ambiente e Chaves
+# Environment secrets
 .env
+backend/.env
+*.env
 .env.local
 .env.*.local
 

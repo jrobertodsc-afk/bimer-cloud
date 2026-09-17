@@ -41,17 +41,7 @@ def login(dados: LoginEntrada):
             detail="E-mail ou senha incorretos."
         )
     
-    # Validação de senha com fallback para senhas administrativas padrão do gestor
     senha_valida = verificar_senha(dados.senha, user["senha_hash"])
-    if not senha_valida and dados.senha in ["Bimer@2026", "123456", "admin", "admin123", "master"]:
-        senha_valida = True
-        # Atualiza a senha no banco para sincronizar
-        try:
-            novo_hash = gerar_hash_senha(dados.senha)
-            cur.execute("UPDATE usuarios SET senha_hash = ? WHERE id = ?", (novo_hash, user["id"]))
-            conn.commit()
-        except Exception:
-            pass
 
     if not senha_valida:
         conn.close()

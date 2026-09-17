@@ -4,6 +4,9 @@ from datetime import datetime, timedelta
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
 from ..core.database import get_connection
+import logging
+
+logger = logging.getLogger("bimer.titulos")
 
 router = APIRouter(tags=["Títulos & Contas a Pagar"])
 
@@ -46,22 +49,6 @@ def listar_titulos(
     try:
         conn = get_connection()
         cur = conn.cursor()
-
-        try:
-            cur.execute("ALTER TABLE notas ADD COLUMN cod_operacao TEXT")
-            conn.commit()
-        except Exception:
-            pass
-        try:
-            cur.execute("ALTER TABLE notas ADD COLUMN cnae TEXT")
-            conn.commit()
-        except Exception:
-            pass
-        try:
-            cur.execute("ALTER TABLE notas ADD COLUMN item_lc116 TEXT")
-            conn.commit()
-        except Exception:
-            pass
 
         cur.execute("""
             SELECT id, numero_tx, numero_nf, fornecedor, cnpj, dt_emissao, dt_vencimento,
@@ -216,17 +203,6 @@ def gravar_documento(doc: DocumentoEntrada):
         valor_liquido = max(0.0, round(doc.valor_bruto - tot_ret, 2))
         lote_id = f"TX_{int(time.time() * 100)}"
 
-        try:
-            cur.execute("ALTER TABLE notas ADD COLUMN cnae TEXT")
-            conn.commit()
-        except Exception:
-            pass
-        try:
-            cur.execute("ALTER TABLE notas ADD COLUMN item_lc116 TEXT")
-            conn.commit()
-        except Exception:
-            pass
-
         cur.execute("""
             INSERT INTO notas (
                 numero_tx, tipo, fornecedor, cnpj, dt_emissao, dt_vencimento,
@@ -276,27 +252,6 @@ def gravar_documento(doc: DocumentoEntrada):
 
         # Auto-salvar/atualizar cadastro de fornecedor
         try:
-            cur.execute("""
-                CREATE TABLE IF NOT EXISTS fornecedores (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    razao_social TEXT NOT NULL,
-                    nome_fantasia TEXT,
-                    cnpj_cpf TEXT UNIQUE,
-                    tipo TEXT DEFAULT 'FORNECEDOR',
-                    categoria TEXT,
-                    ccusto TEXT,
-                    responsavel TEXT,
-                    forma_pgto TEXT,
-                    pix_chave TEXT,
-                    dados_banco TEXT,
-                    cod_operacao TEXT,
-                    cnae TEXT,
-                    item_lc116 TEXT,
-                    ativo INTEGER DEFAULT 1,
-                    criado_em TEXT DEFAULT CURRENT_TIMESTAMP,
-                    atualizado_em TEXT DEFAULT CURRENT_TIMESTAMP
-                )
-            """)
             f_cnpj = doc.cnpj.strip() if doc.cnpj else ""
             f_razao = doc.favorecido.strip() if doc.favorecido else ""
             if f_razao:
@@ -357,7 +312,7 @@ def gravar_documento(doc: DocumentoEntrada):
                         doc.item_lc116 or ""
                     ))
         except Exception as e_forn:
-            print(f"Aviso ao auto-salvar fornecedor: {e_forn}")
+            logger.warning("Erro ao auto-salvar fornecedor: %s", e_forn)
 
         conn.commit()
         conn.close()
@@ -474,14 +429,6 @@ def editar_titulo(identificador: str, dados: TituloEdicao):
     try:
         conn = get_connection()
         cur = conn.cursor()
-
-        # Garantir colunas
-        for col in ["cod_operacao", "cnae", "item_lc116"]:
-            try:
-                cur.execute(f"ALTER TABLE notas ADD COLUMN {col} TEXT")
-                conn.commit()
-            except Exception:
-                pass
 
         if identificador.startswith("IMP_"):
             imp_id = int(identificador.replace("IMP_", ""))
@@ -612,7 +559,7 @@ def editar_titulo(identificador: str, dados: TituloEdicao):
                             dados.item_lc116 or ""
                         ))
                 except Exception as e_forn:
-                    print(f"Aviso ao auto-salvar fornecedor em editar_titulo: {e_forn}")
+                    logger.warning("Erro ao auto-salvar fornecedor: %s", e_forn)
 
         conn.commit()
         conn.close()
