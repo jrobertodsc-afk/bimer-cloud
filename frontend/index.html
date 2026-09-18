@@ -8078,18 +8078,18 @@
     const file = event.target.files[0];
     if (!file) return;
 
-    // Sincroniza diretamente com o backend Cloud para baixa automática no banco de dados
+    // Sincroniza diretamente com o backend Cloud para baixa automatica no banco de dados
     if (file.name.toLowerCase().endsWith('.ofx')) {
       const formData = new FormData();
       formData.append('arquivo', file);
-      fetch(${API_BASE}/conciliar-ofx, { method: 'POST', body: formData })
+      fetch(API_BASE + '/conciliar-ofx', { method: 'POST', body: formData })
         .then(r => r.json())
         .then(res => {
           if (res && res.total_conciliados > 0) {
-            console.log([OFX Cloud]  títulos baixados no banco de dados.);
+            console.log('[OFX Cloud] ' + res.total_conciliados + ' titulos baixados no banco de dados.');
           }
         })
-        .catch(err => console.warn('Erro ao sincronizar conciliação OFX com a nuvem:', err));
+        .catch(err => console.warn('Erro ao sincronizar conciliacao OFX com a nuvem:', err));
     }
 
     const reader = new FileReader();
