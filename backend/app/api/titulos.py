@@ -181,6 +181,127 @@ def listar_titulos(
     except Exception as e:
         return {"success": False, "error": str(e), "titulos": []}
 
+@router.get("/dashboard")
+def dashboard_kpis():
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        hoje = datetime.now().date()
+        hoje_str = hoje.strftime("%Y-%m-%d")
+        semana_str = (hoje + timedelta(days=7)).strftime("%Y-%m-%d")
+        mes_ini = hoje.strftime("%Y-%m-01")
+        mes_fim = hoje.strftime("%Y-%m-30")
+
+        # Buscar todos os titulos nao-previsao
+        cur.execute("""
+            SELECT id, fornecedor, dt_vencimento, valor_bruto, valor_liquido,
+                   status, conciliada, dt_pagamento
+            FROM notas
+            WHERE (is_previsao = 0 OR is_previsao IS NULL)
+        """)
+        rows = cur.fetchall()
+        conn.close()
+
+        total_aberto = 0.0
+        total_vencido = 0.0
+        total_hoje = 0.0
+        total_semana = 0.0
+        total_mes = 0.0
+        total_baixado_mes = 0.0
+        qtd_aberto = 0
+        qtd_vencido = 0
+        qtd_hoje = 0
+        qtd_baixado = 0
+
+        venc_map = {}  # data -> {total, qtd}
+        forn_map = {}  # fornecedor -> {total, qtd}
+
+        for r in rows:
+            rd = dict(r)
+            valor = rd.get("valor_liquido") or rd.get("valor_bruto") or 0.0
+            venc = (rd.get("dt_vencimento") or "").strip()[:10]
+            is_pago = rd.get("status") in ("PAGO", "CONCILIADO") or bool(rd.get("conciliada"))
+            fornecedor = rd.get("fornecedor") or "Sem nome"
+
+            # Normalizar data
+            if venc and "/" in venc:
+                parts = venc.split("/")
+                if len(parts) == 3 and len(parts[2]) == 4:
+                    venc = f"{parts[2]}-{parts[1].zfill(2)}-{parts[0].zfill(2)}"
+
+            # Top fornecedores (apenas abertos)
+            if not is_pago:
+                if fornecedor not in forn_map:
+                    forn_map[fornecedor] = {"total": 0.0, "qtd": 0}
+                forn_map[fornecedor]["total"] += valor
+                forn_map[fornecedor]["qtd"] += 1
+
+            if is_pago:
+                qtd_baixado += 1
+                # Baixado no mes
+                dt_pgto = (rd.get("dt_pagamento") or venc or "")[:10]
+                if dt_pgto >= mes_ini and dt_pgto <= mes_fim:
+                    total_baixado_mes += valor
+                continue
+
+            # Titulo aberto
+            qtd_aberto += 1
+            total_aberto += valor
+
+            if not venc:
+                continue
+
+            # Vencimentos por dia (proximos 14 dias)
+            if venc >= hoje_str and venc <= (hoje + timedelta(days=14)).strftime("%Y-%m-%d"):
+                if venc not in venc_map:
+                    venc_map[venc] = {"total": 0.0, "qtd": 0}
+                venc_map[venc]["total"] += valor
+                venc_map[venc]["qtd"] += 1
+
+            if venc < hoje_str:
+                total_vencido += valor
+                qtd_vencido += 1
+            elif venc == hoje_str:
+                total_hoje += valor
+                qtd_hoje += 1
+
+            if venc >= hoje_str and venc <= semana_str:
+                total_semana += valor
+
+            if venc >= mes_ini and venc <= mes_fim:
+                total_mes += valor
+
+        # Montar vencimentos 14 dias ordenados
+        venc_14dias = []
+        for i in range(15):
+            d = (hoje + timedelta(days=i)).strftime("%Y-%m-%d")
+            entry = venc_map.get(d, {"total": 0.0, "qtd": 0})
+            venc_14dias.append({"data": d, "total": round(entry["total"], 2), "qtd": entry["qtd"]})
+
+        # Top 10 fornecedores por valor
+        top_forn = sorted(forn_map.items(), key=lambda x: x[1]["total"], reverse=True)[:10]
+        top_fornecedores = [{"nome": k, "total": round(v["total"], 2), "qtd": v["qtd"]} for k, v in top_forn]
+
+        return {
+            "success": True,
+            "kpis": {
+                "total_aberto": round(total_aberto, 2),
+                "total_vencido": round(total_vencido, 2),
+                "total_vence_hoje": round(total_hoje, 2),
+                "total_semana": round(total_semana, 2),
+                "total_mes": round(total_mes, 2),
+                "total_baixado_mes": round(total_baixado_mes, 2),
+                "qtd_aberto": qtd_aberto,
+                "qtd_vencido": qtd_vencido,
+                "qtd_vence_hoje": qtd_hoje,
+                "qtd_baixado": qtd_baixado
+            },
+            "vencimentos_14dias": venc_14dias,
+            "top_fornecedores": top_fornecedores
+        }
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
 @router.post("/gravar-documento")
 @router.post("/titulos/gravar-documento")
 def gravar_documento(doc: DocumentoEntrada):
@@ -568,4 +689,207 @@ def editar_titulo(identificador: str, dados: TituloEdicao):
     except HTTPException:
         raise
     except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+# ==============================================================================
+# NOVAS ROTAS INTEGRADAS: REMESSA ITAÚ SISPAG, CONCILIAÇÃO OFX E WHATSAPP
+# ==============================================================================
+from fastapi import Response, UploadFile, File
+import requests
+from ..core.itau_sispag import gerar_cnab240_sispag_itau
+
+@router.get("/exportar-lote-itau")
+@router.post("/exportar-lote-itau")
+def exportar_lote_itau(
+    data_pagamento: Optional[str] = Query(None, description="Data de pagamento (YYYY-MM-DD)"),
+    filial: Optional[str] = Query(None)
+):
+    """
+    Gera arquivo de remessa CNAB 240 / SISPAG Itaú contendo todos os títulos
+    em aberto com linha digitável/código de barras para a data especificada.
+    """
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        
+        query = """
+            SELECT id, numero_tx, numero_nf, fornecedor, cnpj, dt_emissao, dt_vencimento,
+                   valor_bruto, valor_liquido, status, categoria, filial, forma_pgto,
+                   cod_barras, pix_chave
+            FROM notas
+            WHERE (is_previsao = 0 OR is_previsao IS NULL)
+              AND (status = 'PENDENTE' OR status = 'EM ABERTO' OR status IS NULL OR status = '' OR status = 'ABERTO')
+        """
+        params = []
+        if data_pagamento:
+            query += " AND (dt_vencimento LIKE ? OR dt_vencimento = ?)"
+            params.extend([f"{data_pagamento}%", data_pagamento])
+        if filial:
+            query += " AND filial = ?"
+            params.append(filial)
+            
+        cur.execute(query, tuple(params))
+        rows = cur.fetchall()
+        conn.close()
+        
+        titulos = [dict(r) for r in rows]
+        if not titulos:
+            # Se não achou na data exata, busca todos os abertos
+            conn = get_connection()
+            cur = conn.cursor()
+            cur.execute("""
+                SELECT id, numero_tx, numero_nf, fornecedor, cnpj, dt_emissao, dt_vencimento,
+                       valor_bruto, valor_liquido, status, categoria, filial, forma_pgto,
+                       cod_barras, pix_chave
+                FROM notas
+                WHERE (is_previsao = 0 OR is_previsao IS NULL)
+                  AND (status = 'PENDENTE' OR status = 'EM ABERTO' OR status IS NULL OR status = '' OR status = 'ABERTO')
+                LIMIT 50
+            """)
+            titulos = [dict(r) for r in cur.fetchall()]
+            conn.close()
+            
+        if not titulos:
+            raise HTTPException(status_code=404, detail="Nenhum título em aberto encontrado para gerar o lote.")
+            
+        dt_pgto = data_pagamento or datetime.now().strftime("%Y-%m-%d")
+        remessa_conteudo = gerar_cnab240_sispag_itau(titulos, data_pagamento=dt_pgto)
+        
+        nome_arquivo = f"LOTE_ITAU_{dt_pgto.replace('-', '')}.REM"
+        return Response(
+            content=remessa_conteudo,
+            media_type="text/plain",
+            headers={
+                "Content-Disposition": f'attachment; filename="{nome_arquivo}"',
+                "Access-Control-Expose-Headers": "Content-Disposition"
+            }
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.exception("Erro ao gerar lote Itaú: %s", e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/conciliar-ofx")
+async def conciliar_extrato_ofx(arquivo: UploadFile = File(...)):
+    """
+    Recebe um arquivo OFX do Itaú, extrai os débitos de pagamentos
+    e dá baixa automática nos títulos correspondentes por valor e data.
+    """
+    try:
+        import ofxparse
+        import io
+        conteudo = await arquivo.read()
+        ofx = ofxparse.OfxParser.parse(io.BytesIO(conteudo))
+        
+        debitos_encontrados = []
+        for account in ofx.accounts:
+            for tx in account.statement.transactions:
+                if tx.amount < 0:
+                    debitos_encontrados.append({
+                        "data": tx.date.strftime("%Y-%m-%d"),
+                        "valor": abs(float(tx.amount)),
+                        "descricao": tx.memo or "",
+                        "checknum": tx.checknum or tx.id or ""
+                    })
+                    
+        conn = get_connection()
+        cur = conn.cursor()
+        
+        titulos_baixados = []
+        nao_localizados = []
+        
+        for deb in debitos_encontrados:
+            val = deb["valor"]
+            dt = deb["data"]
+            
+            cur.execute("""
+                SELECT id, fornecedor, dt_vencimento, valor_liquido, valor_bruto, numero_nf
+                FROM notas
+                WHERE (status = 'PENDENTE' OR status = 'EM ABERTO' OR status IS NULL OR status = '' OR status = 'ABERTO')
+                  AND (ROUND(valor_liquido, 2) = ROUND(?, 2) OR ROUND(valor_bruto, 2) = ROUND(?, 2))
+                LIMIT 1
+            """, (val, val))
+            
+            tit = cur.fetchone()
+            if tit:
+                tit_id = tit["id"]
+                cur.execute("""
+                    UPDATE notas
+                    SET status = 'PAGO', conciliada = 1, dt_pagamento = ?
+                    WHERE id = ?
+                """, (dt, tit_id))
+                
+                titulos_baixados.append({
+                    "id": tit_id,
+                    "fornecedor": tit["fornecedor"],
+                    "numero_nf": tit["numero_nf"],
+                    "valor": val,
+                    "dt_pagamento": dt,
+                    "descricao_banco": deb["descricao"]
+                })
+            else:
+                nao_localizados.append(deb)
+                
+        conn.commit()
+        conn.close()
+        
+        return {
+            "success": True,
+            "total_debitos_ofx": len(debitos_encontrados),
+            "total_conciliados": len(titulos_baixados),
+            "titulos_baixados": titulos_baixados,
+            "nao_localizados": nao_localizados
+        }
+    except Exception as e:
+        logger.exception("Erro ao conciliar OFX: %s", e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/disparar-whatsapp-diretoria")
+def disparar_whatsapp_diretoria(
+    numero: Optional[str] = Query("557191045869", description="Número com DDI+DDD"),
+    data_pagamento: Optional[str] = Query(None)
+):
+    """
+    Gera o resumo consolidado de títulos a pagar e envia via WhatsApp.
+    """
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        hoje_str = data_pagamento or datetime.now().strftime("%Y-%m-%d")
+        
+        cur.execute("""
+            SELECT id, fornecedor, dt_vencimento, valor_liquido, valor_bruto, forma_pgto
+            FROM notas
+            WHERE (is_previsao = 0 OR is_previsao IS NULL)
+              AND (status = 'PENDENTE' OR status = 'EM ABERTO' OR status IS NULL OR status = '' OR status = 'ABERTO')
+              AND (dt_vencimento LIKE ? OR dt_vencimento = ?)
+        """, (f"{hoje_str}%", hoje_str))
+        
+        rows = cur.fetchall()
+        conn.close()
+        
+        titulos = [dict(r) for r in rows]
+        total_despesas = sum(float(t.get("valor_liquido") or t.get("valor_bruto") or 0.0) for t in titulos)
+        
+        msg = (
+            f"📊 *BOAH FINANCEIRO - AUTORIZAÇÃO DE PAGAMENTOS*\n"
+            f"📅 *Data:* {hoje_str}\n\n"
+            f"📉 *Total a Pagar:* R$ {total_despesas:,.2f}\n"
+            f"📑 *Quantidade de Títulos:* {len(titulos)}\n\n"
+            f"✅ Acesse o Bimer Cloud para conferência e aprovação:\n"
+            f"https://bimer-cloud-app.vercel.app/\n"
+        )
+        
+        resp = requests.post("http://localhost:3333/send-text", json={
+            "number": numero,
+            "message": msg
+        }, timeout=10)
+        
+        return {
+            "success": True,
+            "mensagem_enviada": msg,
+            "whatsapp_status": resp.json() if resp.status_code == 200 else resp.text
+        }
+    except Exception as e:
+        logger.exception("Erro ao disparar WhatsApp: %s", e)
         raise HTTPException(status_code=500, detail=str(e))
