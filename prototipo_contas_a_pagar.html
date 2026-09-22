@@ -1840,7 +1840,83 @@
         </div>
 
       </div>
-
+    <!-- MODAL: VINCULAÇÃO MANUAL DE TÍTULOS (CONCILIAÇÃO N:1) -->
+    <div id="modal-vincular-titulos" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.55); z-index: 9999; justify-content: center; align-items: center;">
+      <div style="background: #ffffff; border-radius: 8px; width: 820px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 25px 50px rgba(0,0,0,0.25); border: 2px solid #004b87;">
+        <!-- HEADER -->
+        <div style="background: #0f172a; color: #fff; padding: 12px 18px; border-radius: 6px 6px 0 0; display: flex; justify-content: space-between; align-items: center;">
+          <div style="font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px;">
+            <svg class="bimer-svg" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+            Vinculação Manual de Títulos ao Débito do Extrato
+          </div>
+          <button onclick="fecharModalVincular()" style="background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 18px; font-weight: 700; padding: 0 4px;" title="Fechar">&times;</button>
+        </div>
+        <!-- EXTRATO SELECIONADO -->
+        <div style="background: #fef2f2; border-bottom: 1px solid #fecaca; padding: 10px 18px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-size: 9.5px; text-transform: uppercase; font-weight: 800; color: #991b1b;">Débito do Extrato Bancário</div>
+            <div style="font-size: 13px; font-weight: 800; color: #dc2626;" id="modal-vinc-extrato-desc">-</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 9.5px; text-transform: uppercase; font-weight: 800; color: #991b1b;">Valor Debitado</div>
+            <div style="font-size: 18px; font-weight: 800; color: #dc2626; font-family: monospace;" id="modal-vinc-extrato-valor">R$ 0,00</div>
+          </div>
+        </div>
+        <!-- BARRA DE BUSCA -->
+        <div style="padding: 10px 18px; border-bottom: 1px solid #e2e8f0; display: flex; gap: 10px; align-items: center;">
+          <input type="text" id="modal-vinc-busca" placeholder="Buscar por fornecedor, NF ou descrição..." oninput="filtrarTitulosModal()" style="flex: 1; padding: 6px 10px; font-size: 11px; border: 1px solid #cbd5e1; border-radius: 4px;">
+          <span style="font-size: 10px; color: #64748b; white-space: nowrap;" id="modal-vinc-contador">0 títulos pendentes</span>
+        </div>
+        <!-- LISTA DE TÍTULOS COM CHECKBOX -->
+        <div style="flex: 1; overflow-y: auto; max-height: 340px; padding: 0;">
+          <table class="alterdata-grid" style="width: 100%; border-collapse: collapse; font-size: 11px;">
+            <thead style="position: sticky; top: 0; z-index: 2;">
+              <tr>
+                <th style="width: 35px; text-align: center;"><input type="checkbox" id="modal-vinc-check-all" onchange="toggleCheckAllModal(this)" title="Marcar/Desmarcar todos"></th>
+                <th style="width: 50px;">ID</th>
+                <th>Fornecedor / Favorecido</th>
+                <th style="width: 80px;">Vencimento</th>
+                <th style="width: 100px; text-align: right;">Valor (R$)</th>
+                <th style="width: 90px;">NF / Doc</th>
+              </tr>
+            </thead>
+            <tbody id="modal-vinc-tbody"></tbody>
+          </table>
+        </div>
+        <!-- TOTALIZADOR EM TEMPO REAL -->
+        <div style="border-top: 2px solid #004b87; padding: 12px 18px; background: #f8fafc;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 16px; align-items: center;">
+            <div>
+              <div style="font-size: 9.5px; text-transform: uppercase; font-weight: 800; color: #1e40af;">Soma dos Selecionados</div>
+              <div style="font-size: 16px; font-weight: 800; color: #004b87; font-family: monospace;" id="modal-vinc-soma">R$ 0,00</div>
+              <div style="font-size: 9.5px; color: #64748b;" id="modal-vinc-qtd-sel">0 títulos selecionados</div>
+            </div>
+            <div>
+              <div style="font-size: 9.5px; text-transform: uppercase; font-weight: 800; color: #991b1b;">Valor do Extrato</div>
+              <div style="font-size: 16px; font-weight: 800; color: #dc2626; font-family: monospace;" id="modal-vinc-valor-ext">R$ 0,00</div>
+            </div>
+            <div>
+              <div style="font-size: 9.5px; text-transform: uppercase; font-weight: 800;" id="modal-vinc-dif-label">Diferença</div>
+              <div style="font-size: 16px; font-weight: 800; font-family: monospace;" id="modal-vinc-diferenca">R$ 0,00</div>
+              <select id="modal-vinc-tipo-dif" style="font-size: 10px; padding: 2px 6px; border: 1px solid #cbd5e1; border-radius: 3px; margin-top: 3px; display: none;">
+                <option value="JUROS">Juros / Mora</option>
+                <option value="MULTA">Multa</option>
+                <option value="DESCONTO">Desconto Obtido</option>
+                <option value="ARREDONDAMENTO">Arredondamento</option>
+              </select>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <button id="modal-vinc-btn-confirmar" class="tool-btn primary" onclick="confirmarVinculacaoGrupo()" disabled style="background: #059669; color: white; font-weight: 800; border-color: #047857; padding: 8px 16px; font-size: 11.5px; border-radius: 4px; opacity: 0.5;">
+                <svg class="bimer-svg" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> Confirmar Vinculação
+              </button>
+              <button class="tool-btn" onclick="fecharModalVincular()" style="padding: 6px 16px; font-size: 10.5px;">
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     </div>
 
     <!-- ==================== ABA 7: CENTRAL DE RELATÓRIOS OFICIAIS (PADRÃO BIMER / JR SOLUTIONS) ==================== -->
@@ -8170,48 +8246,101 @@
       return;
     }
 
-    let conciliadosCont = 0;
+    let concExato = 0, concSoma = 0, concJuros = 0;
     let titulosAlterados = false;
+    const TOLERANCIA_JUROS_PCT = 5; // 5%
 
     for (const ext of extratoBancario) {
       if (ext.conciliado) continue;
 
-      // Busca correspondência no Contas a Pagar por valor exato (+/- R$ 0.05)
-      const match = titulos.find(t => {
-        const mesmoValor = Math.abs(Number(t.valor) - Number(ext.valor)) < 0.05;
-        if (!mesmoValor) return false;
-
+      // === ESTRATÉGIA 1: Match exato por valor (+/- R$ 0.05) ===
+      const matchExato = titulos.find(t => {
         if (t.conciliado_com_extrato && t.conciliado_com_extrato !== ext.id) return false;
-
-        return true;
+        if (t.situacao === 'BAIXADO' || t.status === 'CONCILIADO') return false;
+        return Math.abs(Number(t.valor) - Number(ext.valor)) < 0.06;
       });
 
-      if (match) {
-        ext.conciliado = true;
-        ext.titulo_id = match.id;
-        ext.titulo_numero_id = match.numero_id || match.numero_doc;
-        
-        // EFETIVA A BAIXA CONTÁBIL E BANCÁRIA DO TÍTULO
-        match.situacao = 'BAIXADO';
-        match.status = 'CONCILIADO';
-        match.conciliada = true;
-        match.conciliado = true;
-        match.conciliado_com_extrato = ext.id;
-        match.data_baixa = ext.data;
-        match.banco_baixa = 'Banco Itaú (341)';
+      if (matchExato) {
+        efetivarBaixaTitulo(matchExato, ext);
+        concExato++;
+        titulosAlterados = true;
+        continue;
+      }
 
-        // Se backend online, persistir baixa com forcar_baixa=true
-        const idParaBaixa = match.db_id ? `NOTA_${match.db_id}` : (match.id || match.numero_doc);
-        if (isBackendOnline && idParaBaixa) {
-          try {
-            await fetch(`${API_BASE}/titulos/${idParaBaixa}/baixa?forcar_baixa=true`, { method: 'POST' });
-            console.log('[OK] Baixa persistida com sucesso no backend para:', idParaBaixa);
-          } catch (e) {
-            console.warn('Erro ao persistir baixa no backend:', e);
+      // === ESTRATÉGIA 2: Match por soma de 2-3 títulos ===
+      const pendentes = titulos.filter(t =>
+        !t.conciliado_com_extrato &&
+        t.situacao !== 'BAIXADO' && t.status !== 'CONCILIADO' &&
+        Number(t.valor) > 0
+      );
+      let foundCombo = false;
+      for (let n = 2; n <= 3 && !foundCombo; n++) {
+        if (pendentes.length < n) break;
+        // Tentar combinações (limitado a 200 iterações para performance)
+        let iterCount = 0;
+        for (let i = 0; i < pendentes.length && !foundCombo; i++) {
+          for (let j = i + 1; j < pendentes.length && !foundCombo; j++) {
+            if (iterCount++ > 200) break;
+            const combo = [pendentes[i], pendentes[j]];
+            if (n === 3) {
+              for (let k = j + 1; k < pendentes.length && !foundCombo; k++) {
+                const combo3 = [...combo, pendentes[k]];
+                const soma3 = combo3.reduce((acc, t) => acc + Number(t.valor), 0);
+                if (Math.abs(soma3 - Number(ext.valor)) < 0.11) {
+                  const grupoId = 'GRP_' + Date.now() + '_' + ext.fitid;
+                  combo3.forEach(t => {
+                    efetivarBaixaTitulo(t, ext);
+                    t.grupo_conciliacao = grupoId;
+                  });
+                  ext.grupo_ids = combo3.map(t => t.id);
+                  concSoma++;
+                  titulosAlterados = true;
+                  foundCombo = true;
+                }
+              }
+            } else {
+              const soma2 = combo.reduce((acc, t) => acc + Number(t.valor), 0);
+              if (Math.abs(soma2 - Number(ext.valor)) < 0.11) {
+                const grupoId = 'GRP_' + Date.now() + '_' + ext.fitid;
+                combo.forEach(t => {
+                  efetivarBaixaTitulo(t, ext);
+                  t.grupo_conciliacao = grupoId;
+                });
+                ext.grupo_ids = combo.map(t => t.id);
+                concSoma++;
+                titulosAlterados = true;
+                foundCombo = true;
+              }
+            }
           }
         }
+      }
+      if (foundCombo) continue;
 
-        conciliadosCont++;
+      // === ESTRATÉGIA 3: Match com tolerância de juros (até 5%) ===
+      const matchJuros = titulos.find(t => {
+        if (t.conciliado_com_extrato && t.conciliado_com_extrato !== ext.id) return false;
+        if (t.situacao === 'BAIXADO' || t.status === 'CONCILIADO') return false;
+        const v = Number(t.valor);
+        if (v <= 0) return false;
+        const diff = Math.abs(Number(ext.valor) - v);
+        const pct = (diff / v) * 100;
+        return diff > 0.06 && pct <= TOLERANCIA_JUROS_PCT;
+      });
+
+      if (matchJuros) {
+        const diff = Number(ext.valor) - Number(matchJuros.valor);
+        efetivarBaixaTitulo(matchJuros, ext);
+        matchJuros.valor_pago = ext.valor;
+        if (diff > 0) {
+          matchJuros.juros_multa = Math.round(diff * 100) / 100;
+          ext.juros_valor = matchJuros.juros_multa;
+        } else {
+          matchJuros.desconto = Math.round(Math.abs(diff) * 100) / 100;
+          ext.desconto_valor = matchJuros.desconto;
+        }
+        ext.tipo_diferenca = diff > 0 ? 'JUROS' : 'DESCONTO';
+        concJuros++;
         titulosAlterados = true;
       }
     }
@@ -8221,17 +8350,41 @@
     }
     salvarExtratoConciliacao();
 
-    // Sincroniza e atualiza imediatamente a Aba 3 (Contas a Pagar) e a Aba 6
     renderizarGridTitulos();
     renderizarTelasConciliacao();
     atualizarAgendaFinanceira();
     atualizarBarraRodape();
     atualizarTotaisGerais();
 
-    if (conciliadosCont > 0) {
-      alert(`[SUCESSO] Conciliação Automática Concluída!\nForam identificados, conciliados e BAIXADOS ${conciliadosCont} títulos com sucesso no Contas a Pagar.`);
+    const total = concExato + concSoma + concJuros;
+    if (total > 0) {
+      let msg = `[SUCESSO] Conciliação Automática Concluída!\n`;
+      msg += `Total: ${total} títulos conciliados e BAIXADOS.\n`;
+      if (concExato > 0) msg += `• ${concExato} por valor exato\n`;
+      if (concSoma > 0) msg += `• ${concSoma} por soma de títulos (agrupamento)\n`;
+      if (concJuros > 0) msg += `• ${concJuros} com juros/desconto identificado\n`;
+      alert(msg);
     } else {
-      alert('[INFO] Nenhum novo par coincidente foi identificado automaticamente. Você pode conciliar tarifas clicando no botão "Criar" ao lado de cada item.');
+      alert('[INFO] Nenhum novo par coincidente foi identificado automaticamente.\nVocê pode vincular títulos manualmente clicando no botão "Vincular" ao lado de cada item pendente.');
+    }
+  }
+
+  // Função auxiliar para efetivar a baixa de um título na conciliação
+  function efetivarBaixaTitulo(titulo, extrato) {
+    extrato.conciliado = true;
+    extrato.titulo_id = titulo.id;
+    extrato.titulo_numero_id = titulo.numero_id || titulo.numero_doc;
+    titulo.situacao = 'BAIXADO';
+    titulo.status = 'CONCILIADO';
+    titulo.conciliada = true;
+    titulo.conciliado = true;
+    titulo.conciliado_com_extrato = extrato.id;
+    titulo.data_baixa = extrato.data;
+    titulo.banco_baixa = 'Banco Itaú (341)';
+
+    const idParaBaixa = titulo.db_id ? `NOTA_${titulo.db_id}` : (titulo.id || titulo.numero_doc);
+    if (typeof isBackendOnline !== 'undefined' && isBackendOnline && idParaBaixa) {
+      fetch(`${API_BASE}/titulos/${idParaBaixa}/baixa?forcar_baixa=true`, { method: 'POST' }).catch(() => {});
     }
   }
 
@@ -8316,6 +8469,207 @@
     }
   }
 
+  // ==================== MODAL: VINCULAÇÃO MANUAL DE TÍTULOS ====================
+  let modalVincExtId = null;
+
+  function abrirModalVincular(extId) {
+    const ext = extratoBancario.find(e => e.id === extId);
+    if (!ext) return;
+    modalVincExtId = extId;
+
+    document.getElementById('modal-vinc-extrato-desc').textContent = `${formatarData(ext.data)} — ${ext.memo}`;
+    document.getElementById('modal-vinc-extrato-valor').textContent = `- ${formatarMoeda(ext.valor)}`;
+    document.getElementById('modal-vinc-valor-ext').textContent = formatarMoeda(ext.valor);
+
+    // Carregar títulos pendentes
+    const pendentes = titulos.filter(t =>
+      t.situacao !== 'BAIXADO' && t.status !== 'CONCILIADO' && !t.conciliado_com_extrato && Number(t.valor) > 0
+    );
+    renderizarTitulosModal(pendentes);
+    document.getElementById('modal-vinc-contador').textContent = `${pendentes.length} títulos pendentes`;
+    atualizarTotalizadorModal();
+
+    const modal = document.getElementById('modal-vincular-titulos');
+    modal.style.display = 'flex';
+  }
+
+  function fecharModalVincular() {
+    document.getElementById('modal-vincular-titulos').style.display = 'none';
+    modalVincExtId = null;
+  }
+
+  function renderizarTitulosModal(lista) {
+    const tbody = document.getElementById('modal-vinc-tbody');
+    if (!lista || lista.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px; color: #94a3b8;">Nenhum título pendente encontrado.</td></tr>';
+      return;
+    }
+    let html = '';
+    lista.forEach(t => {
+      html += `
+        <tr style="cursor: pointer;" onclick="toggleCheckTituloModal(this, '${t.id}')">
+          <td style="text-align: center;"><input type="checkbox" class="modal-vinc-check" data-id="${t.id}" data-valor="${Number(t.valor)}" onchange="atualizarTotalizadorModal()" onclick="event.stopPropagation()"></td>
+          <td style="font-family: monospace; font-size: 10px; color: #64748b;">${t.db_id || t.id}</td>
+          <td><strong style="color: #0f172a;">${t.favorecido || t.fornecedor || '-'}</strong></td>
+          <td style="white-space: nowrap;">${formatarData(t.vencimento)}</td>
+          <td style="text-align: right; font-weight: 700; font-family: monospace;">${formatarMoeda(Number(t.valor))}</td>
+          <td style="font-size: 10px; color: #64748b;">${t.numero_doc || t.numero_nf || '-'}</td>
+        </tr>
+      `;
+    });
+    tbody.innerHTML = html;
+  }
+
+  function toggleCheckTituloModal(tr, id) {
+    const cb = tr.querySelector('input[type=checkbox]');
+    cb.checked = !cb.checked;
+    atualizarTotalizadorModal();
+  }
+
+  function toggleCheckAllModal(masterCb) {
+    document.querySelectorAll('.modal-vinc-check').forEach(cb => { cb.checked = masterCb.checked; });
+    atualizarTotalizadorModal();
+  }
+
+  function filtrarTitulosModal() {
+    const busca = (document.getElementById('modal-vinc-busca').value || '').toLowerCase();
+    const pendentes = titulos.filter(t => {
+      if (t.situacao === 'BAIXADO' || t.status === 'CONCILIADO' || t.conciliado_com_extrato) return false;
+      if (Number(t.valor) <= 0) return false;
+      if (!busca) return true;
+      const texto = `${t.favorecido || ''} ${t.fornecedor || ''} ${t.numero_doc || ''} ${t.descricao || ''} ${t.numero_nf || ''}`.toLowerCase();
+      return texto.includes(busca);
+    });
+    renderizarTitulosModal(pendentes);
+    document.getElementById('modal-vinc-contador').textContent = `${pendentes.length} títulos pendentes`;
+  }
+
+  function atualizarTotalizadorModal() {
+    const checks = document.querySelectorAll('.modal-vinc-check:checked');
+    let soma = 0;
+    checks.forEach(cb => { soma += Number(cb.dataset.valor || 0); });
+
+    const ext = extratoBancario.find(e => e.id === modalVincExtId);
+    const valExt = ext ? Number(ext.valor) : 0;
+    const dif = valExt - soma;
+
+    document.getElementById('modal-vinc-soma').textContent = formatarMoeda(soma);
+    document.getElementById('modal-vinc-qtd-sel').textContent = `${checks.length} título${checks.length !== 1 ? 's' : ''} selecionado${checks.length !== 1 ? 's' : ''}`;
+    document.getElementById('modal-vinc-diferenca').textContent = `${dif >= 0 ? '' : '-'} ${formatarMoeda(Math.abs(dif))}`;
+
+    const difLabel = document.getElementById('modal-vinc-dif-label');
+    const difEl = document.getElementById('modal-vinc-diferenca');
+    const selDif = document.getElementById('modal-vinc-tipo-dif');
+    const btnConfirmar = document.getElementById('modal-vinc-btn-confirmar');
+
+    if (Math.abs(dif) < 0.06) {
+      difLabel.textContent = 'Diferença';
+      difLabel.style.color = '#059669';
+      difEl.style.color = '#059669';
+      selDif.style.display = 'none';
+    } else if (dif > 0) {
+      difLabel.textContent = 'Juros / Multa (Extrato > Sistema)';
+      difLabel.style.color = '#dc2626';
+      difEl.style.color = '#dc2626';
+      selDif.style.display = 'block';
+      selDif.value = 'JUROS';
+    } else {
+      difLabel.textContent = 'Desconto (Sistema > Extrato)';
+      difLabel.style.color = '#059669';
+      difEl.style.color = '#059669';
+      selDif.style.display = 'block';
+      selDif.value = 'DESCONTO';
+    }
+
+    // Habilitar botão se ao menos 1 título selecionado (sem limite de % na vinculação manual)
+    const habilitado = checks.length > 0;
+    btnConfirmar.disabled = !habilitado;
+    btnConfirmar.style.opacity = habilitado ? '1' : '0.5';
+  }
+
+  async function confirmarVinculacaoGrupo() {
+    const checks = document.querySelectorAll('.modal-vinc-check:checked');
+    if (checks.length === 0) return;
+
+    const ext = extratoBancario.find(e => e.id === modalVincExtId);
+    if (!ext) return;
+
+    const tituloIds = [];
+    const titulosRef = [];
+    let soma = 0;
+
+    checks.forEach(cb => {
+      const id = cb.dataset.id;
+      const val = Number(cb.dataset.valor || 0);
+      tituloIds.push(id);
+      soma += val;
+      const tit = titulos.find(t => t.id === id);
+      if (tit) titulosRef.push(tit);
+    });
+
+    const dif = Number(ext.valor) - soma;
+    const tipoDif = document.getElementById('modal-vinc-tipo-dif').value;
+    const grupoId = 'GRP_' + Date.now() + '_' + (ext.fitid || '');
+
+    // Efetivar baixa em todos os títulos
+    titulosRef.forEach(t => {
+      efetivarBaixaTitulo(t, ext);
+      t.grupo_conciliacao = grupoId;
+      t.valor_pago = ext.valor;
+      if (dif > 0.05) {
+        t.juros_multa = Math.round(dif * 100) / 100;
+      } else if (dif < -0.05) {
+        t.desconto = Math.round(Math.abs(dif) * 100) / 100;
+      }
+    });
+
+    ext.grupo_ids = tituloIds;
+    if (dif > 0.05) ext.juros_valor = Math.round(dif * 100) / 100;
+    if (dif < -0.05) ext.desconto_valor = Math.round(Math.abs(dif) * 100) / 100;
+    ext.tipo_diferenca = Math.abs(dif) > 0.05 ? tipoDif : null;
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(titulos));
+    salvarExtratoConciliacao();
+
+    // Persistir no backend se online
+    if (typeof isBackendOnline !== 'undefined' && isBackendOnline) {
+      try {
+        const dbIds = titulosRef.map(t => t.db_id).filter(Boolean);
+        if (dbIds.length > 0) {
+          await fetch(`${API_BASE}/conciliar-grupo`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              titulo_ids: dbIds,
+              extrato_fitid: ext.fitid || ext.id,
+              extrato_valor: ext.valor,
+              extrato_data: ext.data,
+              extrato_memo: ext.memo,
+              tipo_diferenca: Math.abs(dif) > 0.05 ? tipoDif : null
+            })
+          });
+          console.log('[OK] Grupo de conciliação persistido no backend:', grupoId);
+        }
+      } catch (e) {
+        console.warn('Erro ao persistir grupo no backend:', e);
+      }
+    }
+
+    fecharModalVincular();
+    renderizarGridTitulos();
+    renderizarTelasConciliacao();
+    atualizarAgendaFinanceira();
+    atualizarBarraRodape();
+    atualizarTotaisGerais();
+
+    const qtdStr = titulosRef.length;
+    let msg = `[SUCESSO] Vinculação manual concluída!\n${qtdStr} título${qtdStr > 1 ? 's' : ''} vinculado${qtdStr > 1 ? 's' : ''} ao débito de ${formatarMoeda(ext.valor)}.`;
+    if (Math.abs(dif) > 0.05) {
+      msg += `\nDiferença de ${formatarMoeda(Math.abs(dif))} registrada como ${tipoDif}.`;
+    }
+    alert(msg);
+  }
+
   function renderizarTelasConciliacao() {
     const tbodyExt = document.getElementById('conc-extrato-body');
     const tbodySis = document.getElementById('conc-sistema-body');
@@ -8333,8 +8687,11 @@
     } else {
       let htmlExt = '';
       extratoBancario.forEach(item => {
+        const grupoInfo = item.grupo_ids ? ` (${item.grupo_ids.length} títulos)` : '';
+        const jurosInfo = item.juros_valor && item.juros_valor > 0 ? `<div style="font-size: 9px; color: #dc2626; font-weight: 700; margin-top: 1px;">Juros: +${formatarMoeda(item.juros_valor)}</div>` : '';
+        const descontoInfo = item.desconto_valor && item.desconto_valor > 0 ? `<div style="font-size: 9px; color: #059669; font-weight: 700; margin-top: 1px;">Desc: -${formatarMoeda(item.desconto_valor)}</div>` : '';
         const statusBadge = item.conciliado 
-          ? `<span style="background: #dcfce7; color: #166534; padding: 2px 6px; border-radius: 3px; font-weight: 700; font-size: 10px; border: 1px solid #86efac;"><svg class="bimer-svg bimer-svg-green bimer-svg-xs" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> Conciliado</span><div style="font-size: 9px; font-family: monospace; color: #15803d; margin-top: 2px;">${item.titulo_numero_id || 'ID VINCULADO'}</div>`
+          ? `<span style="background: #dcfce7; color: #166534; padding: 2px 6px; border-radius: 3px; font-weight: 700; font-size: 10px; border: 1px solid #86efac;"><svg class="bimer-svg bimer-svg-green bimer-svg-xs" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> Conciliado${grupoInfo}</span><div style="font-size: 9px; font-family: monospace; color: #15803d; margin-top: 2px;">${item.titulo_numero_id || 'ID VINCULADO'}</div>${jurosInfo}${descontoInfo}`
           : (item.tipo === 'TARIFA' 
             ? `<span style="background: #fef3c7; color: #92400e; padding: 2px 6px; border-radius: 3px; font-weight: 700; font-size: 10px; border: 1px solid #fde68a;">Tarifa Bancária</span>`
             : `<span style="background: #fee2e2; color: #991b1b; padding: 2px 6px; border-radius: 3px; font-weight: 700; font-size: 10px; border: 1px solid #fca5a5;">Pendente</span>`);
@@ -8345,7 +8702,7 @@
         } else if (item.tipo === 'TARIFA') {
           acaoBtn = `<button class="tool-btn primary" onclick="lancarTarifaRapida('${item.id}')" style="padding: 2px 6px; font-size: 10px; background: #004b87;" title="Criar título no Contas a Pagar e conciliar na hora"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Criar</button>`;
         } else {
-          acaoBtn = `<span style="font-size: 10px; color: #94a3b8;">Aguardando</span>`;
+          acaoBtn = `<button class="tool-btn primary" onclick="abrirModalVincular('${item.id}')" style="padding: 2px 6px; font-size: 10px; background: #004b87;" title="Vincular manualmente a títulos do sistema"><svg class="bimer-svg bimer-svg-xs" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg> Vincular</button>`;
         }
 
         htmlExt += `
@@ -8646,7 +9003,11 @@
             <td style="padding: 5px 6px; font-size: 10px;">${item.forma_pgto || 'BOLETO'}</td>
             <td style="padding: 5px 6px; text-align: right; color: #475569;">${formatarMoeda(vB)}</td>
             <td style="padding: 5px 6px; text-align: right; color: #dc2626;">${vR > 0 ? '- ' + formatarMoeda(vR) : '-'}</td>
-            <td style="padding: 5px 6px; text-align: right; font-weight: 700; color: #0f172a;">${formatarMoeda(vL)}</td>
+            <td style="padding: 5px 6px; text-align: right; font-weight: 700; color: #0f172a;">
+              ${formatarMoeda(vL)}
+              ${item.juros_multa > 0 ? `<div style="font-size: 8.5px; color: #dc2626; margin-top: 2px;">+ Juros: ${formatarMoeda(Number(item.juros_multa))}</div>` : ''}
+              ${item.desconto > 0 ? `<div style="font-size: 8.5px; color: #059669; margin-top: 2px;">- Desc: ${formatarMoeda(Number(item.desconto))}</div>` : ''}
+            </td>
             <td style="padding: 5px 6px; text-align: center;">${sitBadge}</td>
           </tr>
         `;

@@ -218,9 +218,13 @@ def init_db():
     ''')
 
     # Garantir colunas adicionais nas tabelas existentes
-    for col, table in [("cod_operacao", "notas"), ("cnae", "notas"), ("item_lc116", "notas")]:
+    for col, table in [
+        ("cod_operacao", "notas"), ("cnae", "notas"), ("item_lc116", "notas"),
+        ("valor_pago", "notas"), ("juros_multa", "notas"),
+        ("desconto", "notas"), ("grupo_conciliacao", "notas"),
+    ]:
         try:
-            cur.execute(f"ALTER TABLE {table} ADD COLUMN {col} TEXT")
+            cur.execute(f"ALTER TABLE {table} ADD COLUMN {col} TEXT" if col in ("cod_operacao", "cnae", "item_lc116", "grupo_conciliacao") else f"ALTER TABLE {table} ADD COLUMN {col} REAL DEFAULT 0")
             conn.commit()
         except Exception:
             pass
@@ -236,6 +240,22 @@ def init_db():
         status TEXT DEFAULT 'PENDENTE',
         numero_doc TEXT,
         FOREIGN KEY (nota_id) REFERENCES notas(id) ON DELETE CASCADE
+    )
+    ''')
+
+    cur.execute('''
+    CREATE TABLE IF NOT EXISTS conciliacao_grupos (
+        id TEXT PRIMARY KEY,
+        extrato_fitid TEXT,
+        extrato_valor REAL,
+        extrato_data TEXT,
+        extrato_memo TEXT,
+        soma_titulos REAL,
+        diferenca REAL DEFAULT 0,
+        tipo_diferenca TEXT,
+        qtd_titulos INTEGER DEFAULT 1,
+        dt_conciliacao TEXT DEFAULT (datetime('now')),
+        operador TEXT DEFAULT 'Sistema'
     )
     ''')
     
@@ -323,10 +343,12 @@ def init_db():
         "CREATE INDEX IF NOT EXISTS idx_notas_fornecedor ON notas(fornecedor)",
         "CREATE INDEX IF NOT EXISTS idx_notas_cnpj ON notas(cnpj)",
         "CREATE INDEX IF NOT EXISTS idx_notas_is_previsao ON notas(is_previsao)",
+        "CREATE INDEX IF NOT EXISTS idx_notas_grupo_conc ON notas(grupo_conciliacao)",
         "CREATE INDEX IF NOT EXISTS idx_fornecedores_cnpj ON fornecedores(cnpj_cpf)",
         "CREATE INDEX IF NOT EXISTS idx_fornecedores_razao ON fornecedores(razao_social)",
         "CREATE INDEX IF NOT EXISTS idx_impostos_nota ON nota_impostos(nota_id)",
         "CREATE INDEX IF NOT EXISTS idx_audit_created ON audit_log(created_at)",
+        "CREATE INDEX IF NOT EXISTS idx_conc_grupos_fitid ON conciliacao_grupos(extrato_fitid)",
     ]:
         try:
             cur.execute(idx_sql)

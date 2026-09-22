@@ -1,7 +1,8 @@
 from typing import Optional, List
 import time
 from datetime import datetime, timedelta
-from fastapi import APIRouter, HTTPException, Query
+from itertools import combinations
+from fastapi import APIRouter, HTTPException, Query, UploadFile, File
 from pydantic import BaseModel, Field
 from ..core.database import get_connection
 import logging
@@ -39,6 +40,15 @@ class DocumentoEntrada(BaseModel):
     item_lc116: Optional[str] = ""
     impostos: Optional[List[ImpostoItem]] = []
 
+class ConciliacaoGrupoRequest(BaseModel):
+    titulo_ids: List[int] = Field(..., description="IDs dos títulos no banco a vincular")
+    extrato_fitid: Optional[str] = ""
+    extrato_valor: float = Field(..., description="Valor do débito no extrato bancário")
+    extrato_data: Optional[str] = ""
+    extrato_memo: Optional[str] = ""
+    tipo_diferenca: Optional[str] = Field(None, description="JUROS, MULTA, DESCONTO, ARREDONDAMENTO")
+    operador: Optional[str] = "Sistema"
+
 @router.get("")
 @router.get("/titulos")
 def listar_titulos(
@@ -54,7 +64,8 @@ def listar_titulos(
             SELECT id, numero_tx, numero_nf, fornecedor, cnpj, dt_emissao, dt_vencimento,
                    valor_bruto, valor_liquido, status, categoria, filial, responsavel,
                    descricao, forma_pgto, cod_barras, pix_chave, observacao,
-                   conciliada, dt_pagamento, cod_operacao, cnae, item_lc116
+                   conciliada, dt_pagamento, cod_operacao, cnae, item_lc116,
+                   valor_pago, juros_multa, desconto, grupo_conciliacao
             FROM notas
             WHERE (is_previsao = 0 OR is_previsao IS NULL)
         """)
@@ -116,7 +127,11 @@ def listar_titulos(
                 "situacao": n_situacao,
                 "conciliada": n_conciliada,
                 "data_baixa": nota_dict.get("dt_pagamento"),
-                "loteId": nota_dict.get("numero_tx")
+                "loteId": nota_dict.get("numero_tx"),
+                "valor_pago": nota_dict.get("valor_pago"),
+                "juros_multa": nota_dict.get("juros_multa") or 0,
+                "desconto": nota_dict.get("desconto") or 0,
+                "grupo_conciliacao": nota_dict.get("grupo_conciliacao"),
             })
 
             for imp in impostos_por_nota.get(n_id, []):
@@ -773,7 +788,11 @@ def exportar_lote_itau(
 async def conciliar_extrato_ofx(arquivo: UploadFile = File(...)):
     """
     Recebe um arquivo OFX do Itaú, extrai os débitos de pagamentos
-    e dá baixa automática nos títulos correspondentes por valor e data.
+    e dá baixa automática nos títulos correspondentes.
+    Estratégias de match (em ordem):
+      1. Valor exato (±R$ 0,05)
+      2. Soma de 2-3 títulos pendentes
+      3. Tolerância de juros (até 5%)
     """
     try:
         import ofxparse
@@ -789,45 +808,136 @@ async def conciliar_extrato_ofx(arquivo: UploadFile = File(...)):
                         "data": tx.date.strftime("%Y-%m-%d"),
                         "valor": abs(float(tx.amount)),
                         "descricao": tx.memo or "",
-                        "checknum": tx.checknum or tx.id or ""
+                        "checknum": tx.checknum or tx.id or "",
+                        "fitid": tx.id or ""
                     })
                     
         conn = get_connection()
         cur = conn.cursor()
         
         titulos_baixados = []
+        titulos_baixados_soma = []
+        titulos_baixados_juros = []
         nao_localizados = []
+        hoje_str = datetime.now().strftime("%Y-%m-%d")
+
+        # Carrega todos os títulos pendentes uma vez
+        cur.execute("""
+            SELECT id, fornecedor, dt_vencimento, valor_liquido, valor_bruto, numero_nf
+            FROM notas
+            WHERE (status = 'PENDENTE' OR status = 'EM ABERTO' OR status IS NULL OR status = '' OR status = 'ABERTO')
+              AND (is_previsao = 0 OR is_previsao IS NULL)
+        """)
+        pendentes = [dict(r) for r in cur.fetchall()]
+        ids_usados = set()
         
         for deb in debitos_encontrados:
             val = deb["valor"]
             dt = deb["data"]
+            matched = False
             
-            cur.execute("""
-                SELECT id, fornecedor, dt_vencimento, valor_liquido, valor_bruto, numero_nf
-                FROM notas
-                WHERE (status = 'PENDENTE' OR status = 'EM ABERTO' OR status IS NULL OR status = '' OR status = 'ABERTO')
-                  AND (ROUND(valor_liquido, 2) = ROUND(?, 2) OR ROUND(valor_bruto, 2) = ROUND(?, 2))
-                LIMIT 1
-            """, (val, val))
+            # === ESTRATÉGIA 1: Match exato por valor (±R$ 0,05) ===
+            for p in pendentes:
+                if p["id"] in ids_usados:
+                    continue
+                v_liq = p.get("valor_liquido") or 0
+                v_bru = p.get("valor_bruto") or 0
+                if abs(round(v_liq, 2) - round(val, 2)) < 0.06 or abs(round(v_bru, 2) - round(val, 2)) < 0.06:
+                    tit_id = p["id"]
+                    cur.execute("""
+                        UPDATE notas
+                        SET status = 'PAGO', conciliada = 1, dt_pagamento = ?, valor_pago = ?
+                        WHERE id = ?
+                    """, (dt, val, tit_id))
+                    ids_usados.add(tit_id)
+                    titulos_baixados.append({
+                        "id": tit_id, "fornecedor": p["fornecedor"],
+                        "numero_nf": p["numero_nf"], "valor": val,
+                        "dt_pagamento": dt, "descricao_banco": deb["descricao"],
+                        "match_tipo": "EXATO"
+                    })
+                    matched = True
+                    break
             
-            tit = cur.fetchone()
-            if tit:
-                tit_id = tit["id"]
-                cur.execute("""
-                    UPDATE notas
-                    SET status = 'PAGO', conciliada = 1, dt_pagamento = ?
-                    WHERE id = ?
-                """, (dt, tit_id))
-                
-                titulos_baixados.append({
-                    "id": tit_id,
-                    "fornecedor": tit["fornecedor"],
-                    "numero_nf": tit["numero_nf"],
-                    "valor": val,
-                    "dt_pagamento": dt,
-                    "descricao_banco": deb["descricao"]
-                })
-            else:
+            if matched:
+                continue
+            
+            # === ESTRATÉGIA 2: Match por soma de 2-3 títulos ===
+            disponiveis = [p for p in pendentes if p["id"] not in ids_usados]
+            found_combo = False
+            for n in (2, 3):
+                if found_combo or len(disponiveis) < n:
+                    break
+                for combo in combinations(disponiveis, n):
+                    soma = sum((c.get("valor_liquido") or c.get("valor_bruto") or 0) for c in combo)
+                    if abs(round(soma, 2) - round(val, 2)) < 0.11:
+                        grupo_id = f"GRP_{int(time.time() * 1000)}_{deb.get('fitid', '')}"
+                        combo_ids = [c["id"] for c in combo]
+                        for c in combo:
+                            cur.execute("""
+                                UPDATE notas
+                                SET status = 'PAGO', conciliada = 1, dt_pagamento = ?,
+                                    valor_pago = ?, grupo_conciliacao = ?
+                                WHERE id = ?
+                            """, (dt, val, grupo_id, c["id"]))
+                            ids_usados.add(c["id"])
+                        # Registrar grupo
+                        cur.execute("""
+                            INSERT INTO conciliacao_grupos
+                                (id, extrato_fitid, extrato_valor, extrato_data, extrato_memo,
+                                 soma_titulos, diferenca, tipo_diferenca, qtd_titulos, operador)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        """, (grupo_id, deb.get("fitid", ""), val, dt,
+                              deb["descricao"], round(soma, 2),
+                              round(val - soma, 2), None, n, "Sistema (Auto OFX)"))
+                        titulos_baixados_soma.append({
+                            "grupo_id": grupo_id, "titulo_ids": combo_ids,
+                            "soma_titulos": round(soma, 2), "valor_extrato": val,
+                            "dt_pagamento": dt, "descricao_banco": deb["descricao"],
+                            "match_tipo": "SOMA"
+                        })
+                        found_combo = True
+                        break
+            
+            if found_combo:
+                continue
+            
+            # === ESTRATÉGIA 3: Match com tolerância de juros (até 5%) ===
+            for p in pendentes:
+                if p["id"] in ids_usados:
+                    continue
+                v_ref = p.get("valor_liquido") or p.get("valor_bruto") or 0
+                if v_ref <= 0:
+                    continue
+                diff = val - v_ref
+                pct = abs(diff / v_ref) * 100
+                if 0.06 < abs(diff) and pct <= 5.0:
+                    tit_id = p["id"]
+                    tipo_dif = "JUROS" if diff > 0 else "DESCONTO"
+                    cur.execute("""
+                        UPDATE notas
+                        SET status = 'PAGO', conciliada = 1, dt_pagamento = ?,
+                            valor_pago = ?, juros_multa = ?, desconto = ?
+                        WHERE id = ?
+                    """, (dt, val,
+                          round(diff, 2) if diff > 0 else 0,
+                          round(abs(diff), 2) if diff < 0 else 0,
+                          tit_id))
+                    ids_usados.add(tit_id)
+                    titulos_baixados_juros.append({
+                        "id": tit_id, "fornecedor": p["fornecedor"],
+                        "numero_nf": p["numero_nf"],
+                        "valor_titulo": v_ref, "valor_pago": val,
+                        "diferenca": round(diff, 2),
+                        "tipo_diferenca": tipo_dif,
+                        "percentual": round(pct, 2),
+                        "dt_pagamento": dt, "descricao_banco": deb["descricao"],
+                        "match_tipo": "JUROS_TOLERANCIA"
+                    })
+                    matched = True
+                    break
+            
+            if not matched:
                 nao_localizados.append(deb)
                 
         conn.commit()
@@ -836,12 +946,174 @@ async def conciliar_extrato_ofx(arquivo: UploadFile = File(...)):
         return {
             "success": True,
             "total_debitos_ofx": len(debitos_encontrados),
-            "total_conciliados": len(titulos_baixados),
+            "total_conciliados_exato": len(titulos_baixados),
+            "total_conciliados_soma": len(titulos_baixados_soma),
+            "total_conciliados_juros": len(titulos_baixados_juros),
+            "total_conciliados": len(titulos_baixados) + len(titulos_baixados_soma) + len(titulos_baixados_juros),
             "titulos_baixados": titulos_baixados,
+            "titulos_baixados_soma": titulos_baixados_soma,
+            "titulos_baixados_juros": titulos_baixados_juros,
             "nao_localizados": nao_localizados
         }
     except Exception as e:
         logger.exception("Erro ao conciliar OFX: %s", e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== NOVAS ROTAS: CONCILIAÇÃO AVANÇADA ====================
+
+@router.get("/titulos-pendentes-para-conciliacao")
+def listar_pendentes_conciliacao(
+    valor_aprox: Optional[float] = Query(None, description="Valor aproximado para filtrar"),
+    fornecedor: Optional[str] = Query(None, description="Filtro por nome de fornecedor"),
+    tolerancia_pct: Optional[float] = Query(50.0, description="Tolerância % para filtro por valor")
+):
+    """
+    Retorna títulos pendentes para uso no modal de vinculação manual
+    da conciliação bancária. Suporta filtros por valor aproximado e fornecedor.
+    """
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT id, fornecedor, cnpj, dt_vencimento, valor_liquido, valor_bruto,
+                   numero_nf, descricao, categoria, forma_pgto
+            FROM notas
+            WHERE (status = 'PENDENTE' OR status = 'EM ABERTO' OR status IS NULL
+                   OR status = '' OR status = 'ABERTO')
+              AND (is_previsao = 0 OR is_previsao IS NULL)
+            ORDER BY dt_vencimento ASC
+        """)
+        rows = cur.fetchall()
+        conn.close()
+
+        resultados = []
+        for r in rows:
+            rd = dict(r)
+            v = rd.get("valor_liquido") or rd.get("valor_bruto") or 0
+
+            # Filtro por valor aproximado
+            if valor_aprox is not None and valor_aprox > 0 and v > 0:
+                diff_pct = abs(v - valor_aprox) / valor_aprox * 100
+                if diff_pct > tolerancia_pct:
+                    continue
+
+            # Filtro por fornecedor
+            if fornecedor:
+                nome = (rd.get("fornecedor") or "").lower()
+                if fornecedor.lower() not in nome:
+                    continue
+
+            resultados.append({
+                "id": rd["id"],
+                "fornecedor": rd.get("fornecedor"),
+                "cnpj": rd.get("cnpj"),
+                "vencimento": rd.get("dt_vencimento"),
+                "valor": v,
+                "valor_bruto": rd.get("valor_bruto") or 0,
+                "numero_nf": rd.get("numero_nf"),
+                "descricao": rd.get("descricao"),
+                "categoria": rd.get("categoria"),
+            })
+
+        return {"success": True, "total": len(resultados), "titulos": resultados}
+    except Exception as e:
+        logger.exception("Erro ao listar pendentes para conciliação: %s", e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/conciliar-grupo")
+def conciliar_grupo(req: ConciliacaoGrupoRequest):
+    """
+    Vincula N títulos do sistema a 1 débito do extrato bancário.
+    Registra o agrupamento, calcula diferença (juros/multa/desconto),
+    e dá baixa em todos os títulos vinculados.
+    """
+    try:
+        if not req.titulo_ids:
+            raise HTTPException(status_code=400, detail="Nenhum título informado")
+
+        conn = get_connection()
+        cur = conn.cursor()
+        hoje_str = datetime.now().strftime("%Y-%m-%d")
+        dt_pgto = req.extrato_data or hoje_str
+
+        # Buscar títulos e calcular soma
+        placeholders = ",".join(["?" for _ in req.titulo_ids])
+        cur.execute(f"""
+            SELECT id, fornecedor, valor_liquido, valor_bruto, numero_nf
+            FROM notas WHERE id IN ({placeholders})
+        """, tuple(req.titulo_ids))
+        titulos_encontrados = [dict(r) for r in cur.fetchall()]
+
+        if len(titulos_encontrados) != len(req.titulo_ids):
+            ids_encontrados = {t["id"] for t in titulos_encontrados}
+            ids_faltando = [i for i in req.titulo_ids if i not in ids_encontrados]
+            raise HTTPException(status_code=404,
+                detail=f"Títulos não encontrados: {ids_faltando}")
+
+        soma = sum((t.get("valor_liquido") or t.get("valor_bruto") or 0) for t in titulos_encontrados)
+        diferenca = round(req.extrato_valor - soma, 2)
+
+        # Determinar tipo da diferença automaticamente se não informado
+        tipo_dif = req.tipo_diferenca
+        if tipo_dif is None and abs(diferenca) > 0.05:
+            tipo_dif = "JUROS" if diferenca > 0 else "DESCONTO"
+
+        # Gerar ID do grupo
+        grupo_id = f"GRP_{int(time.time() * 1000)}"
+
+        # Registrar grupo de conciliação
+        cur.execute("""
+            INSERT INTO conciliacao_grupos
+                (id, extrato_fitid, extrato_valor, extrato_data, extrato_memo,
+                 soma_titulos, diferenca, tipo_diferenca, qtd_titulos, operador)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (grupo_id, req.extrato_fitid, req.extrato_valor, dt_pgto,
+              req.extrato_memo, round(soma, 2), diferenca, tipo_dif,
+              len(req.titulo_ids), req.operador))
+
+        # Dar baixa em cada título
+        juros_val = round(diferenca, 2) if diferenca > 0 else 0
+        desc_val = round(abs(diferenca), 2) if diferenca < 0 else 0
+
+        titulos_result = []
+        for t in titulos_encontrados:
+            cur.execute("""
+                UPDATE notas
+                SET status = 'PAGO', conciliada = 1, dt_pagamento = ?,
+                    valor_pago = ?, juros_multa = ?, desconto = ?,
+                    grupo_conciliacao = ?
+                WHERE id = ?
+            """, (dt_pgto, req.extrato_valor, juros_val, desc_val,
+                  grupo_id, t["id"]))
+            titulos_result.append({
+                "id": t["id"],
+                "fornecedor": t["fornecedor"],
+                "numero_nf": t["numero_nf"],
+                "valor_titulo": t.get("valor_liquido") or t.get("valor_bruto") or 0
+            })
+
+        conn.commit()
+        conn.close()
+
+        logger.info("Conciliação em grupo: %s — %d títulos, extrato R$ %.2f, soma R$ %.2f, dif R$ %.2f (%s)",
+                     grupo_id, len(req.titulo_ids), req.extrato_valor, soma, diferenca, tipo_dif or "SEM_DIF")
+
+        return {
+            "success": True,
+            "grupo_id": grupo_id,
+            "qtd_titulos": len(req.titulo_ids),
+            "soma_titulos": round(soma, 2),
+            "valor_extrato": req.extrato_valor,
+            "diferenca": diferenca,
+            "tipo_diferenca": tipo_dif,
+            "titulos": titulos_result
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.exception("Erro ao conciliar grupo: %s", e)
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/disparar-whatsapp-diretoria")
